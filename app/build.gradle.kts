@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.compose")
     // 🗒️ Necesario para que room procece las anotaciones
     id("kotlin-kapt")
 }
@@ -65,6 +65,8 @@ dependencies {
 
     // 🎯 --- Coroutines ---
     implementation(libs.kotlinx.coroutines.android)
+
+    implementation(libs.kotlinx.metadata.jvm)
 
     // 🎯 Navigation Compose
     implementation(libs.androidx.navigation.compose)
