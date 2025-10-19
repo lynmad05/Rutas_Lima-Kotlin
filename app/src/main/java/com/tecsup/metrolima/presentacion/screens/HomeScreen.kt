@@ -23,11 +23,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tecsup.metrolima.R
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.OutlinedTextField
 import com.tecsup.metrolima.ui.components.BottomNavigationBar
 import com.tecsup.metrolima.ui.components.TopAppBarWithMenuAndNotifications
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
+import androidx.compose.material3.FilterChipDefaults // ¡Necesitarás este import!
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import com.tecsup.metrolima.ui.theme.CardDescriptionColor
+import com.tecsup.metrolima.ui.theme.ChipBorderColor
+import com.tecsup.metrolima.ui.theme.ChipSelectedColor
+import com.tecsup.metrolima.ui.theme.ChipUnselectedContentColor
+import com.tecsup.metrolima.ui.theme.OnChipSelectedColor
+import com.tecsup.metrolima.ui.theme.SearchBarBackground
+import com.tecsup.metrolima.ui.theme.SearchBarContentColor
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,13 +63,6 @@ fun HomeScreen(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             item {
-                Text(
-                    text = "MetroLima GO",
-                    style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
-                )
-
-
                 OutlinedTextField(
                     value = "",
                     onValueChange = { /* */ },
@@ -73,32 +75,67 @@ fun HomeScreen(
                     enabled = false,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-                        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+                        focusedContainerColor = SearchBarBackground,
+                        unfocusedContainerColor = SearchBarBackground,
+                        disabledContainerColor = SearchBarBackground,
+
                         disabledBorderColor = Color.Transparent,
                         focusedBorderColor = Color.Transparent,
                         unfocusedBorderColor = Color.Transparent,
-                        disabledTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-                        disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                        disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                        disabledTextColor = SearchBarContentColor,
+                        disabledLeadingIconColor = SearchBarContentColor,
+                        disabledPlaceholderColor = SearchBarContentColor
                     )
                 )
-
-                //Las categorias
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .padding(horizontal = 14.dp, vertical = 8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    FilterChip(selected = true, onClick = { /* Filtro Favoritos */ }, label = { Text("Mis Favoritos") })
-                    FilterChip(selected = false, onClick = { /* Filtro Últimas Rutas */ }, label = { Text("Últimas Rutas") })
-                    FilterChip(selected = false, onClick = { /* Filtro Líneas y Mapas */ }, label = { Text("Líneas y Mapas") })
+                    // CHIP 1: Mis Favoritos
+                    FilterChip(
+                        selected = true, // <<-- ¡Este ya está definido!
+                        enabled = true,  // <<-- ¡Este ya está definido!
+                        onClick = { /* Lógica para seleccionar Mis Favoritos */ },
+                        label = { Text("Mis Favoritos") },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = ChipSelectedColor,
+                            selectedLabelColor = OnChipSelectedColor,
+                            selectedLeadingIconColor = OnChipSelectedColor,
+                            containerColor = Color.Transparent,
+                            labelColor = ChipUnselectedContentColor
+                        ),
+
+                    )
+                    FilterChip(
+                        selected = true, // <<-- ¡Este ya está definido!
+                        enabled = true,  // <<-- ¡Este ya está definido!
+                        onClick = { /* Lógica para seleccionar Mis Favoritos */ },
+                        label = { Text("Últimas Rutas") },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = ChipSelectedColor,
+                            selectedLabelColor = OnChipSelectedColor,
+                            selectedLeadingIconColor = OnChipSelectedColor,
+                            containerColor = Color.Transparent,
+                            labelColor = ChipUnselectedContentColor
+                        ),
+                        )
+                    FilterChip(
+                        selected = true, // <<-- ¡Este ya está definido!
+                        enabled = true,  // <<-- ¡Este ya está definido!
+                        onClick = { /* Lógica para seleccionar Mis Favoritos */ },
+                        label = { Text("Lineas/Mapas") },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = ChipSelectedColor,
+                            selectedLabelColor = OnChipSelectedColor,
+                            selectedLeadingIconColor = OnChipSelectedColor,
+                            containerColor = Color.Transparent,
+                            labelColor = ChipUnselectedContentColor
+                        ),
+                        )
                 }
             }
-
-            // Sección "Lugares Populares" (Tarjetas con imágenes)
             item {
                 Text(
                     text = "Lugares Populares",
@@ -109,23 +146,22 @@ fun HomeScreen(
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Aquí deberías iterar sobre una lista de "PopularPlace" o "SuggestedRoute"
-                    // Por ahora, usamos placeholders:
                     item {
                         PopularPlaceCard(
-                            title = "Ruta: Miraflores",
-                            description = "Estación Central a Miraflores",
+                            title = "Ruta",
+                            subtitulo = "Estación Central a Miraflores",
+                            description = "Linea 1",
                             imageUrl =R.drawable.estacion_central
                         )
                     }
                     item {
                         PopularPlaceCard(
-                            title = "Estación Central",
+                            title = "Estación ",
+                            subtitulo ="Estación Central",
                             description = "Cercado de Lima",
                             imageUrl =R.drawable.cercado
                         )
                     }
-                    // Agrega más tarjetas si lo deseas
                 }
             }
 
@@ -180,12 +216,15 @@ fun HomeScreen(
 
 
 @Composable
-fun PopularPlaceCard(title: String, description: String, imageUrl: Int, modifier: Modifier = Modifier) {
+fun PopularPlaceCard(title: String,subtitulo:String, description: String, imageUrl: Int, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
             .width(180.dp)
             .height(200.dp)
             .clip(RoundedCornerShape(16.dp)),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -209,21 +248,17 @@ fun PopularPlaceCard(title: String, description: String, imageUrl: Int, modifier
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
+                    text = subtitulo,
+                    style = MaterialTheme.typography.labelSmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = CardDescriptionColor
                 )
             }
-            // Aquí el icono de corazón lo pones dentro de la imagen o en un Box superpuesto para que se vea como en la referencia
-            // O puedes dejarlo al final de la columna como ahora si te gusta más
-            Icon(
-                Icons.Filled.FavoriteBorder,
-                contentDescription = "Favorito",
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(bottom = 4.dp, end = 4.dp) // Ajusta si lo mueves de lugar
-                    .size(24.dp)
-            )
         }
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
 
@@ -18,7 +19,8 @@ fun TopAppBarWithMenuAndNotifications(
     onNotificationsClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
-        title = { Text("MetroLima GO", style = MaterialTheme.typography.titleLarge) },
+        title = { Text("MetroLima GO", style = MaterialTheme.typography.titleLarge.copy(
+            fontWeight = FontWeight.Bold))},
         navigationIcon = {
             IconButton(onClick = onMenuClick) {
                 Icon(Icons.Filled.Menu, contentDescription = "Menú")
