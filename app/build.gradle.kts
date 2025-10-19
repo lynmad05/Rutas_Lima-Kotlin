@@ -51,7 +51,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-
     // Dependencias agregadas ✅
 
     // 🎯 --- Room ---
@@ -68,6 +67,10 @@ dependencies {
 
     // 🎯 Navigation Compose
     implementation(libs.androidx.navigation.compose)
+
+    // Material Design Icons Extended (para más íconos)
+    implementation("androidx.compose.material:material-icons-extended:<VERSION>")
+    implementation("androidx.compose.material3:material3:1.2.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
