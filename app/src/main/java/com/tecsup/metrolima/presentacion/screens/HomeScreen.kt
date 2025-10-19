@@ -27,11 +27,8 @@ import androidx.compose.material3.OutlinedTextField
 import com.tecsup.metrolima.ui.components.BottomNavigationBar
 import com.tecsup.metrolima.ui.components.TopAppBarWithMenuAndNotifications
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
-import androidx.compose.material3.FilterChipDefaults // ¡Necesitarás este import!
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.material3.FilterChipDefaults
 import com.tecsup.metrolima.ui.theme.CardDescriptionColor
-import com.tecsup.metrolima.ui.theme.ChipBorderColor
 import com.tecsup.metrolima.ui.theme.ChipSelectedColor
 import com.tecsup.metrolima.ui.theme.ChipUnselectedContentColor
 import com.tecsup.metrolima.ui.theme.OnChipSelectedColor
