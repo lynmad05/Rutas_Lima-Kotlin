@@ -13,7 +13,10 @@ activityCompose = "1.11.0"
 composeBom = "2024.09.00"
 navigationCompose = "2.9.5"
 retrofit = "3.0.0"
-roomVersion = "2.6.1"
+roomCompiler = "2.8.0-alpha03"
+roomKtx = "2.8.0-alpha03"
+roomRuntime = "2.8.0-alpha03"
+roomVersion = "2.8.2"
 foundation = "1.9.3"
 
 [libraries]
