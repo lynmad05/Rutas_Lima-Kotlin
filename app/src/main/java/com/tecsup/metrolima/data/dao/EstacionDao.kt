@@ -14,7 +14,4 @@ interface EstacionDao{
     //Obtiene todas las estaciones que se almacenan
     @Query("SELECT * FROM estaciones")
     suspend fun getAllEstaciones(): List<Estacion>
-
-
-
 }
