@@ -1,17 +1,15 @@
 package com.tecsup.metrolima.ui.components
 
-import android.view.Surface
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsTransit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Map // Este icono ahora representa "Mapa" visualmente
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,38 +21,51 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
-// ¡Importa tus nuevos colores!
 import com.tecsup.metrolima.ui.theme.NavigationBarBackground
 import com.tecsup.metrolima.ui.theme.SelectedButtonColor
 import com.tecsup.metrolima.ui.theme.OnSelectedButtonColor
 import com.tecsup.metrolima.ui.theme.UnselectedIconColor
-import androidx.navigation.NavController
 
 
 @Composable
 fun BottomNavigationBar(
     navController: NavController,
-    modifier: Modifier = Modifier,
-    selectedItemIndex: Int = 0
+    modifier: Modifier = Modifier
 ){
-    var selectedIndex by remember { mutableStateOf(selectedItemIndex) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
-    val items = listOf(
-        Icons.Filled.Home,
-        Icons.Filled.LocationOn,
-        Icons.Filled.Map,
-        Icons.Filled.DirectionsTransit,
-        Icons.Filled.Settings
+    val navItems = listOf(
+        BottomNavItem(
+            icon = Icons.Filled.Home,
+            description = "Inicio",
+            route = "home"
+        ),
+        BottomNavItem(
+            icon = Icons.Filled.LocationOn,
+            description = "Rutas",
+            route = "rutas"
+        ),
+        BottomNavItem(
+            icon = Icons.Filled.Map,
+            description = "Mapa",
+            route = "mapa"
+        ),
+        BottomNavItem(
+            icon = Icons.Filled.DirectionsTransit,
+            description = "Estaciones",
+            route = "listado"
+        ),
+        BottomNavItem(
+            icon = Icons.Filled.Settings,
+            description = "Configuración",
+            route = "config"
+        )
     )
 
-    val descriptions = listOf(
-        "Inicio",
-        "Rutas",
-        "Estaciones",
-        "Tren",
-        "Configuración"
-    )
 
     Box(
         modifier = modifier
@@ -83,42 +94,52 @@ fun BottomNavigationBar(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                items.forEachIndexed { index, icon ->
+                navItems.forEachIndexed { index, item ->
+                    val isSelected = currentRoute == item.route
+
                     Box(
                         modifier = Modifier
                             .width(80.dp)
                             .height(60.dp)
                             .clip(RoundedCornerShape(30.dp))
                             .background(
-                                if (selectedIndex == index) SelectedButtonColor
+                                if (isSelected) SelectedButtonColor
                                 else Color.Transparent
                             )
                             .clickable {
-                                selectedIndex = index
-                                when (index) {
-                                    0 -> navController.navigate("home")  // 🏠 Ir a Home
-                                    1 -> navController.navigate("rutas") // 📍 Rutas
-                                    2 -> navController.navigate("listado") // 🚉 Estaciones
-                                    3 -> navController.navigate("tren")  // 🚆 (si agregas más adelante)
-                                    4 -> navController.navigate("config") // ⚙️ Configuración
+                                if (currentRoute != item.route) {
+                                    navController.navigate(item.route) {
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
                                 }
                             },
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = icon,
-                            contentDescription = descriptions[index],
-                            tint = if (selectedIndex == index) OnSelectedButtonColor
+                            imageVector = item.icon,
+                            contentDescription = item.description,
+                            tint = if (isSelected) OnSelectedButtonColor
                             else UnselectedIconColor,
                             modifier = Modifier.size(40.dp)
                         )
                     }
                 }
-
             }
         }
     }
 }
+
+
+data class BottomNavItem(
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val description: String,
+    val route: String
+)
+
 
 @Preview(showBackground = true)
 @Composable
@@ -126,10 +147,7 @@ fun PreviewBottomNavigationBar() {
     MetroLimaGoTheme {
         val navController = androidx.navigation.compose.rememberNavController()
         Surface(color = MaterialTheme.colorScheme.background) {
-            BottomNavigationBar(
-                navController = navController,
-                selectedItemIndex = 0
-            )
+            BottomNavigationBar(navController = navController)
         }
     }
 }
