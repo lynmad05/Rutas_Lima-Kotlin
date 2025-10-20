@@ -45,7 +45,7 @@ fun HomeScreen(
         topBar = {
             TopAppBarWithMenuAndNotifications(
                 onMenuClick = { /* aquí puedes abrir un drawer si luego quieres */ },
-                onNotificationsClick = { /* o navegar a notificaciones */ }
+                onNotificationsClick = { /* o navega    r a notificaciones */ }
             )
         },
         bottomBar = { BottomNavigationBar(navController = navController) }
@@ -59,20 +59,21 @@ fun HomeScreen(
             item {
                 OutlinedTextField(
                     value = "",
-                    onValueChange = { /* */ },
+                    onValueChange = { },
                     placeholder = { Text("Buscar estaciones o rutas") },
                     leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Buscar") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .clickable { onSearchClick() },
+                        .clickable {
+                            navController.navigate("listado")
+                        },
                     enabled = false,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = SearchBarBackground,
                         unfocusedContainerColor = SearchBarBackground,
                         disabledContainerColor = SearchBarBackground,
-
                         disabledBorderColor = Color.Transparent,
                         focusedBorderColor = Color.Transparent,
                         unfocusedBorderColor = Color.Transparent,
@@ -81,6 +82,8 @@ fun HomeScreen(
                         disabledPlaceholderColor = SearchBarContentColor
                     )
                 )
+
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

@@ -2,11 +2,17 @@ package com.tecsup.metrolima.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tecsup.metrolima.data.db.MetroLimaDataBase
 import com.tecsup.metrolima.data.model.Estacion
 import com.tecsup.metrolima.repository.EstacionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ListaEstacionesViewModel(
     private val repository: EstacionRepository
@@ -44,8 +50,23 @@ class ListaEstacionesViewModel(
         )
 
         repository.insertarEstaciones(estacionesIniciales)
-
-        // Cargar nuevamente para actualizar la UI
         _estaciones.value = repository.getEstaciones()
     }
+
+    companion object {
+        fun provideFactory(context: android.content.Context): androidx.lifecycle.ViewModelProvider.Factory {
+            return object : androidx.lifecycle.ViewModelProvider.Factory {
+                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                    val dao = com.tecsup.metrolima.data.db.MetroLimaDataBase
+                        .getDatabase(context)
+                        .estacionDao()
+                    val repo = com.tecsup.metrolima.repository.EstacionRepository(dao)
+                    @Suppress("UNCHECKED_CAST")
+                    return ListaEstacionesViewModel(repo) as T
+                }
+            }
+        }
+    }
+
+
 }

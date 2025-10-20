@@ -93,7 +93,16 @@ fun BottomNavigationBar(
                                 if (selectedIndex == index) SelectedButtonColor
                                 else Color.Transparent
                             )
-                            .clickable { selectedIndex = index },
+                            .clickable {
+                                selectedIndex = index
+                                when (index) {
+                                    0 -> navController.navigate("home")  // 🏠 Ir a Home
+                                    1 -> navController.navigate("rutas") // 📍 Rutas
+                                    2 -> navController.navigate("listado") // 🚉 Estaciones
+                                    3 -> navController.navigate("tren")  // 🚆 (si agregas más adelante)
+                                    4 -> navController.navigate("config") // ⚙️ Configuración
+                                }
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -105,6 +114,7 @@ fun BottomNavigationBar(
                         )
                     }
                 }
+
             }
         }
     }
@@ -114,8 +124,12 @@ fun BottomNavigationBar(
 @Composable
 fun PreviewBottomNavigationBar() {
     MetroLimaGoTheme {
+        val navController = androidx.navigation.compose.rememberNavController()
         Surface(color = MaterialTheme.colorScheme.background) {
-            BottomNavigationBar(selectedItemIndex = 0)
+            BottomNavigationBar(
+                navController = navController,
+                selectedItemIndex = 0
+            )
         }
     }
 }
