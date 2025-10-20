@@ -29,14 +29,15 @@ import com.tecsup.metrolima.ui.theme.NavigationBarBackground
 import com.tecsup.metrolima.ui.theme.SelectedButtonColor
 import com.tecsup.metrolima.ui.theme.OnSelectedButtonColor
 import com.tecsup.metrolima.ui.theme.UnselectedIconColor
+import androidx.navigation.NavController
 
 
 @Composable
 fun BottomNavigationBar(
+    navController: NavController,
     modifier: Modifier = Modifier,
-    selectedItemIndex: Int = 0,
-    onItemSelected: (Int) -> Unit = {}
-) {
+    selectedItemIndex: Int = 0
+){
     var selectedIndex by remember { mutableStateOf(selectedItemIndex) }
 
     val items = listOf(

@@ -50,7 +50,10 @@ import com.tecsup.metrolima.ui.theme.StationDescriptionColor
 import com.tecsup.metrolima.ui.theme.StationNameColor
 import com.tecsup.metrolima.ui.theme.DividerColor
 
-
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.tecsup.metrolima.viewmodel.ListaEstacionesViewModel
 data class Station(
     val id: Int,
     val name: String,
@@ -67,15 +70,28 @@ fun ListaEstacionScreen(
     onStationClick: (Station) -> Unit = {}
 ) {
 
-    val stations = listOf(
-        Station(1, "Estación La Cultura", "San Borja", R.drawable.estacion_cultura),
-        Station(2, "Estación Bayóvar", "San Juan de Lurigancho", R.drawable.estacion_bayovar),
-        Station(3, "Estación Grau", "Cercado de Lima", R.drawable.proximamente),
-        Station(4, "Estación Gamarra", "La Victoria", R.drawable.gamarra),
-        Station(5, "Estación Ricardo Palma", "Miraflores", R.drawable.ricardo_palma),
-        Station(6, "Estación Angamos", "Surquillo", R.drawable.angamos),
-        Station(7, "Estación Villa el Salvador", "Villa El Salvador", R.drawable.estacion_cultura)
-    )
+    //val stations = listOf(
+    //   Station(1, "Estación La Cultura", "San Borja", R.drawable.estacion_cultura),
+    //    Station(2, "Estación Bayóvar", "San Juan de Lurigancho", R.drawable.estacion_bayovar),
+    //  Station(3, "Estación Grau", "Cercado de Lima", R.drawable.proximamente),
+    //   Station(4, "Estación Gamarra", "La Victoria", R.drawable.gamarra),
+    //   Station(5, "Estación Ricardo Palma", "Miraflores", R.drawable.ricardo_palma),
+    //   Station(6, "Estación Angamos", "Surquillo", R.drawable.angamos),
+    //   Station(7, "Estación Villa el Salvador", "Villa El Salvador", R.drawable.estacion_cultura)
+    //
+    val viewModel: ListaEstacionesViewModel = viewModel()
+    val estaciones by viewModel.estaciones.collectAsState()
+
+    // Convertir las estaciones reales (Room) a tu modelo visual
+    val stations = estaciones.map {
+        Station(
+            id = it.id,
+            name = it.nombre,
+            district = it.direccion,
+            imageUrl = R.drawable.estacion_cultura
+        )
+    }
+
 
     Scaffold(
         topBar = {

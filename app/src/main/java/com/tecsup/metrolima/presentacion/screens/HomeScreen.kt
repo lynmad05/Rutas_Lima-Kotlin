@@ -39,19 +39,16 @@ import com.tecsup.metrolima.ui.theme.SearchBarContentColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onMenuClick: () -> Unit = {},
-    onNotificationsClick: () -> Unit = {},
-    onSearchClick: () -> Unit = {},
-
+    navController: androidx.navigation.NavHostController,
 ) {
     Scaffold(
         topBar = {
             TopAppBarWithMenuAndNotifications(
-                onMenuClick = onMenuClick,
-                onNotificationsClick = onNotificationsClick
+                onMenuClick = { /* aquí puedes abrir un drawer si luego quieres */ },
+                onNotificationsClick = { /* o navegar a notificaciones */ }
             )
         },
-        bottomBar = { BottomNavigationBar() }
+        bottomBar = { BottomNavigationBar(navController = navController) }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -265,6 +262,6 @@ fun PopularPlaceCard(title: String,subtitulo:String, description: String, imageU
 @Composable
 fun PreviewHomeScreen() {
     MetroLimaGoTheme {
-        HomeScreen()
+        HomeScreen(navController = androidx.navigation.compose.rememberNavController())
     }
 }
