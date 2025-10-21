@@ -108,6 +108,38 @@
                 }
             }
         }
+
+
+        fun cargarEstacionesRemotas(){
+            viewModelScope.launch {
+                try {
+                    //Acá llamo al Api remoto con Retrofit
+                    val api = com.tecsup.metrolima.data.api.RetrofitInstance.api
+                    val estacionesRemotas = api.getEstaciones().map {
+                        estacion -> estacion.copy(imagenCircularResId = asignarImagenLocal(estacion.imagenCircular))
+                    }
+
+                    if (estacionesRemotas.isNotEmpty()){
+                        repository.insertarEstaciones(estacionesRemotas)
+                        _estaciones.value = repository.getEstaciones()
+                        println("Estaciones cargadas desde API remoto (${estacionesRemotas.size})")
+                    } else {
+                        println("API vacía, usando respaldo local")
+                        insertarEstacionesIniciales()
+                    }
+                } catch (e: Exception){
+                    e.printStackTrace()
+                    println("Error al cargar estaciones remotas, usando base local o mock")
+                    val locales = repository.getEstaciones()
+                    if (locales.isEmpty()){
+                        insertarEstacionesIniciales()
+                    } else {
+                        _estaciones.value = locales
+                    }
+                }
+            }
+        }
+
         private suspend fun insertarEstacionesIniciales() {
             val estacionesIniciales = listOf(
                 Estacion(
