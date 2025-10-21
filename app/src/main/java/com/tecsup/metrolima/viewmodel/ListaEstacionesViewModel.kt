@@ -150,7 +150,7 @@ class ListaEstacionesViewModel(
                 id = 13,
                 nombre = "Arriola",
                 distrito = "La Victoria",
-                latitud = -12.06789, longitud = -77.02109,
+                latitud = -12.08661, longitud = -77.01309,
                 linea = "Línea 1 Metro",
                 horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
                 imagenCircularResId = R.drawable.gamarra //imagen de la estación
