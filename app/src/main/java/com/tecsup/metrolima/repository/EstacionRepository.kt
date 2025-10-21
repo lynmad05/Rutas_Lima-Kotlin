@@ -16,4 +16,8 @@ class EstacionRepository(private val estacionDao: EstacionDao) {
     suspend fun getStationCount(): Int {
         return estacionDao.getCount()
     }
+
+    suspend fun getEstacionesRemotas(): List<Estacion>{
+        return RetrofitInstance.api.getEstaciones()
+    }
 }
