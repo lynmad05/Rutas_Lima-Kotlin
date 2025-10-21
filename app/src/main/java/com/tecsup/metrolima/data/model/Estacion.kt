@@ -16,5 +16,6 @@ data class Estacion(
     val longitud: Double,
     val linea: String,
     val horario: String,
-    val imagenCircularResId: Int
+    val imagenCircular: String? = null,
+    val imagenCircularResId: Int = 0
 ) : Parcelable
