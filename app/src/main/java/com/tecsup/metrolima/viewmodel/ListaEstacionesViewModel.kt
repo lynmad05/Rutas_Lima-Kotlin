@@ -237,10 +237,10 @@ class ListaEstacionesViewModel(
                 imagenCircularResId = R.drawable.estacion_mariaauxiliadora
             ),
             Estacion(
-                id = 3,
-                nombre = "Estación Bayóvar",
-                distrito = "San Juan de Lurigancho",
-                latitud = -11.96789, longitud = -77.01234,
+                id = 23,
+                nombre = "Villa María",
+                distrito = "Villa María del Triunfo",
+                latitud = -12.16508, longitud = -76.95028,
                 linea = "Línea 1 Metro",
                 horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
                 imagenCircularResId = R.drawable.estacion_bayovar
