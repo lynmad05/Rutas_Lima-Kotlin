@@ -14,18 +14,20 @@ import com.tecsup.metrolima.data.model.Estacion
 import com.tecsup.metrolima.presentacion.screens.DetalleEstacionScreen
 import com.tecsup.metrolima.presentacion.screens.ListaEstacionScreen
 import kotlinx.coroutines.delay
-import android.net.Uri // Importa Uri para el encoding del JSON en la navegación
 import com.tecsup.metrolima.presentacion.screens.HomeScreen
+import com.tecsup.metrolima.presentacion.screens.SplashScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = "home" // <--- ¡Asegúrate de que sea "home" aquí!
+        startDestination = "splash"
     ) {
+        composable("splash") {
+            SplashScreen(navController = navController)
+        }
         composable("home") {
-            // Aquí vamos a usar un Composable dedicado para Home, no solo un Text
-            HomeScreen(navController = navController) // <--- ¡CAMBIO AQUÍ!
+            HomeScreen(navController = navController)
         }
 
         composable("rutas") {
