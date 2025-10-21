@@ -1,17 +1,21 @@
-package com.tecsup.metrolima.data.dao
+package com.tecsup.metrolima.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.tecsup.metrolima.data.model.Estacion
 
 @Dao
-interface EstacionDao{
-    //Inserta la lista de estaciones
-    @Insert
-    suspend fun insertarEstaciones(estaciones: List<Estacion>)
+interface EstacionDao {
 
-    //Obtiene todas las estaciones que se almacenan
-    @Query("SELECT * FROM estaciones")
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(estaciones: List<Estacion>)
+
+    @Query("SELECT * FROM estaciones ORDER BY id ASC")
     suspend fun getAllEstaciones(): List<Estacion>
+
+
+    @Query("SELECT COUNT(id) FROM estaciones")
+    suspend fun getCount(): Int
 }

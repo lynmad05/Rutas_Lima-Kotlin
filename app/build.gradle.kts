@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("org.jetbrains.kotlin.plugin.compose")
-    // 🗒️ Necesario para que room procece las anotaciones
     id("kotlin-kapt")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -74,6 +74,7 @@ dependencies {
     // Material Design Icons Extended (para más íconos)
     implementation("androidx.compose.material:material-icons-extended:<VERSION>")
     implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("com.google.code.gson:gson:2.10.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
