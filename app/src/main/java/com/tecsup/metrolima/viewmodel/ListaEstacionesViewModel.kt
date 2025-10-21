@@ -115,7 +115,7 @@
                 try {
                     //Acá llamo al Api remoto con Retrofit
                     val api = com.tecsup.metrolima.data.api.RetrofitInstance.api
-                    val estacionesRemotas = api.getEstaciones().map {
+                    val estacionesRemotas = repository.getEstacionesRemotas().map {
                         estacion -> estacion.copy(imagenCircularResId = asignarImagenLocal(estacion.imagenCircular))
                     }
 
