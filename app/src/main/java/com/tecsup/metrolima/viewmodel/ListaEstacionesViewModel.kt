@@ -153,7 +153,88 @@ class ListaEstacionesViewModel(
                 latitud = -12.08661, longitud = -77.01309,
                 linea = "Línea 1 Metro",
                 horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
-                imagenCircularResId = R.drawable.gamarra //imagen de la estación
+                imagenCircularResId = R.drawable.estacion_arriola
+            ),
+            Estacion(
+                id = 14,
+                nombre = "La Cultura",
+                distrito = "San Borja",
+                latitud = -12.09228, longitud = -77.00433,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_cultura
+            ),
+            Estacion(
+                id = 15,
+                nombre = "San Borja Sur",
+                distrito = "San Borja",
+                latitud = -12.09818, longitud = -76.99427,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_sanborjasur
+            ),
+            Estacion(
+                id = 16,
+                nombre = "Estación Angamos",
+                distrito = "Surquillo",
+                latitud = -12.1039, longitud = -76.9869,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_angamos
+            ),
+            Estacion(
+                id = 17,
+                nombre = "Cabitos",
+                distrito = "Santiago de Surco",
+                latitud = -12.10731, longitud = -76.97541,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_cabitos
+            ),
+            Estacion(
+                id = 18,
+                nombre = "Ayacucho",
+                distrito = " San Juan de Miraflores",
+                latitud = -12.11363, longitud = -76.97691,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_ayacucho
+            ),
+            Estacion(
+                id = 19,
+                nombre = "Jorge Chávez",
+                distrito = "Santiago de Surco",
+                latitud = -12.12083, longitud = -76.97732,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_jorgechavez
+            ),
+            Estacion(
+                id = 20,
+                nombre = "Atocongo",
+                distrito = "San Juan de Miraflores",
+                latitud = -12.13255, longitud = -76.97273,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_atocongo
+            ),
+            Estacion(
+                id = 21,
+                nombre = "San Juan",
+                distrito = "San Juan de Miraflores",
+                latitud = -12.14379, longitud = -76.96791,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_sanjuan
+            ),
+            Estacion(
+                id = 22,
+                nombre = "María Auxilidora",
+                distrito = "San Juan de Miraflores",
+                latitud = -12.15554, longitud = -76.95809,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_mariaauxiliadora
             ),
             Estacion(
                 id = 3,
