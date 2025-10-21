@@ -18,6 +18,8 @@ class ListaEstacionesViewModel(
     private val _estaciones = MutableStateFlow<List<Estacion>>(emptyList())
     val estaciones = _estaciones.asStateFlow()
 
+    private val ESTACIONES_TOTAL_ESPERADAS = 26
+
     init {
         cargarEstaciones()
     }
@@ -25,17 +27,28 @@ class ListaEstacionesViewModel(
     private fun cargarEstaciones() {
         viewModelScope.launch {
             try {
-                if (repository.getStationCount() == 0) {
+                val count = repository.getStationCount()
+                if (count < ESTACIONES_TOTAL_ESPERADAS) {
                     insertarEstacionesIniciales()
-                } else {
-                    _estaciones.value = repository.getEstaciones()
                 }
+
+                _estaciones.value = repository.getEstaciones()
+
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
+    fun refrescarEstaciones() {
+        viewModelScope.launch {
+            try {
+                _estaciones.value = repository.getEstaciones()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
     private suspend fun insertarEstacionesIniciales() {
         val estacionesIniciales = listOf(
             Estacion(
