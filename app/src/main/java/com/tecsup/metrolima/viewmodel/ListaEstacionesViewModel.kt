@@ -22,8 +22,10 @@
         val estaciones = _estaciones.asStateFlow()
 
         // 🔍 Texto del campo de búsqueda
-        private val _searchText = MutableStateFlow("")
+        private val _searchText = MutableStateFlow( "")
         val searchText = _searchText.asStateFlow()
+
+
 
         // 🔹 Lista filtrada (resultado de búsqueda)
         val estacionesFiltradas = combine(_searchText, _estaciones) { text, estaciones ->
