@@ -40,9 +40,9 @@ class ListaEstacionesViewModel(
         val estacionesIniciales = listOf(
             Estacion(
                 id = 1,
-                nombre = "Estación Villa El Salvador",
-                distrito = "Villa El Salvador",
-                latitud = -12.23456, longitud = -76.98765,
+                nombre = "Estación Bayóvar",
+                distrito = "San Juan de Lurigancho",
+                latitud = -11.96789, longitud = -77.01234,
                 linea = "Línea 1 Metro",
                 horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
                 imagenCircularResId = R.drawable.estacion_bayovar
