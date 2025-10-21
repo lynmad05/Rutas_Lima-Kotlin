@@ -254,7 +254,24 @@ class ListaEstacionesViewModel(
                 horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
                 imagenCircularResId = R.drawable.estacion_pumacahua
             ),
-            // ... Chicos aqui las 23 estaciones restantes
+            Estacion(
+                id = 25,
+                nombre = "Parque Industrial",
+                distrito = "Villa El Salvador",
+                latitud = -12.18845, longitud = -76.94023,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_parque_industrial
+            ),
+            Estacion(
+                id = 26,
+                nombre = "Villa El Salvador",
+                distrito = "Villa El Salvador",
+                latitud = -12.19823, longitud = -76.93588,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_villa_salvador
+            )
         )
 
         repository.insertarEstaciones(estacionesIniciales)
