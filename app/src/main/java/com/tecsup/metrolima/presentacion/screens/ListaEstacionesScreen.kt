@@ -33,8 +33,8 @@ import com.tecsup.metrolima.ui.components.BottomNavigationBar
 import com.tecsup.metrolima.ui.components.TopAppBarEstaciones
 import com.tecsup.metrolima.ui.theme.*
 import com.tecsup.metrolima.viewmodel.ListaEstacionesViewModel
-
-
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.collectAsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +49,8 @@ fun ListaEstacionScreen(
         factory = ListaEstacionesViewModel.provideFactory(context)
     )
 
-    val estaciones by viewModel.estaciones.collectAsState()
+    val estaciones by viewModel.estacionesFiltradas.collectAsState()
+
 
     Scaffold(
         topBar = {
@@ -67,30 +68,34 @@ fun ListaEstacionScreen(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             item {
+                val searchText by viewModel.searchText.collectAsState()
+
                 OutlinedTextField(
-                    value = "",
-                    onValueChange = { },
-                    placeholder = { Text("Buscar estaciones o rutas") },
-                    leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Buscar") },
+                    value = searchText,
+                    onValueChange = { viewModel.onSearchTextChange(it) },
+                    placeholder = { Text(text = "Buscar estaciones o rutas") },
+                    leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = "Buscar") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .clickable { onSearchClick() },
-                    enabled = false,
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    enabled = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = SearchBarBackground,
                         unfocusedContainerColor = SearchBarBackground,
-                        disabledContainerColor = SearchBarBackground,
-                        disabledBorderColor = Color.Transparent,
                         focusedBorderColor = Color.Transparent,
                         unfocusedBorderColor = Color.Transparent,
-                        disabledTextColor = SearchBarContentColor,
-                        disabledLeadingIconColor = SearchBarContentColor,
-                        disabledPlaceholderColor = SearchBarContentColor
+                        focusedTextColor = SearchBarContentColor,
+                        unfocusedTextColor = SearchBarContentColor,
+                        focusedLeadingIconColor = SearchBarContentColor,
+                        unfocusedLeadingIconColor = SearchBarContentColor,
+                        focusedPlaceholderColor = SearchBarContentColor,
+                        unfocusedPlaceholderColor = SearchBarContentColor
                     )
                 )
             }
+
+
 
             items(estaciones) { estacion ->
                 StationListItem(
