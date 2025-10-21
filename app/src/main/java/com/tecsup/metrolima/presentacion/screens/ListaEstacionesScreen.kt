@@ -1,5 +1,6 @@
 package com.tecsup.metrolima.presentacion.screens
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,24 +18,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
 import com.tecsup.metrolima.R
+import com.tecsup.metrolima.data.model.Estacion
 import com.tecsup.metrolima.ui.components.BottomNavigationBar
 import com.tecsup.metrolima.ui.components.TopAppBarEstaciones
 import com.tecsup.metrolima.ui.theme.*
 import com.tecsup.metrolima.viewmodel.ListaEstacionesViewModel
 
-data class Station(
-    val id: Int,
-    val name: String,
-    val district: String,
-    val imageUrl: Int
-)
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,22 +44,12 @@ fun ListaEstacionScreen(
     onNotificationsClick: () -> Unit = {},
     onSearchClick: () -> Unit = {}
 ) {
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val context = LocalContext.current
     val viewModel: ListaEstacionesViewModel = viewModel(
         factory = ListaEstacionesViewModel.provideFactory(context)
     )
 
     val estaciones by viewModel.estaciones.collectAsState()
-
-    // Convertir las estaciones de Room a tu modelo visual
-    val stations = estaciones.map {
-        Station(
-            id = it.id,
-            name = it.nombre,
-            district = it.direccion,
-            imageUrl = R.drawable.estacion_cultura
-        )
-    }
 
     Scaffold(
         topBar = {
@@ -76,7 +66,6 @@ fun ListaEstacionScreen(
                 .padding(paddingValues)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            // Campo de búsqueda (por ahora deshabilitado)
             item {
                 OutlinedTextField(
                     value = "",
@@ -103,13 +92,12 @@ fun ListaEstacionScreen(
                 )
             }
 
-            // Lista de estaciones
-            items(stations) { station ->
+            items(estaciones) { estacion ->
                 StationListItem(
-                    station = station,
+                    estacion = estacion,
                     onClick = {
-                        // Navegar al detalle de la estación
-                        navController.navigate("detalle/${station.name}/${station.district}")
+                        val estacionJson = Uri.encode(Gson().toJson(estacion))
+                        navController.navigate("detalle/${estacionJson}")
                     }
                 )
                 Divider(
@@ -122,7 +110,7 @@ fun ListaEstacionScreen(
 }
 
 @Composable
-fun StationListItem(station: Station, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun StationListItem(estacion: Estacion, onClick: () -> Unit, modifier: Modifier = Modifier) { // Recibe Estacion
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -132,8 +120,8 @@ fun StationListItem(station: Station, onClick: () -> Unit, modifier: Modifier = 
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Image(
-            painter = painterResource(id = station.imageUrl),
-            contentDescription = station.name,
+            painter = painterResource(id = estacion.imagenCircularResId), // Usamos imagenCircularResId
+            contentDescription = estacion.nombre,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .width(90.dp)
@@ -145,12 +133,12 @@ fun StationListItem(station: Station, onClick: () -> Unit, modifier: Modifier = 
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = station.name,
+                text = estacion.nombre,
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                 color = StationNameColor
             )
             Text(
-                text = station.district,
+                text = estacion.distrito, // Usamos distrito
                 style = MaterialTheme.typography.bodySmall,
                 color = StationDescriptionColor
             )
@@ -158,7 +146,7 @@ fun StationListItem(station: Station, onClick: () -> Unit, modifier: Modifier = 
 
         Icon(
             imageVector = Icons.Filled.ArrowForwardIos,
-            contentDescription = "Ir a detalles de ${station.name}",
+            contentDescription = "Ir a detalles de ${estacion.nombre}",
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(16.dp)
         )
@@ -169,7 +157,7 @@ fun StationListItem(station: Station, onClick: () -> Unit, modifier: Modifier = 
 @Composable
 fun PreviewListaEstacionScreen() {
     MetroLimaGoTheme {
-        val navController = androidx.navigation.compose.rememberNavController()
+        val navController = rememberNavController()
         Surface(color = MaterialTheme.colorScheme.background) {
             ListaEstacionScreen(navController = navController)
         }

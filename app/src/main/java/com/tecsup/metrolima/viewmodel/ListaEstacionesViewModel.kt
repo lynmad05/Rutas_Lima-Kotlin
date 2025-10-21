@@ -8,11 +8,8 @@ import com.tecsup.metrolima.repository.EstacionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.tecsup.metrolima.R
 
 class ListaEstacionesViewModel(
     private val repository: EstacionRepository
@@ -28,11 +25,10 @@ class ListaEstacionesViewModel(
     private fun cargarEstaciones() {
         viewModelScope.launch {
             try {
-                val lista = repository.getEstaciones()
-                if (lista.isEmpty()) {
+                if (repository.getStationCount() == 0) {
                     insertarEstacionesIniciales()
                 } else {
-                    _estaciones.value = lista
+                    _estaciones.value = repository.getEstaciones()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -42,11 +38,34 @@ class ListaEstacionesViewModel(
 
     private suspend fun insertarEstacionesIniciales() {
         val estacionesIniciales = listOf(
-            Estacion(nombre = "Estación Villa El Salvador", direccion = "Villa El Salvador", latitud = -12.234, longitud = -76.934),
-            Estacion(nombre = "Estación Atocongo", direccion = "San Juan de Miraflores", latitud = -12.154, longitud = -76.981),
-            Estacion(nombre = "Estación Gamarra", direccion = "La Victoria", latitud = -12.065, longitud = -77.015),
-            Estacion(nombre = "Estación La Cultura", direccion = "San Borja", latitud = -12.098, longitud = -77.001),
-            Estacion(nombre = "Estación Bayóvar", direccion = "San Juan de Lurigancho", latitud = -12.005, longitud = -76.980)
+            Estacion(
+                id = 1,
+                nombre = "Estación Villa El Salvador",
+                distrito = "Villa El Salvador",
+                latitud = -12.23456, longitud = -76.98765,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_villa_salvador
+            ),
+            Estacion(
+                id = 2,
+                nombre = "Estación Gamarra",
+                distrito = "La Victoria",
+                latitud = -12.06789, longitud = -77.02109,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.gamarra //imagen de la estación
+            ),
+            Estacion(
+                id = 3,
+                nombre = "Estación Bayóvar",
+                distrito = "San Juan de Lurigancho",
+                latitud = -11.96789, longitud = -77.01234,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_bayovar
+            ),
+            // ... Chicos aqui las 23 estaciones restantes
         )
 
         repository.insertarEstaciones(estacionesIniciales)
@@ -54,19 +73,20 @@ class ListaEstacionesViewModel(
     }
 
     companion object {
-        fun provideFactory(context: android.content.Context): androidx.lifecycle.ViewModelProvider.Factory {
-            return object : androidx.lifecycle.ViewModelProvider.Factory {
-                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                    val dao = com.tecsup.metrolima.data.db.MetroLimaDataBase
-                        .getDatabase(context)
-                        .estacionDao()
-                    val repo = com.tecsup.metrolima.repository.EstacionRepository(dao)
-                    @Suppress("UNCHECKED_CAST")
-                    return ListaEstacionesViewModel(repo) as T
+        fun provideFactory(context: android.content.Context): ViewModelProvider.Factory {
+            return object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    if (modelClass.isAssignableFrom(ListaEstacionesViewModel::class.java)) {
+                        val dao = MetroLimaDataBase
+                            .getDatabase(context)
+                            .estacionDao()
+                        val repo = EstacionRepository(dao)
+                        @Suppress("UNCHECKED_CAST")
+                        return ListaEstacionesViewModel(repo) as T
+                    }
+                    throw IllegalArgumentException("Unknown ViewModel class")
                 }
             }
         }
     }
-
-
 }

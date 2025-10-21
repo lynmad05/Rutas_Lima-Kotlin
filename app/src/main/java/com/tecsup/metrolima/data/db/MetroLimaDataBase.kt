@@ -1,13 +1,13 @@
-package com.tecsup.metrolima.data.db
+package com.tecsup.metrolima.data.db // Esto debería ser lo primero
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.tecsup.metrolima.data.dao.EstacionDao
 import com.tecsup.metrolima.data.model.Estacion
+import com.tecsup.metrolima.data.db.EstacionDao
 
-@Database(entities = [Estacion::class], version = 1, exportSchema = false)
+@Database(entities = [Estacion::class], version = 2, exportSchema = false) // Revisa tu versión
 abstract class MetroLimaDataBase : RoomDatabase() {
 
     abstract fun estacionDao(): EstacionDao
@@ -21,8 +21,10 @@ abstract class MetroLimaDataBase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     MetroLimaDataBase::class.java,
-                    "metro_lima_database"
-                ).build()
+                    "metrolima_database"
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }
