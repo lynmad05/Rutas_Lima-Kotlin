@@ -243,7 +243,16 @@ class ListaEstacionesViewModel(
                 latitud = -12.16508, longitud = -76.95028,
                 linea = "Línea 1 Metro",
                 horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
-                imagenCircularResId = R.drawable.estacion_bayovar
+                imagenCircularResId = R.drawable.estacion_villamaria
+            ),
+            Estacion(
+                id = 24,
+                nombre = "Pumacahua",
+                distrito = "Villa María del Triunfo",
+                latitud = -12.17669, longitud = -76.94482,
+                linea = "Línea 1 Metro",
+                horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
+                imagenCircularResId = R.drawable.estacion_pumacahua
             ),
             // ... Chicos aqui las 23 estaciones restantes
         )
