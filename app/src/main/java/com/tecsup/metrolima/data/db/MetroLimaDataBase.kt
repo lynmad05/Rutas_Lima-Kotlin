@@ -5,9 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.tecsup.metrolima.data.model.Estacion
-import com.tecsup.metrolima.data.db.EstacionDao
-
-@Database(entities = [Estacion::class], version = 2, exportSchema = false) // Revisa tu versión
+import com.tecsup.metrolima.data.dao.EstacionDao
+@Suppress("DEPRECATION")
+@Database(entities = [Estacion::class], version = 3, exportSchema = false) // Revisa tu versión
 abstract class MetroLimaDataBase : RoomDatabase() {
 
     abstract fun estacionDao(): EstacionDao
