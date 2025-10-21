@@ -51,6 +51,38 @@
             cargarEstacionesRemotas()
         }
 
+        private fun asignarImagenLocal(nombre: String?): Int{
+            return when (nombre){
+                "estacion_bayovar" -> R.drawable.estacion_bayovar
+                "estacion_santarosa" -> R.drawable.estacion_santarosa
+                "estacion_sanmartin" -> R.drawable.estacion_sanmartin
+                "estacion_sancarlos" -> R.drawable.estacion_sancarlos
+                "estacion_lospostes" -> R.drawable.estacion_lospostes
+                "estacion_losjardines" -> R.drawable.estacion_losjardines
+                "estacion_piramidedelsol" -> R.drawable.estacion_piramidedelsol
+                "estacion_cajadeagua" -> R.drawable.estacion_cajadeagua
+                "estacion_presbiteromaestro" -> R.drawable.estacion_presbiteromaestro
+                "estacion_elangel" -> R.drawable.estacion_elangel
+                "estacion_miguelgrau" -> R.drawable.estacion_miguelgrau
+                "estacion_gamarra" -> R.drawable.estacion_gamarra
+                "estacion_arriola" -> R.drawable.estacion_arriola
+                "estacion_cultura" -> R.drawable.estacion_cultura
+                "estacion_sanborjasur" -> R.drawable.estacion_sanborjasur
+                "estacion_angamos" -> R.drawable.estacion_angamos
+                "estacion_cabitos" -> R.drawable.estacion_cabitos
+                "estacion_ayacucho" -> R.drawable.estacion_ayacucho
+                "estacion_jorgechavez" -> R.drawable.estacion_jorgechavez
+                "estacion_atocongo" -> R.drawable.estacion_atocongo
+                "estacion_sanjuan" -> R.drawable.estacion_sanjuan
+                "estacion_mariaauxiliadora" -> R.drawable.estacion_mariaauxiliadora
+                "estacion_villamaria" -> R.drawable.estacion_villamaria
+                "estacion_pumacahua" -> R.drawable.estacion_pumacahua
+                "estacion_parque_industrial" -> R.drawable.estacion_parque_industrial
+                "estacion_villa_salvador" -> R.drawable.estacion_villa_salvador
+                else -> R.drawable.ic_launcher_foreground
+            }
+        }
+
         private fun cargarEstaciones() {
             viewModelScope.launch {
                 try {
