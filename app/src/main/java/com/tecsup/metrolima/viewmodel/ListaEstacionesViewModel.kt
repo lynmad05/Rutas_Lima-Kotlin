@@ -48,7 +48,7 @@
         private val ESTACIONES_TOTAL_ESPERADAS = 26
 
         init {
-            cargarEstaciones()
+            cargarEstacionesRemotas()
         }
 
         private fun cargarEstaciones() {
