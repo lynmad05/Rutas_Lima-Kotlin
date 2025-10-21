@@ -45,7 +45,7 @@ class ListaEstacionesViewModel(
                 latitud = -12.23456, longitud = -76.98765,
                 linea = "Línea 1 Metro",
                 horario = "L-S: 06:00 - 22:00, D/F: 06:00 - 21:00",
-                imagenCircularResId = R.drawable.estacion_villa_salvador
+                imagenCircularResId = R.drawable.estacion_bayovar
             ),
             Estacion(
                 id = 2,
