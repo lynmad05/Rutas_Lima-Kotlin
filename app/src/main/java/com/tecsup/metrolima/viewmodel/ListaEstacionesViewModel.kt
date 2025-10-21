@@ -1,5 +1,6 @@
     package com.tecsup.metrolima.viewmodel
 
+    import android.util.Log
     import androidx.lifecycle.ViewModel
     import androidx.lifecycle.viewModelScope
     import com.tecsup.metrolima.data.db.MetroLimaDataBase
@@ -11,6 +12,7 @@
     import androidx.lifecycle.ViewModelProvider
     import com.tecsup.metrolima.R
     import kotlinx.coroutines.flow.SharingStarted
+    import kotlinx.coroutines.flow.StateFlow
     import kotlinx.coroutines.flow.combine
     import kotlinx.coroutines.flow.stateIn
 
@@ -24,6 +26,13 @@
         // 🔍 Texto del campo de búsqueda
         private val _searchText = MutableStateFlow( "")
         val searchText = _searchText.asStateFlow()
+
+
+        private val _mensajeUsuario = MutableStateFlow("")
+        val mensajeUsuario: StateFlow<String> = _mensajeUsuario.asStateFlow()
+
+        private val _isLoading = MutableStateFlow(false)
+        val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
 
 
@@ -110,35 +119,47 @@
         }
 
 
-        fun cargarEstacionesRemotas(){
+        fun cargarEstacionesRemotas() {
             viewModelScope.launch {
+                _isLoading.value = true
                 try {
-                    //Acá llamo al Api remoto con Retrofit
-                    val api = com.tecsup.metrolima.data.api.RetrofitInstance.api
                     val estacionesRemotas = repository.getEstacionesRemotas().map {
-                        estacion -> estacion.copy(imagenCircularResId = asignarImagenLocal(estacion.imagenCircular))
+                            estacion -> estacion.copy(imagenCircularResId = asignarImagenLocal(estacion.imagenCircular))
                     }
-
-                    if (estacionesRemotas.isNotEmpty()){
+                    if (estacionesRemotas.isNotEmpty()) {
+                        repository.deleteAllEstaciones()
                         repository.insertarEstaciones(estacionesRemotas)
                         _estaciones.value = repository.getEstaciones()
-                        println("Estaciones cargadas desde API remoto (${estacionesRemotas.size})")
+                        _mensajeUsuario.value = " Datos actualizados correctamente."
+                        Log.d("ListaEstacionesViewModel", "Estaciones cargadas desde API remoto (${estacionesRemotas.size})")
                     } else {
-                        println("API vacía, usando respaldo local")
-                        insertarEstacionesIniciales()
+                        Log.w("ListaEstacionesViewModel", "API remota devolvió lista vacía. Usando respaldo local.")
+                        val locales = repository.getEstaciones()
+                        if (locales.isEmpty()) {
+                            insertarEstacionesIniciales()
+                            _mensajeUsuario.value = "API vacía. Datos iniciales cargados."
+                        } else {
+                            _estaciones.value = locales
+                            _mensajeUsuario.value = "API vacía. Mostrando datos locales existentes."
+                        }
                     }
-                } catch (e: Exception){
-                    e.printStackTrace()
-                    println("Error al cargar estaciones remotas, usando base local o mock")
+                } catch (e: Exception) {
+                    Log.e("ListaEstacionesViewModel", "Error al cargar estaciones remotas: ${e.message}", e)
                     val locales = repository.getEstaciones()
-                    if (locales.isEmpty()){
+                    if (locales.isEmpty()) {
                         insertarEstacionesIniciales()
+                        _mensajeUsuario.value = "No hay conexión y no se encontraron datos locales. Mostrando datos iniciales."
                     } else {
                         _estaciones.value = locales
+                        _mensajeUsuario.value = "No se pudo conectar. Mostrando datos locales."
                     }
+                } finally {
+                    _isLoading.value = false
                 }
             }
         }
+
+
 
         private suspend fun insertarEstacionesIniciales() {
             val estacionesIniciales = listOf(

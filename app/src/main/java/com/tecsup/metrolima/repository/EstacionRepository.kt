@@ -21,4 +21,7 @@ class EstacionRepository(private val estacionDao: EstacionDao) {
     suspend fun getEstacionesRemotas(): List<Estacion>{
         return RetrofitInstance.api.getEstaciones()
     }
+    suspend fun deleteAllEstaciones() {
+        estacionDao.deleteAllEstaciones()
+    }
 }

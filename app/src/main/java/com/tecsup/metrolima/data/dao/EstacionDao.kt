@@ -18,4 +18,7 @@ interface EstacionDao {
 
     @Query("SELECT COUNT(id) FROM estaciones")
     suspend fun getCount(): Int
+
+    @Query("DELETE FROM estaciones")
+    suspend fun deleteAllEstaciones()
 }
