@@ -3,6 +3,7 @@ package com.tecsup.metrolima.repository
 import com.tecsup.metrolima.data.api.RetrofitInstance
 import com.tecsup.metrolima.data.dao.EstacionDao
 import com.tecsup.metrolima.data.model.Estacion
+import kotlinx.coroutines.flow.Flow
 
 class EstacionRepository(private val estacionDao: EstacionDao) {
 
@@ -10,11 +11,11 @@ class EstacionRepository(private val estacionDao: EstacionDao) {
         estacionDao.insertAll(estaciones)
     }
 
-    suspend fun getEstaciones(): List<Estacion> {
+    fun getEstaciones(): Flow<List<Estacion>> {
         return estacionDao.getAllEstaciones()
     }
 
-    suspend fun getStationCount(): Int {
+    fun getStationCount(): Flow<Int> {
         return estacionDao.getCount()
     }
 

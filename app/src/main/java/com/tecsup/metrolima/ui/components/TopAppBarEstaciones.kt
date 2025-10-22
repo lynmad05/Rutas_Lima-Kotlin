@@ -14,18 +14,19 @@ import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarEstaciones(
+    title: String,
     modifier: Modifier = Modifier,
     onMenuClick: () -> Unit = {},
-    onNotificationsClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
-        title = { Text("Estaciones", style = MaterialTheme.typography.titleLarge.copy(
+        title = { Text(title, style = MaterialTheme.typography.titleLarge.copy(
             fontWeight = FontWeight.Bold))},
         navigationIcon = {
             IconButton(onClick = onMenuClick) {
                 Icon(Icons.Filled.Menu, contentDescription = "Menú")
             }
-        }
+        },
+        modifier = modifier
     )
 }
 
@@ -33,6 +34,6 @@ fun TopAppBarEstaciones(
 @Composable
 fun PreviewTopAppEstaciones() {
     MetroLimaGoTheme {
-        TopAppBarEstaciones()
+        TopAppBarEstaciones("Estaciones")
     }
 }

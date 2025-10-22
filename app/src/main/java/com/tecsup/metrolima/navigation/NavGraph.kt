@@ -15,6 +15,7 @@ import com.tecsup.metrolima.presentacion.screens.DetalleEstacionScreen
 import com.tecsup.metrolima.presentacion.screens.ListaEstacionScreen
 import kotlinx.coroutines.delay
 import com.tecsup.metrolima.presentacion.screens.HomeScreen
+import com.tecsup.metrolima.presentacion.screens.RutaScreen
 import com.tecsup.metrolima.presentacion.screens.SplashScreen
 
 @Composable
@@ -31,8 +32,9 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable("rutas") {
-            Text("Pantalla de rutas", color = Color.Black)
+            RutaScreen(navController = navController)
         }
+
 
         composable("mapa") {
             Text("Mapa interactivo (en desarrollo)", color = Color.Black)
@@ -77,5 +79,8 @@ fun NavGraph(navController: NavHostController) {
                 }
             }
         }
+
+
+
     }
 }

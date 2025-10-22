@@ -6,11 +6,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.tecsup.metrolima.data.model.Estacion
 import com.tecsup.metrolima.data.dao.EstacionDao
+import com.tecsup.metrolima.data.dao.RutaDao
+import com.tecsup.metrolima.data.model.Ruta
+
 @Suppress("DEPRECATION")
-@Database(entities = [Estacion::class], version = 3, exportSchema = false) // Revisa tu versión
+@Database(entities = [Estacion::class, Ruta::class], version = 4, exportSchema = false)
 abstract class MetroLimaDataBase : RoomDatabase() {
 
     abstract fun estacionDao(): EstacionDao
+    abstract fun rutaDao(): RutaDao
 
     companion object {
         @Volatile
