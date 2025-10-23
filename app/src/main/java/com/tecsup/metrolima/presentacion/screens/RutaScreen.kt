@@ -200,7 +200,7 @@ fun RutaScreen(
                 Spacer(modifier = Modifier.size(16.dp))
 
                 Button(
-                    onClick = { selectedOptimizationOption = "Menos Transbordos" },
+                    onClick = { viewModel.onOptimizationOptionSelected("Menos Transbordos") },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (selectedOptimizationOption == "Menos Transbordos") Color(0xFFE0BBE4) else Color(0xFFF0F0F0),
