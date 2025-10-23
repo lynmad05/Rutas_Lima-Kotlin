@@ -21,11 +21,6 @@ fun TopAppBarEstaciones(
     CenterAlignedTopAppBar(
         title = { Text(title, style = MaterialTheme.typography.titleLarge.copy(
             fontWeight = FontWeight.Bold))},
-        navigationIcon = {
-            IconButton(onClick = onMenuClick) {
-                Icon(Icons.Filled.Menu, contentDescription = "Menú")
-            }
-        },
         modifier = modifier
     )
 }

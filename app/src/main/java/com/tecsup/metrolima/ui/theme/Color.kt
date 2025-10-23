@@ -16,12 +16,6 @@ val Pink40 = Color(0xFF7D5260)
 val SearchBarBackground = Color(0xFFD9CAFF)
 val SearchBarContentColor = Color(0xFF000000)
 
-//Colores para las categorias
-val ChipSelectedColor = Color(0x4F00D1FF)
-val OnChipSelectedColor = Color(0xFF1F617A)
-val ChipBorderColor = Color(0xFF4FCCE0)
-val ChipUnselectedContentColor = Color(0xFF1F617A)
-
 val CardDescriptionColor = Color(0xFF1F617A)
 
 
@@ -38,3 +32,5 @@ val UnselectedIconColor = Color(0xFF000000)
 val StationNameColor = Color(0xFF6A6A6A)
 val StationDescriptionColor = Color(0xFF1F617A)
 val DividerColor = Color(0xFFD3D3D3)
+
+val miColorBorde = Color(0xFF47949E)

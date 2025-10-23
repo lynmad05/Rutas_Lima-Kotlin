@@ -76,8 +76,7 @@ fun ListaEstacionScreen(
     Scaffold(
         topBar = {
             TopAppBarEstaciones(
-                title = "Estaciones",
-                onMenuClick = onMenuClick,
+                title = "Estaciones"
             )
         },
         bottomBar = { BottomNavigationBar(navController = navController) },

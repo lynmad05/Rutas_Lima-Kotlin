@@ -1,5 +1,6 @@
 package com.tecsup.metrolima.ui.components
-
+import androidx.compose.runtime.Composable
+import androidx.compose.material3.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.tecsup.metrolima.presentacion.LocalAppContext
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
 import com.tecsup.metrolima.ui.theme.NavigationBarBackground
 import com.tecsup.metrolima.ui.theme.SelectedButtonColor
@@ -133,6 +135,13 @@ fun BottomNavigationBar(
     }
 }
 
+
+//función para mostrar texto traducido
+@Composable
+fun LocalizedText(resId: Int) {
+    val context = LocalAppContext.current
+    Text(text = context.getString(resId))
+}
 
 data class BottomNavItem(
     val icon: androidx.compose.ui.graphics.vector.ImageVector,

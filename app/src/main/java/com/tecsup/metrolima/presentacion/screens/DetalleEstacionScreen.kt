@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.Train
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +42,7 @@ fun DetalleEstacionScreen(
         topBar = {
             TopAppBar(
                 title = { Text(
-                    text = "Estación ${estacion.nombre}",
+                    text = "${estacion.nombre}",
                     fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -57,7 +58,7 @@ fun DetalleEstacionScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .background(Color(0xFFF6F8FB)),
+                .background(MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -75,7 +76,7 @@ fun DetalleEstacionScreen(
                 text = estacion.nombre,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Start,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -138,11 +139,11 @@ fun DetalleEstacionScreen(
                     text = "Servicios",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                     shape = RoundedCornerShape(12.dp),
                     elevation = CardDefaults.cardElevation(2.dp),
                     modifier = Modifier.fillMaxWidth()
@@ -154,10 +155,10 @@ fun DetalleEstacionScreen(
                         Icon(
                             imageVector = Icons.Default.Train,
                             contentDescription = "Línea 1",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.width(12.dp))
-                        Text("Línea 1", fontWeight = FontWeight.Medium)
+                        Text("Línea 1", fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)
                     }
                 }
             }
@@ -176,16 +177,17 @@ fun DetalleEstacionScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF004E63)),
                     shape = RoundedCornerShape(8.dp)
                 ) {
-                    Text("Ver en Google Maps")
+                    Text("Ver en Google Maps", color = Color.White)
                 }
 
                 Button(
                     onClick = { navController.navigate("rutas") },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9EE2F0)),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(8.dp),
                 ) {
                     Text("Planificar Ruta", color = Color.Black)
                 }
+
             }
 
             Spacer(modifier = Modifier.height(32.dp))

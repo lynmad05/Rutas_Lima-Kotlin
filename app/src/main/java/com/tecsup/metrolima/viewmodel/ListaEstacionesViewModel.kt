@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.first // <-- ¡IMPORTANTE! Necesario para obtener el primer valor del Flow
+import kotlinx.coroutines.flow.first
 
 class ListaEstacionesViewModel(
     private val repository: EstacionRepository
@@ -121,15 +121,9 @@ class ListaEstacionesViewModel(
         }
     }
 
-    // El `refrescarEstaciones` tampoco necesita reasignar a _estaciones.value
-    // porque 'estaciones' (el StateFlow público) ya está escuchando los cambios del repositorio.
-    // Solo si el repositorio tiene una función específica para "refrescar" datos.
     fun refrescarEstaciones() {
-        // Si `repository.getEstaciones()` ya es un Flow, y `estaciones` lo está colectando
-        // no necesitas hacer nada aquí a menos que el repositorio tenga un método
-        // para *forzar* una recarga o invalidar el cache.
-        // Por ahora, lo dejamos vacío ya que 'estaciones' es reactivo.
-        _mensajeUsuario.value = "Estaciones refrescadas." // Mensaje de feedback
+
+        _mensajeUsuario.value = "Estaciones refrescadas."
     }
 
     fun cargarEstacionesRemotas() {
@@ -142,18 +136,12 @@ class ListaEstacionesViewModel(
                 if (estacionesRemotas.isNotEmpty()) {
                     repository.deleteAllEstaciones()
                     repository.insertarEstaciones(estacionesRemotas)
-                    // No es necesario asignar a _estaciones.value aquí.
-                    // El StateFlow 'estaciones' se actualizará automáticamente
-                    // porque Room emite cambios en el Flow de getAllEstaciones().
                     _mensajeUsuario.value = "Datos actualizados correctamente."
                     Log.d("ListaEstacionesViewModel", "Estaciones cargadas desde API remoto (${estacionesRemotas.size})")
                 } else {
                     Log.w("ListaEstacionesViewModel", "API remota devolvió lista vacía. Usando respaldo local.")
-                    // Aquí sí necesitamos obtener los locales, pero sin reasignar _estaciones.value directamente.
-                    // Si el StateFlow 'estaciones' está vacío y la API falla, insertamos iniciales.
-                    // Si 'estaciones' tiene datos, simplemente lo dejamos.
-                    val currentEstaciones = estaciones.first() // Obtenemos el valor actual del StateFlow
-                    if (currentEstaciones.isEmpty()) { // Si no hay estaciones ni remotas ni locales
+                    val currentEstaciones = estaciones.first()
+                    if (currentEstaciones.isEmpty()) {
                         insertarEstacionesIniciales()
                         _mensajeUsuario.value = "API vacía. Datos iniciales cargados."
                     } else {
@@ -162,8 +150,8 @@ class ListaEstacionesViewModel(
                 }
             } catch (e: Exception) {
                 Log.e("ListaEstacionesViewModel", "Error al cargar estaciones remotas: ${e.message}", e)
-                val currentEstaciones = estaciones.first() // Obtenemos el valor actual del StateFlow
-                if (currentEstaciones.isEmpty()) { // Si no hay estaciones locales para mostrar
+                val currentEstaciones = repository.getEstaciones().first()
+                if (currentEstaciones.isEmpty()) {
                     insertarEstacionesIniciales()
                     _mensajeUsuario.value = "No hay conexión y no se encontraron datos locales. Mostrando datos iniciales."
                 } else {

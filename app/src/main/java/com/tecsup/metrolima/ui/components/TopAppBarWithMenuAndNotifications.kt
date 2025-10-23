@@ -16,7 +16,6 @@ import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
 fun TopAppBarWithMenuAndNotifications(
     modifier: Modifier = Modifier,
     onMenuClick: () -> Unit = {},
-    onNotificationsClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         title = { Text("MetroLima GO", style = MaterialTheme.typography.titleLarge.copy(
@@ -24,11 +23,6 @@ fun TopAppBarWithMenuAndNotifications(
         navigationIcon = {
             IconButton(onClick = onMenuClick) {
                 Icon(Icons.Filled.Menu, contentDescription = "Menú")
-            }
-        },
-        actions = {
-            IconButton(onClick = onNotificationsClick) {
-                Icon(Icons.Filled.Notifications, contentDescription = "Notificaciones")
             }
         },
         modifier = modifier,

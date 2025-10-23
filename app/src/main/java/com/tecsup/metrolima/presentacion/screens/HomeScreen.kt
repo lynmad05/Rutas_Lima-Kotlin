@@ -8,53 +8,168 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.automirrored.filled.Article
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.compose.material.icons.filled.Restore
+import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavHostController
 import com.tecsup.metrolima.R
 import com.tecsup.metrolima.ui.components.BottomNavigationBar
+import com.tecsup.metrolima.ui.components.TopAppBarWithMenuAndNotifications
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
 import com.tecsup.metrolima.ui.theme.CardDescriptionColor
-import com.tecsup.metrolima.ui.theme.ChipSelectedColor
-import com.tecsup.metrolima.ui.theme.ChipUnselectedContentColor
-import com.tecsup.metrolima.ui.theme.OnChipSelectedColor
 import com.tecsup.metrolima.ui.theme.SearchBarBackground
 import com.tecsup.metrolima.ui.theme.SearchBarContentColor
 import kotlinx.coroutines.launch
 
+data class MenuDrawerItem(
+    val title: String,
+    val icon: ImageVector,
+    val route: String
+)
+
+val menuItems = listOf(
+    MenuDrawerItem("Mis rutas favoritas", Icons.Default.Star, "favoritos"),
+    MenuDrawerItem("Historial de Rutas", Icons.Default.Restore, "historial_rutas"),
+    MenuDrawerItem("Líneas y mapas", Icons.Default.Map, "lineas_mapas"),
+    MenuDrawerItem("Acerca de la App", Icons.Default.Info, "acerca_app"),
+)
+
+@Composable
+fun DrawerMenuItem(
+    item: MenuDrawerItem,
+    isSelected: Boolean,
+    onItemClick: (String) -> Unit,
+    isInfoItem: Boolean = false
+) {
+    val backgroundColor = if (isSelected) Color(0xFFE0F7FA) else Color.White
+    val contentColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+
+    val infoBackgroundColor = if (isInfoItem) Color(0xFFF0F0F0) else backgroundColor
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(infoBackgroundColor)
+            .clickable(enabled = !isInfoItem) {
+                if (!isInfoItem && item.route.isNotEmpty()) {
+                    onItemClick(item.route)
+                }
+            }
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = if (isInfoItem) Icons.AutoMirrored.Filled.Article else item.icon,
+            contentDescription = item.title,
+            tint = if (isInfoItem) MaterialTheme.colorScheme.onSurfaceVariant else contentColor
+        )
+        Spacer(modifier = Modifier.width(20.dp))
+        Text(
+            text = item.title,
+            style = MaterialTheme.typography.bodyLarge,
+            color = if (isInfoItem) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+        )
+    }
+}
+
+@Composable
+fun DrawerContent(
+    currentRoute: String,
+    onItemClick: (String) -> Unit
+) {
+    ModalDrawerSheet(
+        modifier = Modifier.width(280.dp),
+        drawerContainerColor = Color.White
+    ) {
+        // Título del Menú
+        Text(
+            text = "Menú",
+            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier.padding(20.dp)
+        )
+        Spacer(Modifier.height(8.dp))
+
+        // Ítems de navegación
+        menuItems.forEach { item ->
+            val isSelected = currentRoute == item.route
+
+            DrawerMenuItem(
+                item = item,
+                isSelected = isSelected,
+                onItemClick = onItemClick
+            )
+        }
+        // Ítem de información fija
+        DrawerMenuItem(
+            item = MenuDrawerItem("Version 1.0.0", Icons.AutoMirrored.Filled.Article, ""),
+            isSelected = false,
+            onItemClick = { /* No hay acción */ },
+            isInfoItem = true
+        )
+    }
+}
+
+// ----------------------------------------------------------------------------
+// HOMESCREEN (CONTENEDOR PRINCIPAL)
+// ----------------------------------------------------------------------------
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navController: androidx.navigation.NavHostController,
+    navController: NavHostController,
+    openDrawerOnStart: Boolean,
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route ?: "home"
+
+    LaunchedEffect(openDrawerOnStart) {
+        if (openDrawerOnStart){
+            drawerState.open()
+        }
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             DrawerContent(
-                onItemClick = { item ->
+                currentRoute = currentRoute,
+                onItemClick = { route ->
                     scope.launch { drawerState.close() }
-                    when (item) {
-                        "Inicio" -> navController.navigate("home")
-                        "Mis rutas" -> navController.navigate("rutas")
-                        "Favoritos" -> navController.navigate("favoritos")
-                        "Configuración" -> navController.navigate("configuracion")
-                        "Cerrar sesión" -> { /* lógica para cerrar sesión */ }
+                    if (route.isNotEmpty()) {
+                        navController.navigate(route) {
+                            // Configuración de navegación para el drawer
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 }
             )
@@ -64,7 +179,6 @@ fun HomeScreen(
             topBar = {
                 TopAppBarWithMenuAndNotifications(
                     onMenuClick = { scope.launch { drawerState.open() } },
-                    onNotificationsClick = { /* Navegar a notificaciones */ }
                 )
             },
             bottomBar = { BottomNavigationBar(navController = navController) }
@@ -85,7 +199,7 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                             .clickable { navController.navigate("listado") },
-                        enabled = false,
+                        enabled = openDrawerOnStart,
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedContainerColor = SearchBarBackground,
@@ -112,12 +226,13 @@ fun HomeScreen(
                             onClick = { },
                             label = { Text("Mis Favoritos") },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = ChipSelectedColor,
-                                selectedLabelColor = OnChipSelectedColor,
-                                selectedLeadingIconColor = OnChipSelectedColor,
+                                selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                 containerColor = Color.Transparent,
-                                labelColor = ChipUnselectedContentColor
+                                labelColor = MaterialTheme.colorScheme.onSurfaceVariant
                             ),
+
                         )
                         FilterChip(
                             selected = true,
@@ -125,12 +240,13 @@ fun HomeScreen(
                             onClick = { },
                             label = { Text("Últimas Rutas") },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = ChipSelectedColor,
-                                selectedLabelColor = OnChipSelectedColor,
-                                selectedLeadingIconColor = OnChipSelectedColor,
+                                selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                 containerColor = Color.Transparent,
-                                labelColor = ChipUnselectedContentColor
-                            ),
+                                labelColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            ,
                         )
                         FilterChip(
                             selected = true,
@@ -138,12 +254,13 @@ fun HomeScreen(
                             onClick = { },
                             label = { Text("Líneas/Mapas") },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = ChipSelectedColor,
-                                selectedLabelColor = OnChipSelectedColor,
-                                selectedLeadingIconColor = OnChipSelectedColor,
+                                selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                 containerColor = Color.Transparent,
-                                labelColor = ChipUnselectedContentColor
-                            ),
+                                labelColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            ,
                         )
                     }
                 }
@@ -226,69 +343,6 @@ fun HomeScreen(
     }
 }
 
-@Composable
-fun DrawerContent(onItemClick: (String) -> Unit) {
-    Surface(
-        modifier = Modifier
-            .wrapContentHeight()
-            .width(240.dp)
-            .padding(vertical = 24.dp)
-            .clip(RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp)),
-        tonalElevation = 8.dp,
-        shadowElevation = 8.dp,
-        color = Color(0xFFF7F7F7)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                text = "Menú",
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            DrawerItem("Inicio", onItemClick)
-            DrawerItem("Mis rutas", onItemClick)
-            DrawerItem("Favoritos", onItemClick)
-            DrawerItem("Configuración", onItemClick)
-            DrawerItem("Cerrar sesión", onItemClick)
-        }
-    }
-}
-
-
-@Composable
-fun DrawerItem(text: String, onItemClick: (String) -> Unit) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onItemClick(text) }
-            .padding(vertical = 12.dp)
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppBarWithMenuAndNotifications(
-    onMenuClick: () -> Unit,
-    onNotificationsClick: () -> Unit
-) {
-    TopAppBar(
-        title   = { Text("MetroLima GO") },
-        navigationIcon = {
-            IconButton(onClick = onMenuClick) {
-                Icon(Icons.Default.Menu, contentDescription = "Menú")
-            }
-        },
-        actions = {
-            IconButton(onClick = onNotificationsClick) {
-                Icon(Icons.Default.Notifications, contentDescription = "Notificaciones")
-            }
-        }
-    )
-}
 
 @Composable
 fun PopularPlaceCard(title: String, subtitulo: String, description: String, imageUrl: Int, modifier: Modifier = Modifier) {
@@ -320,18 +374,21 @@ fun PopularPlaceCard(title: String, subtitulo: String, description: String, imag
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
                     maxLines = 1,
+                    color = Color.Black,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = subtitulo,
                     style = MaterialTheme.typography.labelSmall,
                     maxLines = 1,
+                    color = Color.Black,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = CardDescriptionColor
+                    color = Color.Black
+
                 )
             }
         }
@@ -342,6 +399,9 @@ fun PopularPlaceCard(title: String, subtitulo: String, description: String, imag
 @Composable
 fun PreviewHomeScreen() {
     MetroLimaGoTheme {
-        HomeScreen(navController = androidx.navigation.compose.rememberNavController())
+        HomeScreen(
+            navController = androidx.navigation.compose.rememberNavController(),
+            openDrawerOnStart = false // O no pases este parámetro, porque es false por defecto
+        )
     }
 }

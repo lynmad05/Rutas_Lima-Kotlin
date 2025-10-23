@@ -19,6 +19,7 @@ roomKtx = "2.8.0-alpha03"
 roomRuntime = "2.8.0-alpha03"
 roomVersion = "2.8.2"
 foundation = "1.9.3"
+material3Version = "1.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -47,6 +48,7 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-metadata-jvm = { module = "org.jetbrains.kotlinx:kotlinx-metadata-jvm", version.ref = "kotlinxMetadataJvm" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3Version" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

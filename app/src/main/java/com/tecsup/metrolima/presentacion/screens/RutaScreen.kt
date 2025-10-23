@@ -72,7 +72,7 @@ fun RutaScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(Color.White),
+                .background(MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
@@ -94,7 +94,7 @@ fun RutaScreen(
                 },
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color(0xFF00BCD4),
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = Color(0xFFE0E0E0),
                     focusedLabelColor = Color(0xFF00BCD4),
                     unfocusedLabelColor = Color(0xFF757575),
@@ -120,7 +120,7 @@ fun RutaScreen(
                 },
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color(0xFF00BCD4),
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = Color(0xFFE0E0E0),
                     focusedLabelColor = Color(0xFF00BCD4),
                     unfocusedLabelColor = Color(0xFF757575),
@@ -141,6 +141,7 @@ fun RutaScreen(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (selectedTransportOption == "Metro") Color(0xFFE0BBE4) else Color(0xFFF0F0F0),
                         contentColor = if (selectedTransportOption == "Metro") Color(0xFF8D53A4) else Color(0xFF757575)
+
                     ),
                     shape = RoundedCornerShape(12.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)

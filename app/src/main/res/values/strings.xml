@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">MetroLimaGo</string>
+    <string name="config_title">Configuración</string>
+    <string name="options">Opciones</string>
+    <string name="dark_mode">Modo oscuro / claro</string>
+    <string name="language">Idioma</string>
+    <string name="show_languages">Mostrar idiomas</string>
+    <string name="hide_languages">Ocultar idiomas</string>
+    <string name="spanish">Español</string>
+    <string name="english">Inglés</string>
+    <string name="back">Volver</string>
 </resources>

@@ -1,9 +1,12 @@
 package com.tecsup.metrolima.navigation
 
+import android.content.Context
 import androidx.compose.material3.Text
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -11,25 +14,66 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.gson.Gson
 import com.tecsup.metrolima.data.model.Estacion
+import com.tecsup.metrolima.presentacion.screens.AcercaAppScreen
+import com.tecsup.metrolima.presentacion.screens.ConfigScreen
 import com.tecsup.metrolima.presentacion.screens.DetalleEstacionScreen
 import com.tecsup.metrolima.presentacion.screens.ListaEstacionScreen
 import kotlinx.coroutines.delay
 import com.tecsup.metrolima.presentacion.screens.HomeScreen
 import com.tecsup.metrolima.presentacion.screens.RutaScreen
 import com.tecsup.metrolima.presentacion.screens.SplashScreen
+import com.tecsup.metrolima.presentacion.screens.menu.FavoritosScreen
+import com.tecsup.metrolima.presentacion.screens.menu.HistorialRutasScreen
+import com.tecsup.metrolima.presentacion.screens.menu.LineasMapasScreen
+import java.util.Locale
 
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(
+    navController: NavHostController,
+    darkModeEnabled: Boolean,
+    onDarkModeChange: (Boolean) -> Unit,
+    selectedLanguage: String,
+    onLanguageChange: (String) -> Unit
+) {
+    val context = LocalContext.current
+
     NavHost(
         navController = navController,
         startDestination = "splash"
     ) {
+
+        // RUTAS DEL MENU
+
+        composable("favoritos") {
+            FavoritosScreen(navController = navController)
+        }
+        composable("historial_rutas") {
+            HistorialRutasScreen(navController = navController)
+        }
+        composable("lineas_mapas") {
+            LineasMapasScreen(navController = navController)
+        }
+        composable("acerca_app") {
+            AcercaAppScreen(navController = navController)
+        }
+
+        // RUTAS DEL NAVBAR
+
         composable("splash") {
             SplashScreen(navController = navController)
         }
-        composable("home") {
-            HomeScreen(navController = navController)
+        composable(
+            "home?openDrawer={openDrawer}",
+            arguments = listOf(navArgument("openDrawer") {
+                type = NavType.BoolType
+                defaultValue = false
+            })
+        ) { backStackEntry ->
+            val openDrawer = backStackEntry.arguments?.getBoolean("openDrawer") ?: false
+            HomeScreen(navController, openDrawerOnStart = openDrawer)
         }
+
+
 
         composable("rutas") {
             RutaScreen(navController = navController)
@@ -44,17 +88,18 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable("config") {
-            Text("Pantalla de configuración", color = Color.Black)
+            ConfigScreen(
+                navController = navController,
+                darkModeEnabled = darkModeEnabled,
+                onDarkModeChange = onDarkModeChange,
+                selectedLanguage = selectedLanguage,
+                onLanguageChange = onLanguageChange
+            )
         }
 
 
 
-        composable(
-            route = "detalle/{estacionJson}",
-            arguments = listOf(navArgument("estacionJson") { type = NavType.StringType })
-        ) { backStackEntry ->
-            // ... (tu lógica para DetalleEstacionScreen)
-        }
+        //RUTAS DE DETALLES DE LAS ESTACIONES
 
         composable(
             route = "detalle/{estacionJson}",
