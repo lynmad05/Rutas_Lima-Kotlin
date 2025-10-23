@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -17,15 +18,18 @@ import com.tecsup.metrolima.data.model.Estacion
 import com.tecsup.metrolima.presentacion.screens.AcercaAppScreen
 import com.tecsup.metrolima.presentacion.screens.ConfigScreen
 import com.tecsup.metrolima.presentacion.screens.DetalleEstacionScreen
+import com.tecsup.metrolima.presentacion.screens.FavoritosScreen
 import com.tecsup.metrolima.presentacion.screens.ListaEstacionScreen
 import kotlinx.coroutines.delay
 import com.tecsup.metrolima.presentacion.screens.HomeScreen
+import com.tecsup.metrolima.presentacion.screens.IniciarRutaScreen
 import com.tecsup.metrolima.presentacion.screens.RutaScreen
 import com.tecsup.metrolima.presentacion.screens.SplashScreen
-import com.tecsup.metrolima.presentacion.screens.menu.FavoritosScreen
+//import com.tecsup.metrolima.presentacion.screens.menu.FavoritosScreen
 import com.tecsup.metrolima.presentacion.screens.menu.HistorialRutasScreen
 import com.tecsup.metrolima.presentacion.screens.menu.LineasMapasScreen
-import java.util.Locale
+import com.tecsup.metrolima.viewmodel.RutaViewModel
+
 
 @Composable
 fun NavGraph(
@@ -44,9 +48,8 @@ fun NavGraph(
 
         // RUTAS DEL MENU
 
-        composable("favoritos") {
-            FavoritosScreen(navController = navController)
-        }
+
+
         composable("historial_rutas") {
             HistorialRutasScreen(navController = navController)
         }
@@ -73,6 +76,17 @@ fun NavGraph(
             HomeScreen(navController, openDrawerOnStart = openDrawer)
         }
 
+        composable("favoritos") {
+            FavoritosScreen(navController = navController)
+        }
+
+        composable("iniciarRuta") {
+            val context = LocalContext.current
+            val viewModel: RutaViewModel = viewModel(
+                factory = RutaViewModel.provideFactory(context)
+            )
+            IniciarRutaScreen(navController = navController, viewModel = viewModel)
+        }
 
 
         composable("rutas") {

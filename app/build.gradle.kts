@@ -29,20 +29,22 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -50,33 +52,34 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    // Dependencias agregadas ✅
+    implementation("androidx.compose.material3:material3:1.4.0")
 
-    // 🎯 --- Room ---
+    // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.foundation)
-    implementation(libs.material3)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
-    // 🎯 --- Retrofit ---
+    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
-    // 🎯 --- Coroutines ---
+    // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.kotlinx.metadata.jvm)
 
-    // 🎯 Navigation Compose
+    // Navigation Compose
     implementation(libs.androidx.navigation.compose)
 
-    // Material Design Icons Extended (para más íconos)
-    implementation("androidx.compose.material:material-icons-extended:<VERSION>")
-    implementation("androidx.compose.material3:material3:1.2.1")
+    // Material Design Icons Extended
+    implementation("androidx.compose.material:material-icons-extended")
+
+    // Gson
     implementation("com.google.code.gson:gson:2.10.1")
 
+    // Google Maps Compose
+    implementation("com.google.maps.android:maps-compose:2.14.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
