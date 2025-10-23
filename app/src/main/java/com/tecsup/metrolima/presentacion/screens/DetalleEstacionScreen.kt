@@ -41,7 +41,7 @@ fun DetalleEstacionScreen(
         topBar = {
             TopAppBar(
                 title = { Text(
-                    text = "Estación Central",
+                    text = "Estación ${estacion.nombre}",
                     fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -180,7 +180,7 @@ fun DetalleEstacionScreen(
                 }
 
                 Button(
-                    onClick = { /* Planificar ruta */ },
+                    onClick = { navController.navigate("rutas") },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9EE2F0)),
                     shape = RoundedCornerShape(8.dp)
                 ) {
