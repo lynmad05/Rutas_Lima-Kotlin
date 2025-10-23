@@ -58,6 +58,10 @@ fun RutaScreen(
     var selectedTransportOption by remember { mutableStateOf("Metro") }
     var selectedOptimizationOption by remember { mutableStateOf("Menos Transbordos") }
 
+    val filteredOrigenes by viewModel.filteredOrigenes.collectAsState()
+    val filteredDestinos by viewModel.filteredDestinos.collectAsState()
+    val searchOrigenText by viewModel.searchOrigenText.collectAsState()
+    val searchDestinoText by viewModel.searchDestinoText.collectAsState()
 
     Scaffold(
         topBar = {
