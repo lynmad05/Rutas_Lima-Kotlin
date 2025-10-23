@@ -53,8 +53,8 @@ fun RutaScreen(
         factory = RutaViewModel.provideFactory(context)
     )
 
-    var selectedTransportOption by remember { mutableStateOf("Metro") }
-    var selectedOptimizationOption by remember { mutableStateOf("Menos Transbordos") }
+    val selectedTransportOption by viewModel.selectedTransportOption.collectAsState()
+    val selectedOptimizationOption by viewModel.selectedOptimizationOption.collectAsState()
 
     val filteredOrigenes by viewModel.filteredOrigenes.collectAsState()
     val filteredDestinos by viewModel.filteredDestinos.collectAsState()
