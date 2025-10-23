@@ -216,7 +216,7 @@ fun RutaScreen(
             Spacer(modifier = Modifier.height(48.dp))
 
             Button(
-                onClick = { /* Lógica de cálculo de ruta */ },
+                onClick = { viewModel.onCalcularRutaClick() }, // Llama la función que Marlon completará
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .height(56.dp),
