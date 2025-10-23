@@ -120,7 +120,7 @@ class RutaViewModel(
             println("🏁 Destino: ${destino.nombre}")
             println("🚇 Transporte: $transporte")
             println("⚙️ Optimización: $optimizacion")
-    
+
             // Aquí Marlon implementará la lógica real del cálculo
 
         } else {
