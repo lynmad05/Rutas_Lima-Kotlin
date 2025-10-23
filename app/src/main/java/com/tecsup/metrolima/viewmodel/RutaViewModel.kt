@@ -107,6 +107,28 @@ class RutaViewModel(
         _filteredDestinos.value = emptyList()
     }
 
+    fun onCalcularRutaClick(){
+        val origen = _origenEstacion.value
+        val destino = _destinoEstacion.value
+        val transporte = _selectedTransportOption.value
+        val optimizacion = _selectedOptimizationOption.value
+
+        //Solo visual en  el logcat
+        if (origen != null && destino != null){
+            println("🟢 Cálculo de ruta iniciado")
+            println("➡️ Origen: ${origen.nombre}")
+            println("🏁 Destino: ${destino.nombre}")
+            println("🚇 Transporte: $transporte")
+            println("⚙️ Optimización: $optimizacion")
+    
+            // Aquí Marlon implementará la lógica real del cálculo
+
+        } else {
+            println("No se puede calcular: falta origen o destino.")
+        }
+    }
+    // Esto deja un registro visible en el Logcat cada vez que el usuario presiona el botón.
+
 
 
     init {
