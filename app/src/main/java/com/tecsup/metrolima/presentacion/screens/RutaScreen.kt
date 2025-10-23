@@ -53,8 +53,6 @@ fun RutaScreen(
         factory = RutaViewModel.provideFactory(context)
     )
 
-    var origenText by remember { mutableStateOf("") }
-    var destinoText by remember { mutableStateOf("") }
     var selectedTransportOption by remember { mutableStateOf("Metro") }
     var selectedOptimizationOption by remember { mutableStateOf("Menos Transbordos") }
 
