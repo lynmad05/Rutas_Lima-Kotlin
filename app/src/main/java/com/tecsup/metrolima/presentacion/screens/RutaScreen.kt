@@ -154,6 +154,29 @@ fun RutaScreen(
                 )
             )
 
+            // Lista de sugerencias de destino
+            if (filteredDestinos.isNotEmpty() && searchDestinoText.isNotBlank()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
+                        .padding(8.dp)
+                ) {
+                    filteredDestinos.forEach { estacion ->
+                        Text(
+                            text = estacion.nombre,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .clickable {
+                                    viewModel.onDestinoSelected(estacion)
+                                },
+                            color = Color.Black
+                        )
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.height(32.dp))
 
             Row(
