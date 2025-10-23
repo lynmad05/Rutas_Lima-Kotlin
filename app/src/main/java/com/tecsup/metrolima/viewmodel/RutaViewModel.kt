@@ -72,6 +72,7 @@ class RutaViewModel(
 
     fun onTransportOptionSelected(option: String){
         _selectedTransportOption.value = option
+        println("🚇 Transporte seleccionado: $option")
     }
 
     fun onOptimizationOptionSelected(option: String){
