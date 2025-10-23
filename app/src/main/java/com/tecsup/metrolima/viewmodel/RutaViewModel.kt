@@ -133,8 +133,7 @@ class RutaViewModel(
 
     // Funciones básicas de interacción (Medrano y Livia las completarán)
 
-    fun onOrigenSelected(estacion: Estacion) { /* ... */ }
-    fun onDestinoSelected(estacion: Estacion) { /* ... */ }
+
     fun setShowOriginPicker(show: Boolean) { _showOriginPicker.value = show }
     fun setShowDestinoPicker(show: Boolean) { _showDestinoPicker.value = show }
     fun clearSelections() { /* ... */ }
