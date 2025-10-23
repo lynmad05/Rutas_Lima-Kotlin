@@ -113,17 +113,23 @@ class RutaViewModel(
     }
 
     private fun resolveSelectionsFromTextIfNeeded() {
+        println("Resolviendo estaciones desde texto...")
         if (_origenEstacion.value == null && _searchOrigenText.value.isNotBlank()) {
-            _allEstaciones.value.firstOrNull {
-                it.nombre.equals(_searchOrigenText.value.trim(), ignoreCase = true)
-            }?.let { _origenEstacion.value = it }
+            val encontrado = _allEstaciones.value.firstOrNull {
+                it.nombre.trim().equals(_searchOrigenText.value.trim(), ignoreCase = true)
+            }
+            println("Origen encontrado: $encontrado")
+            if (encontrado != null) _origenEstacion.value = encontrado
         }
         if (_destinoEstacion.value == null && _searchDestinoText.value.isNotBlank()) {
-            _allEstaciones.value.firstOrNull {
-                it.nombre.equals(_searchDestinoText.value.trim(), ignoreCase = true)
-            }?.let { _destinoEstacion.value = it }
+            val encontrado = _allEstaciones.value.firstOrNull {
+                it.nombre.trim().equals(_searchDestinoText.value.trim(), ignoreCase = true)
+            }
+            println("Destino encontrado: $encontrado")
+            if (encontrado != null) _destinoEstacion.value = encontrado
         }
     }
+
 
 
     fun onCalcularRutaClick() {

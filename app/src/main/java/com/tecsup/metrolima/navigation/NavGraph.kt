@@ -40,6 +40,8 @@ fun NavGraph(
     onLanguageChange: (String) -> Unit
 ) {
     val context = LocalContext.current
+    // Crear una única instancia del ViewModel aquí
+    val rutaViewModel: RutaViewModel = viewModel(factory = RutaViewModel.provideFactory(context))
 
     NavHost(
         navController = navController,
@@ -81,17 +83,13 @@ fun NavGraph(
         }
 
         composable("iniciarRuta") {
-            val context = LocalContext.current
-            val viewModel: RutaViewModel = viewModel(
-                factory = RutaViewModel.provideFactory(context)
-            )
-            IniciarRutaScreen(navController = navController, viewModel = viewModel)
+            IniciarRutaScreen(navController = navController, viewModel = rutaViewModel)
         }
-
 
         composable("rutas") {
-            RutaScreen(navController = navController)
+            RutaScreen(navController = navController, viewModel = rutaViewModel)  // Pasa el mismo ViewModel aquí
         }
+
 
 
         composable("mapa") {

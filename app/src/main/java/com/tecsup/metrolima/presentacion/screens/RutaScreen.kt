@@ -54,13 +54,12 @@ import com.tecsup.metrolima.viewmodel.RutaViewModel
 @Composable
 fun RutaScreen(
     navController: NavHostController,
+    viewModel: RutaViewModel,
     onMenuClick: () -> Unit = {},
 ) {
     val context = LocalContext.current
-    val viewModel: RutaViewModel = viewModel(
-        factory = RutaViewModel.provideFactory(context)
-    )
 
+    // Cambié rutaviewModel por viewModel (el parámetro)
     val selectedTransportOption by viewModel.selectedTransportOption.collectAsState()
     val selectedOptimizationOption by viewModel.selectedOptimizationOption.collectAsState()
 
@@ -92,7 +91,7 @@ fun RutaScreen(
 
             OutlinedTextField(
                 value = searchOrigenText,
-                onValueChange = { viewModel.onSearchOrigenChange(it)},
+                onValueChange = { viewModel.onSearchOrigenChange(it) },
                 label = { Text("¿Desde dónde?") },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
@@ -137,12 +136,11 @@ fun RutaScreen(
                 }
             }
 
-
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = searchDestinoText,
-                onValueChange = { viewModel.onSearchDestinoChange(it)},
+                onValueChange = { viewModel.onSearchDestinoChange(it) },
                 label = { Text("¿Hacia dónde?") },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
@@ -227,7 +225,7 @@ fun RutaScreen(
             Spacer(modifier = Modifier.height(48.dp))
 
             Button(
-                onClick = { viewModel.onCalcularRutaClick() }, // Llama la función que Marlon completará
+                onClick = { viewModel.onCalcularRutaClick() },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .height(56.dp),
@@ -245,7 +243,6 @@ fun RutaScreen(
                     )
                 )
             }
-
 
             val resultadoRuta by viewModel.resultadoRuta.collectAsState()
 
@@ -275,6 +272,7 @@ fun RutaScreen(
                     // Origen y destino resumidos
                     val origen = viewModel.origenEstacion.value?.nombre ?: "?"
                     val destino = viewModel.destinoEstacion.value?.nombre ?: "?"
+
                     Text(
                         text = "Desde: $origen | Hasta: $destino",
                         style = MaterialTheme.typography.bodyMedium.copy(
@@ -336,19 +334,19 @@ fun RutaScreen(
                     }
                 }
             }
-
-
         }
     }
 }
 
+/*
 @Preview(showBackground = true, device = "id:pixel_7_pro")
 @Composable
 fun PreviewRutas() {
     MetroLimaGoTheme {
         RutaScreen(
-            navController = rememberNavController(),
+            navController = null,
             onMenuClick = { /* Preview click */ }
         )
     }
 }
+*/

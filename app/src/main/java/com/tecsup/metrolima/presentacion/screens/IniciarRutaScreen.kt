@@ -171,16 +171,7 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth(0.9f)
             ) {
-                Button(
-                    onClick = { /* función para alertar incidencia */ },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFF3E5F5),
-                        contentColor = Color(0xFF6A1B9A)
-                    ),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text("Alertar Incidencia")
-                }
+
 
                 Button(
                     onClick = { navController.navigate("favoritos") },
