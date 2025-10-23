@@ -185,7 +185,7 @@ fun RutaScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
-                    onClick = { selectedTransportOption = "Metro" },
+                    onClick = { viewModel.onTransportOptionSelected("Metro") },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (selectedTransportOption == "Metro") Color(0xFFE0BBE4) else Color(0xFFF0F0F0),
