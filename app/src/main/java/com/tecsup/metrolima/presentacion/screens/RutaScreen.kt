@@ -104,6 +104,30 @@ fun RutaScreen(
                 )
             )
 
+            // Lista de sugerencias de origen
+            if (filteredOrigenes.isNotEmpty() && searchOrigenText.isNotBlank()){
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
+                        .padding(8.dp)
+                ){
+                    filteredOrigenes.forEach { estacion ->
+                        Text(
+                            text = estacion.nombre,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .clickable{
+                                    viewModel.onOrigenSelected(estacion)
+                                },
+                            color = Color.Black
+                        )
+                    }
+                }
+            }
+
+
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
