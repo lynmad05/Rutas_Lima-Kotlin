@@ -49,6 +49,37 @@ class RutaViewModel(
     val isCurrentRouteFavorite: StateFlow<Boolean> = _isCurrentRouteFavorite.asStateFlow()
 
 
+    //Texto que escribirá el usuario
+    private val _searchOrigenText = MutableStateFlow("")
+    val searchOrigenText: StateFlow<String> = _searchOrigenText.asStateFlow()
+
+    private val _searchDestinoText = MutableStateFlow("")
+    val searchDestinoText: StateFlow<String> = _searchDestinoText.asStateFlow()
+
+    // Estaciones filtradas según busqueda
+
+    private val _filteredOrigenes = MutableStateFlow<List<Estacion>>(emptyList())
+    val filteredOrigenes: StateFlow<List<Estacion>> = _filteredOrigenes.asStateFlow()
+
+    private val _filteredDestinos = MutableStateFlow<List<Estacion>>(emptyList())
+    val filteredDestinos: StateFlow<List<Estacion>> = _filteredDestinos.asStateFlow()
+
+
+    fun onSearchOrigenChange(query: String){
+        _searchOrigenText.value = query
+        _filteredOrigenes.value = _allEstaciones.value.filter {
+            it.nombre.contains(query, ignoreCase = true)
+        }
+    }
+
+    fun onSearchDestinoChange(query: String){
+        _searchDestinoText.value = query
+        _filteredDestinos.value = _allEstaciones.value.filter {
+            it.nombre.contains(query, ignoreCase = true)
+        }
+    }
+
+
     init {
         loadAllEstaciones()
         loadSavedRoutes()
