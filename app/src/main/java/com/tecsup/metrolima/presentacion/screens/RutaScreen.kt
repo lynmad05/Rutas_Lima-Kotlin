@@ -81,8 +81,8 @@ fun RutaScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             OutlinedTextField(
-                value = origenText,
-                onValueChange = { origenText = it },
+                value = searchOrigenText,
+                onValueChange = { viewModel.onSearchOrigenChange(it)},
                 label = { Text("¿Desde dónde?") },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
