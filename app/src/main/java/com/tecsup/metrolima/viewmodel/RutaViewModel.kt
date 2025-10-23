@@ -92,6 +92,19 @@ class RutaViewModel(
         }
     }
 
+    fun onOrigenSelected(estacion: Estacion) {
+        _origenEstacion.value = estacion
+        _searchOrigenText.value = estacion.nombre
+        _filteredOrigenes.value = emptyList()
+    }
+
+    fun onDestinoSelected(estacion: Estacion) {
+        _destinoEstacion.value = estacion
+        _searchDestinoText.value = estacion.nombre
+        _filteredDestinos.value = emptyList()
+    }
+
+
 
     init {
         loadAllEstaciones()
