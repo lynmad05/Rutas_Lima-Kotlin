@@ -4,6 +4,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -12,11 +14,14 @@ import androidx.navigation.navArgument
 import com.google.gson.Gson
 import com.tecsup.metrolima.data.model.Estacion
 import com.tecsup.metrolima.presentacion.screens.DetalleEstacionScreen
+import com.tecsup.metrolima.presentacion.screens.FavoritosScreen
 import com.tecsup.metrolima.presentacion.screens.ListaEstacionScreen
 import kotlinx.coroutines.delay
 import com.tecsup.metrolima.presentacion.screens.HomeScreen
+import com.tecsup.metrolima.presentacion.screens.IniciarRutaScreen
 import com.tecsup.metrolima.presentacion.screens.RutaScreen
 import com.tecsup.metrolima.presentacion.screens.SplashScreen
+import com.tecsup.metrolima.viewmodel.RutaViewModel
 
 @Composable
 fun NavGraph(navController: NavHostController) {
@@ -29,6 +34,18 @@ fun NavGraph(navController: NavHostController) {
         }
         composable("home") {
             HomeScreen(navController = navController)
+        }
+
+        composable("favoritos") {
+            FavoritosScreen(navController = navController)
+        }
+
+        composable("iniciarRuta") {
+            val context = LocalContext.current
+            val viewModel: RutaViewModel = viewModel(
+                factory = RutaViewModel.provideFactory(context)
+            )
+            IniciarRutaScreen(navController = navController, viewModel = viewModel)
         }
 
         composable("rutas") {

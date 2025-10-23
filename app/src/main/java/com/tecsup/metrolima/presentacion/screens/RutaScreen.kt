@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
+import androidx.compose.material.icons.filled.DirectionsTransit
+import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -236,6 +240,98 @@ fun RutaScreen(
                     )
                 )
             }
+
+
+            val resultadoRuta by viewModel.resultadoRuta.collectAsState()
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            resultadoRuta?.let { resultado ->
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(0.95f)
+                        .background(Color.White)
+                        .padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Tiempo grande en minutos
+                    Text(
+                        text = resultado.tiempoEstimado,
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    // Origen y destino resumidos
+                    val origen = viewModel.origenEstacion.value?.nombre ?: "?"
+                    val destino = viewModel.destinoEstacion.value?.nombre ?: "?"
+                    Text(
+                        text = "Desde: $origen | Hasta: $destino",
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = Color(0xFF4FC3F7),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    // Lista de pasos
+                    resultado.estacionesIntermedias.forEachIndexed { index, estacion ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(0.9f)
+                                .padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // Ícono
+                            Icon(
+                                imageVector = when (index % 3) {
+                                    0 -> Icons.Filled.LocationOn
+                                    1 -> Icons.Filled.DirectionsTransit
+                                    else -> Icons.Filled.DirectionsWalk
+                                },
+                                contentDescription = null,
+                                tint = Color(0xFF006064),
+                                modifier = Modifier.size(32.dp)
+                            )
+
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            Column {
+                                Text(
+                                    text = "Tomar ${estacion.linea} en ${estacion.nombre}",
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                                )
+                                Text(
+                                    text = estacion.distrito,
+                                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
+                                )
+                            }
+                        }
+                    }
+
+                    // Botón de iniciar ruta
+                    Button(
+                        onClick = { navController.navigate("iniciarRuta") },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF4FC3F7),
+                            contentColor = Color.Black
+                        ),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .height(48.dp)
+                    ) {
+                        Text("Iniciar Ruta", fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+
 
         }
     }

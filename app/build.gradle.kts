@@ -16,8 +16,6 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -56,6 +54,7 @@ dependencies {
     // 🎯 --- Room ---
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.foundation)
+    implementation(libs.play.services.maps)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
@@ -75,6 +74,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:<VERSION>")
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation("com.google.maps.android:maps-compose:2.14.0")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
 
 
     testImplementation(libs.junit)
