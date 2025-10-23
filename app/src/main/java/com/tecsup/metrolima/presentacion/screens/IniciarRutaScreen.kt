@@ -28,9 +28,14 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
 
 
     val resultadoRuta by viewModel.resultadoRuta.collectAsState()
-
     val origen = viewModel.origenEstacion.collectAsState().value
     val destino = viewModel.destinoEstacion.collectAsState().value
+
+    // Aquí agregas este bloque para imprimir el estado actual
+    LaunchedEffect(origen, destino) {
+        println("🟢 Origen recibido: ${origen?.nombre}")
+        println("🟢 Destino recibido: ${destino?.nombre}")
+    }
 
 
     Scaffold(
