@@ -77,6 +77,7 @@ class RutaViewModel(
 
     fun onOptimizationOptionSelected(option: String){
         _selectedOptimizationOption.value = option
+        println("⚙️ Optimización seleccionada: $option")
     }
 
     fun onSearchOrigenChange(query: String){
