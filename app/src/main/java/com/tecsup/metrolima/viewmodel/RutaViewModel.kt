@@ -64,6 +64,19 @@ class RutaViewModel(
     private val _filteredDestinos = MutableStateFlow<List<Estacion>>(emptyList())
     val filteredDestinos: StateFlow<List<Estacion>> = _filteredDestinos.asStateFlow()
 
+    private val _selectedTransportOption = MutableStateFlow("Metro")
+    val selectedTransportOption: StateFlow<String> = _selectedTransportOption.asStateFlow()
+
+    private val _selectedOptimizationOption = MutableStateFlow("Menos Transbordos")
+    val selectedOptimizationOption: StateFlow<String> = _selectedOptimizationOption.asStateFlow()
+
+    fun onTransportOptionSelected(option: String){
+        _selectedTransportOption.value = option
+    }
+
+    fun onOptimizationOptionSelected(option: String){
+        _selectedOptimizationOption.value = option
+    }
 
     fun onSearchOrigenChange(query: String){
         _searchOrigenText.value = query
