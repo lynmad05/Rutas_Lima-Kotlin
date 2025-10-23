@@ -3,6 +3,7 @@ package com.tecsup.metrolima.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.ViewModelProvider
+import androidx.room.Query
 import com.tecsup.metrolima.data.db.MetroLimaDataBase
 import com.tecsup.metrolima.data.model.Estacion
 import com.tecsup.metrolima.data.model.Ruta
