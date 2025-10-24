@@ -1,5 +1,6 @@
 package com.tecsup.metrolima.presentacion.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,23 +21,44 @@ import androidx.navigation.NavHostController
 import com.tecsup.metrolima.viewmodel.RutaViewModel
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnrememberedGetBackStackEntry")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritosScreen(navController: NavHostController) {
     val context = LocalContext.current
-    val vm: RutaViewModel = viewModel(factory = RutaViewModel.provideFactory(context))
-    val rutas by vm.savedRoutes.collectAsState()
+    val parentEntry = remember(navController) { navController.getBackStackEntry("rutas") }
+    val viewModel: RutaViewModel = viewModel(parentEntry, factory = RutaViewModel.provideFactory(context))
+    val rutas by viewModel.savedRoutes.collectAsState()
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Rutas Favoritas") }) }
+        topBar = {
+            TopAppBar(
+                title = { Text("Rutas Favoritas") },
+                navigationIcon = {
+                    IconButton({ navController.popBackStack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+                    }
+                }
+            )
+        }
     ) { padding ->
-        LazyColumn(Modifier.padding(padding).padding(16.dp)) {
-            items(rutas) { r ->
-                Text("Desde: ${r.nombreEstacionOrigen}")
-                Text("Hasta: ${r.nombreEstacionDestino}")
-                Text("Tiempo: ${r.tiempoEstimadoMinutos} min")
-                Spacer(Modifier.height(16.dp))
+        if (rutas.isEmpty()) {
+            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
+                Text("Aún no tienes rutas guardadas")
+            }
+        } else {
+            LazyColumn(Modifier.padding(padding).padding(16.dp)) {
+                items(rutas) { ruta ->
+                    Card(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                        Column(Modifier.padding(12.dp)) {
+                            Text("Desde: ${ruta.nombreEstacionOrigen}", fontWeight = FontWeight.Bold)
+                            Text("Hasta: ${ruta.nombreEstacionDestino}", color = Color.Gray)
+                            Text("Tiempo: ${ruta.tiempoEstimadoMinutos} min")
+                        }
+                    }
+                }
             }
         }
     }
 }
+

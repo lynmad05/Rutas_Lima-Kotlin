@@ -85,7 +85,7 @@ fun NavGraph(
             val viewModel: RutaViewModel = viewModel(
                 factory = RutaViewModel.provideFactory(context)
             )
-            IniciarRutaScreen(navController = navController, viewModel = viewModel)
+            IniciarRutaScreen(navController = navController)
         }
 
 
