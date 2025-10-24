@@ -130,6 +130,14 @@
     <string name="menu">Menu</string>
     <string name="notificaciones">Notifications</string>
 
+    <!--MapaScreen-->
+    <string name="map_title">Line 1 Map</string>
+    <string name="map_description">
+        Lima Metro Line 1 runs through 26 stations from Villa El Salvador to San Juan de Lurigancho.
+        It connects the south and east of the city, providing fast, modern, and safe transport for thousands of people every day.
+    </string>
+    <string name="map_image_description">Map of Lima Metro Line 1</string>
+
 
 
 </resources>

@@ -38,14 +38,6 @@ fun TopAppBarWithMenuAndNotifications(
                 )
             }
         },
-        actions = {
-            IconButton(onClick = { /* acción de notificación opcional */ }) {
-                Icon(
-                    imageVector = Icons.Filled.Notifications,
-                    contentDescription = stringResource(R.string.notificaciones)
-                )
-            }
-        },
         modifier = modifier,
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.background

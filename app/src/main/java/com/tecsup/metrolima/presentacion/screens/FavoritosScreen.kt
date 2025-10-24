@@ -11,13 +11,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.tecsup.metrolima.R
 import com.tecsup.metrolima.viewmodel.RutaViewModel
 
@@ -31,7 +34,12 @@ fun FavoritosScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.favoritos_title), color = Color.Black) },
+                title = {
+                    Text(
+                        stringResource(R.string.favoritos_title),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -65,11 +73,16 @@ fun FavoritosScreen(navController: NavHostController) {
             ) {
                 items(rutas) { ruta ->
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFFB2DFDB)), // jadecito suave
-                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-                    ) {
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .shadow(6.dp, RoundedCornerShape(16.dp)) // sombra más suave
+                            .padding(vertical = 4.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFFDFF6FF) // azul pastel suave
+                        ),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    ){
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -105,4 +118,11 @@ fun FavoritosScreen(navController: NavHostController) {
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FavoritosScreenPreview() {
+    val fakeNavController = rememberNavController()
+    FavoritosScreen(navController = fakeNavController)
 }

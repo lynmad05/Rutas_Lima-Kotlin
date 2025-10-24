@@ -130,6 +130,12 @@
     <string name="menu">Menú</string>
     <string name="notificaciones">Notificaciones</string>
 
-
+    <!-- mapascreen de la linea 1-->
+    <string name="map_title">Mapa de la Línea 1</string>
+    <string name="map_description">
+        La Línea 1 del Metro de Lima recorre 26 estaciones desde Villa El Salvador hasta San Juan de Lurigancho.
+        Conecta el sur con el este de la ciudad y ofrece un transporte rápido, moderno y seguro para miles de personas cada día.
+    </string>
+    <string name="map_image_description">Mapa de la Línea 1 del Metro de Lima</string>
 
 </resources>
