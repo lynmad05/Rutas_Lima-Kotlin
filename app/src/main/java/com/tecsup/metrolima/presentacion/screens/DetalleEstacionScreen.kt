@@ -13,13 +13,13 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.Train
 import androidx.compose.material3.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,12 +41,18 @@ fun DetalleEstacionScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(
-                    text = "${estacion.nombre}",
-                    fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(
+                        text = estacion.nombre,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Atrás")
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 }
             )
@@ -64,7 +70,7 @@ fun DetalleEstacionScreen(
 
             Image(
                 painter = painterResource(id = R.drawable.linea1),
-                contentDescription = "Mapa de estación",
+                contentDescription = stringResource(R.string.mapa_estacion),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp)
@@ -85,20 +91,19 @@ fun DetalleEstacionScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Tarjetas de información
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     InfoCard(
-                        label = "Tipo de Ruta",
+                        label = stringResource(R.string.tipo_ruta),
                         value = estacion.linea,
                         icon = Icons.Default.Train,
                         modifier = Modifier.weight(1f)
                     )
                     InfoCard(
-                        label = "Distrito",
+                        label = stringResource(R.string.distrito),
                         value = estacion.distrito,
                         icon = Icons.Default.LocationOn,
                         modifier = Modifier.weight(1f)
@@ -112,13 +117,13 @@ fun DetalleEstacionScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     InfoCard(
-                        label = "Coordenadas",
+                        label = stringResource(R.string.coordenadas),
                         value = "${estacion.latitud}, ${estacion.longitud}",
                         icon = Icons.Default.Route,
                         modifier = Modifier.weight(1f)
                     )
                     InfoCard(
-                        label = "Horario",
+                        label = stringResource(R.string.horario),
                         value = estacion.horario,
                         icon = Icons.Default.AccessTime,
                         modifier = Modifier.weight(1f)
@@ -126,17 +131,15 @@ fun DetalleEstacionScreen(
                 }
             }
 
-
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Servicios
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = "Servicios",
+                    text = stringResource(R.string.servicios),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.onBackground
@@ -154,18 +157,21 @@ fun DetalleEstacionScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Train,
-                            contentDescription = "Línea 1",
+                            contentDescription = stringResource(R.string.linea_1),
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.width(12.dp))
-                        Text("Línea 1", fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)
+                        Text(
+                            stringResource(R.string.linea_1),
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Botones
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -173,11 +179,11 @@ fun DetalleEstacionScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = { /* Ver en Google Maps */ },
+                    onClick = { /* TODO: Ver en Google Maps */ },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF004E63)),
                     shape = RoundedCornerShape(8.dp)
                 ) {
-                    Text("Ver en Google Maps", color = Color.White)
+                    Text(stringResource(R.string.ver_en_maps), color = Color.White)
                 }
 
                 Button(
@@ -185,9 +191,8 @@ fun DetalleEstacionScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9EE2F0)),
                     shape = RoundedCornerShape(8.dp),
                 ) {
-                    Text("Planificar Ruta", color = Color.Black)
+                    Text(stringResource(R.string.planificar_ruta), color = Color.Black)
                 }
-
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -200,7 +205,7 @@ fun InfoCard(
     label: String,
     value: String,
     icon: androidx.compose.ui.graphics.vector.ImageVector,
-    modifier: Modifier = Modifier // <- se agrega esto
+    modifier: Modifier = Modifier
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = Color(0xFFEDE0FF)),

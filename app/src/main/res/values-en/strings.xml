@@ -1,12 +1,133 @@
 <resources>
-    <string name="app_name">MetroLimaGo</string>
+    <string name="app_name">MetroLima GO</string>
+
+    <!-- 🏠 Home / Drawer -->
+    <string name="menu_title">Menu</string>
+    <string name="drawer_favoritos">My Favorite Routes</string>
+    <string name="drawer_historial">Route History</string>
+    <string name="drawer_acerca">About the App</string>
+    <string name="version_app">Version 1.0.0</string>
+
+    <!-- 🚆 Start Route -->
+    <string name="finalizar">Finish</string>
+    <string name="mapa_linea1_desc">Map of Metro Line 1 - Lima</string>
+    <string name="sin_origen">No origin</string>
+    <string name="sin_destino">No destination</string>
+    <string name="ruta_guardada">Route saved</string>
+    <string name="tiempo_estimado_label">Estimated time: %1$s</string>
+    <string name="estaciones_intermedias_label">Intermediate stations: %1$d</string>
+    <string name="proximo_paso_label">Next stop: %1$s</string>
+
+    <!-- 🔍 Search Bar -->
+    <string name="buscar_placeholder">Search stations or routes</string>
+
+    <!-- 🧩 Chips -->
+    <string name="filtro_favoritos">My Favorites</string>
+    <string name="filtro_ultimas">Recent Routes</string>
+    <string name="filtro_lineas">Lines/Maps</string>
+
+    <!-- 📍 Places Section -->
+    <string name="lugares_populares">Popular Places</string>
+    <string name="ruta">Route</string>
+    <string name="estacion">Station</string>
+
+    <!-- 🚆 Coming Soon -->
+    <string name="proximamente">Coming Soon</string>
+    <string name="mas_lineas">More lines on the way</string>
+    <string name="lineas_en_desarrollo">Lines 2, 3, 4, and 6 under development</string>
+    <string name="tren_construccion">Train under construction</string>
+
+    <!-- 🏙️ Station list -->
+    <string name="titulo_estaciones">Stations</string>
+    <string name="no_estaciones">No stations available or no results found.</string>
+    <string name="ir_detalle">Go to details of %1$s</string>
+
+    <!-- 🚇 Route Screen -->
+    <string name="planifica_tu_ruta">Plan Your Route</string>
+    <string name="desde_donde">From</string>
+    <string name="hacia_donde">To</string>
+    <string name="ubicacion_icono">Location icon</string>
+    <string name="metro">Metro</string>
+    <string name="menos_transbordos">Fewer Transfers</string>
+    <string name="calcular_ruta">Calculate Route</string>
+    <string name="iniciar_ruta">Start Route</string>
+    <string name="tomar_linea_en">Take %1$s at %2$s</string>
+
+    <!-- 🟣 Configuracion  -->
     <string name="config_title">Settings</string>
     <string name="options">Options</string>
-    <string name="dark_mode">Dark / Light mode</string>
+    <string name="dark_mode">Dark / Light Mode</string>
     <string name="language">Language</string>
     <string name="show_languages">Show languages</string>
     <string name="hide_languages">Hide languages</string>
     <string name="spanish">Spanish</string>
     <string name="english">English</string>
+
+    <!-- 🟣 Home screen -->
+    <string name="home_title">Home</string>
+    <string name="welcome_message">Welcome to Metro de Lima</string>
+
+    <!-- 🟣 Acerca de -->
+    <string name="acerca_title">About MetroLima GO</string>
+    <string name="app_description">Your essential guide to the Lima Metro and integrated routes, designed to connect the city efficiently and easily.</string>
+    <string name="credits_title">Project Credits</string>
+    <string name="version_num">Version %1$s</string>
+    <string name="desarrollado_por">Developed by the MetroLima GO team</string>
+
+    <!-- 🟣 Mis rutas favoritas -->
+    <string name="pantalla_favoritos">Screen: My Favorite Routes</string>
+
+    <!-- 🟣 Mis historial de rutas -->
+    <string name="historial_title">Route History</string>
+    <string name="no_saved_routes">No saved routes yet</string>
+    <string name="intermedias">Intermediate: %1$s</string>
+
+    <!-- 🟣 DetalleEstacion -->
+    <string name="mapa_estacion">Station Map</string>
+    <string name="tipo_ruta">Route Type</string>
+    <string name="distrito">District</string>
+    <string name="coordenadas">Coordinates</string>
+    <string name="horario">Schedule</string>
+    <string name="servicios">Services</string>
+    <string name="linea_1">Line 1</string>
+    <string name="ver_en_maps">View on Google Maps</string>
+    <string name="planificar_ruta">Plan Route</string>
+
+    <!-- 🟣 Favoritos -->
+    <string name="favoritos_title">Favorite Routes</string>
+    <string name="desde">From: %1$s</string>
+    <string name="hasta">To: %1$s</string>
+    <string name="favorito">Favorite</string>
     <string name="back">Back</string>
+
+    <!-- 💜 Splash Screen -->
+    <string name="splash_image_desc">MetroLima GO splash screen</string>
+
+    <!-- 🟣 Routes screen -->
+    <string name="guardar_favorito">Save Favorite Route</string>
+    <string name="ver_favoritos">View Favorites</string>
+    <string name="tiempo_estimado">Estimated time:</string>
+    <string name="recorrido">Route:</string>
+
+    <!-- 🟣 Favorites screen -->
+    <string name="rutas_guardadas">Saved Routes</string>
+    <string name="no_favoritos">You have no saved routes yet 💾</string>
+    <string name="eliminar_ruta">Delete route</string>
+
+    <!-- 🔽 Bottom Navigation -->
+    <string name="nav_inicio">Home</string>
+    <string name="nav_rutas">Routes</string>
+    <string name="nav_mapa">Map</string>
+    <string name="nav_estaciones">Stations</string>
+    <string name="nav_configuracion">Settings</string>
+
+    <!-- 🔹 TopAppBar Estaciones -->
+    <string name="estaciones_title">Stations</string>
+
+    <!-- 🔹 TopAppBar with Menu and Notifications -->
+    <string name="menu">Menu</string>
+    <string name="notificaciones">Notifications</string>
+
+
+
 </resources>

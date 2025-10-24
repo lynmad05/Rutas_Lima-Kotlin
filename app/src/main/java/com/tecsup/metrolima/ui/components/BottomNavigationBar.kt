@@ -1,4 +1,5 @@
 package com.tecsup.metrolima.ui.components
+
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
 import androidx.compose.foundation.background
@@ -10,64 +11,64 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsTransit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Map // Este icono ahora representa "Mapa" visualmente
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.tecsup.metrolima.presentacion.LocalAppContext
+import com.tecsup.metrolima.R
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
 import com.tecsup.metrolima.ui.theme.NavigationBarBackground
 import com.tecsup.metrolima.ui.theme.SelectedButtonColor
 import com.tecsup.metrolima.ui.theme.OnSelectedButtonColor
 import com.tecsup.metrolima.ui.theme.UnselectedIconColor
 
-
 @Composable
 fun BottomNavigationBar(
     navController: NavController,
     modifier: Modifier = Modifier
-){
+) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    // 🔤 Textos traducibles
     val navItems = listOf(
         BottomNavItem(
             icon = Icons.Filled.Home,
-            description = "Inicio",
+            description = stringResource(R.string.nav_inicio),
             route = "home"
         ),
         BottomNavItem(
             icon = Icons.Filled.LocationOn,
-            description = "Rutas",
+            description = stringResource(R.string.nav_rutas),
             route = "rutas"
         ),
         BottomNavItem(
             icon = Icons.Filled.Map,
-            description = "Mapa",
+            description = stringResource(R.string.nav_mapa),
             route = "mapa"
         ),
         BottomNavItem(
             icon = Icons.Filled.DirectionsTransit,
-            description = "Estaciones",
+            description = stringResource(R.string.nav_estaciones),
             route = "listado"
         ),
         BottomNavItem(
             icon = Icons.Filled.Settings,
-            description = "Configuración",
+            description = stringResource(R.string.nav_configuracion),
             route = "config"
         )
     )
-
 
     Box(
         modifier = modifier
@@ -75,7 +76,6 @@ fun BottomNavigationBar(
             .padding(horizontal = 10.dp, vertical = 10.dp),
         contentAlignment = Alignment.Center
     ) {
-
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,7 +96,7 @@ fun BottomNavigationBar(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                navItems.forEachIndexed { index, item ->
+                navItems.forEach { item ->
                     val isSelected = currentRoute == item.route
 
                     Box(
@@ -124,8 +124,7 @@ fun BottomNavigationBar(
                         Icon(
                             imageVector = item.icon,
                             contentDescription = item.description,
-                            tint = if (isSelected) OnSelectedButtonColor
-                            else UnselectedIconColor,
+                            tint = if (isSelected) OnSelectedButtonColor else UnselectedIconColor,
                             modifier = Modifier.size(40.dp)
                         )
                     }
@@ -135,20 +134,11 @@ fun BottomNavigationBar(
     }
 }
 
-
-//función para mostrar texto traducido
-@Composable
-fun LocalizedText(resId: Int) {
-    val context = LocalAppContext.current
-    Text(text = context.getString(resId))
-}
-
 data class BottomNavItem(
     val icon: androidx.compose.ui.graphics.vector.ImageVector,
     val description: String,
     val route: String
 )
-
 
 @Preview(showBackground = true)
 @Composable
