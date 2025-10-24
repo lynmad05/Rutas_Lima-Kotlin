@@ -1,6 +1,6 @@
 package com.tecsup.metrolima.presentacion.screens
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,202 +12,172 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.google.android.gms.maps.model.*
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.*
+import com.tecsup.metrolima.R
 import com.tecsup.metrolima.viewmodel.RutaViewModel
 
-@SuppressLint("UnrememberedGetBackStackEntry", "UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IniciarRutaScreen(navController: NavHostController) {
-    val context = LocalContext.current
-    val parentEntry = remember(navController) { navController.getBackStackEntry("rutas") }
-    val viewModel: RutaViewModel = viewModel(parentEntry, factory = RutaViewModel.provideFactory(context))
+fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel) {
 
-    val origen by viewModel.origenEstacion.collectAsState()
-    val destino by viewModel.destinoEstacion.collectAsState()
     val resultadoRuta by viewModel.resultadoRuta.collectAsState()
-    val isFav by viewModel.isCurrentRouteFavorite.collectAsState()
+    val origen = viewModel.origenEstacion.collectAsState().value
+    val destino = viewModel.destinoEstacion.collectAsState().value
 
-    // --- CONFIGURACIÓN DE MAPA ---
-    val origenLatLng = origen?.let { LatLng(it.latitud, it.longitud) }
-    val destinoLatLng = destino?.let { LatLng(it.latitud, it.longitud) }
-
-    // Calcula el punto medio entre las estaciones para enfocar mejor el mapa
-    val centerLatLng = remember(origenLatLng, destinoLatLng) {
-        if (origenLatLng != null && destinoLatLng != null) {
-            LatLng(
-                (origenLatLng.latitude + destinoLatLng.latitude) / 2,
-                (origenLatLng.longitude + destinoLatLng.longitude) / 2
-            )
-        } else {
-            LatLng(-12.0464, -77.0428) // Lima centro por defecto
-        }
-    }
-
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(centerLatLng, 13f)
+    // Mostrar en logcat los datos actuales (solo para depuración)
+    LaunchedEffect(origen, destino) {
+        println("🟢 Origen recibido: ${origen?.nombre}")
+        println("🟢 Destino recibido: ${destino?.nombre}")
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("MetroLima GO") },
+                title = { Text(stringResource(R.string.app_name)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 },
                 actions = {
                     TextButton(onClick = { navController.navigate("rutas") }) {
-                        Text("Finalizar", color = Color(0xFF00BCD4))
+                        Text(stringResource(R.string.finalizar), color = Color(0xFF00BCD4))
                     }
                 }
             )
         }
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .background(Color.White),
+                .background(MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // ---  MAPA  ---
-            if (origenLatLng != null && destinoLatLng != null) {
-                GoogleMap(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(400.dp)
-                        .padding(horizontal = 12.dp, vertical = 8.dp)
-                        .shadow(6.dp, RoundedCornerShape(20.dp)),
-                    cameraPositionState = cameraPositionState
-                ) {
-                    Marker(
-                        state = MarkerState(position = origenLatLng),
-                        title = origen!!.nombre,
-                        snippet = "Origen"
-                    )
-                    Marker(
-                        state = MarkerState(position = destinoLatLng),
-                        title = destino!!.nombre,
-                        snippet = "Destino"
-                    )
 
-                    // Simulación de trazo curvo estilo "ruta del metro"
-                    val puntos = listOf(
-                        origenLatLng,
-                        LatLng(
-                            (origenLatLng.latitude + destinoLatLng.latitude) / 2 + 0.005,
-                            (origenLatLng.longitude + destinoLatLng.longitude) / 2
-                        ),
-                        destinoLatLng
-                    )
+            // Imagen ilustrativa
+            Image(
+                painter = painterResource(id = R.drawable.mapa_linea1),
+                contentDescription = stringResource(R.string.mapa_linea1_desc),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .padding(16.dp)
+            )
 
-                    Polyline(
-                        points = puntos,
-                        color = Color(0xFF0091EA),
-                        width = 12f
-                    )
-                }
-            } else {
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(350.dp)
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Selecciona origen y destino para ver el mapa.")
-                }
-            }
-
-            // ---  CARD  ---
+            // Datos de la ruta
             Card(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    .padding(12.dp)
-                    .shadow(8.dp, RoundedCornerShape(16.dp)),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFF9FBFC)),
-                shape = RoundedCornerShape(20.dp)
+                    .padding(8.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
+                shape = RoundedCornerShape(16.dp)
             ) {
                 Column(
-                    Modifier
-                        .padding(vertical = 16.dp, horizontal = 20.dp),
+                    modifier = Modifier.padding(16.dp),
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        "Desde: ${origen?.nombre ?: "Selecciona origen"}",
-                        fontSize = 17.sp,
-                        color = Color(0xFF1565C0),
-                        fontWeight = FontWeight.Bold
+                        text = origen?.nombre ?: stringResource(R.string.sin_origen),
+                        color = if (origen == null) Color.Red else Color.Black,
+                        fontWeight = if (origen == null) FontWeight.Bold else FontWeight.Normal
                     )
-                    Spacer(Modifier.height(4.dp))
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Text(
-                        "Hasta: ${destino?.nombre ?: "Selecciona destino"}",
-                        fontSize = 17.sp,
-                        color = Color(0xFF00897B),
-                        fontWeight = FontWeight.Bold
+                        text = destino?.nombre ?: stringResource(R.string.sin_destino),
+                        color = if (destino == null) Color.Red else Color.Black,
+                        fontWeight = if (destino == null) FontWeight.Bold else FontWeight.Normal
                     )
-                    Spacer(Modifier.height(4.dp))
-                    resultadoRuta?.let {
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Botón para guardar favorito
+            var guardado by remember { mutableStateOf(false) }
+
+            Button(
+                onClick = {
+                    viewModel.saveCurrentRoute()
+                    guardado = true
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (guardado) Color(0xFFFFCDD2) else Color(0xFFE0F7FA),
+                    contentColor = if (guardado) Color(0xFFB71C1C) else Color.Black
+                ),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .height(50.dp)
+            ) {
+                Icon(
+                    imageVector = if (guardado) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                    contentDescription = stringResource(R.string.favorito),
+                    tint = if (guardado) Color(0xFFB71C1C) else Color.Black
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    if (guardado)
+                        stringResource(R.string.ruta_guardada)
+                    else
+                        stringResource(R.string.guardar_favorito)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            resultadoRuta?.let { resultado ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .padding(top = 8.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
                         Text(
-                            "Duración: ${it.tiempoEstimado}",
-                            fontSize = 15.sp,
-                            color = Color(0xFF424242),
-                            fontWeight = FontWeight.Medium
+                            text = stringResource(R.string.tiempo_estimado_label, resultado.tiempoEstimado),
+                            fontWeight = FontWeight.Bold
                         )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = stringResource(R.string.estaciones_intermedias_label, resultado.estacionesIntermedias.size)
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        if (resultado.estacionesIntermedias.isNotEmpty()) {
+                            Text(
+                                text = stringResource(R.string.proximo_paso_label, resultado.estacionesIntermedias.first().nombre)
+                            )
+                        }
                     }
                 }
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-            // --- BOTÓN FAVORITO ---
-            Button(
-                onClick = { viewModel.saveCurrentRoute() },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isFav) Color(0xFFFFCDD2) else Color(0xFFE0F7FA),
-                    contentColor = if (isFav) Color(0xFFB71C1C) else Color.Black
-                ),
-                shape = RoundedCornerShape(14.dp),
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .height(55.dp)
-                    .shadow(4.dp, RoundedCornerShape(14.dp))
-            ) {
-                Icon(
-                    imageVector = if (isFav) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "Favorito"
-                )
-                Spacer(Modifier.width(8.dp))
-                Text(if (isFav) "Ruta guardada" else "Guardar como favorita")
-            }
-
-            Spacer(Modifier.height(20.dp))
-
-            //  BOTÓN FAVORITOS ---
             Button(
                 onClick = { navController.navigate("favoritos") },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF1A237E),
-                    contentColor = Color.White
+                    containerColor = Color(0xFFF8BBD0),
+                    contentColor = Color.Black
                 ),
-                shape = RoundedCornerShape(30.dp),
-                modifier = Modifier
-                    .fillMaxWidth(0.6f)
-                    .height(50.dp)
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth(0.9f)
             ) {
-                Text("Ver Favoritos", fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.ver_favoritos))
             }
         }
     }

@@ -27,8 +27,8 @@ import com.tecsup.metrolima.presentacion.screens.RutaScreen
 import com.tecsup.metrolima.presentacion.screens.SplashScreen
 //import com.tecsup.metrolima.presentacion.screens.menu.FavoritosScreen
 import com.tecsup.metrolima.presentacion.screens.menu.HistorialRutasScreen
-import com.tecsup.metrolima.presentacion.screens.menu.LineasMapasScreen
 import com.tecsup.metrolima.viewmodel.RutaViewModel
+
 
 @Composable
 fun NavGraph(
@@ -39,6 +39,8 @@ fun NavGraph(
     onLanguageChange: (String) -> Unit
 ) {
     val context = LocalContext.current
+    // Crear una única instancia del ViewModel aquí
+    val rutaViewModel: RutaViewModel = viewModel(factory = RutaViewModel.provideFactory(context))
 
     NavHost(
         navController = navController,
@@ -48,12 +50,11 @@ fun NavGraph(
         // RUTAS DEL MENU
 
 
+
         composable("historial_rutas") {
-            HistorialRutasScreen(navController = navController)
+            HistorialRutasScreen(navController = navController, viewModel = rutaViewModel)
         }
-        composable("lineas_mapas") {
-            LineasMapasScreen(navController = navController)
-        }
+
         composable("acerca_app") {
             AcercaAppScreen(navController = navController)
         }
@@ -79,17 +80,13 @@ fun NavGraph(
         }
 
         composable("iniciarRuta") {
-            val context = LocalContext.current
-            val viewModel: RutaViewModel = viewModel(
-                factory = RutaViewModel.provideFactory(context)
-            )
-            IniciarRutaScreen(navController = navController)
+            IniciarRutaScreen(navController = navController, viewModel = rutaViewModel)
         }
-
 
         composable("rutas") {
-            RutaScreen(navController = navController)
+            RutaScreen(navController = navController, viewModel = rutaViewModel)  // Pasa el mismo ViewModel aquí
         }
+
 
 
         composable("mapa") {

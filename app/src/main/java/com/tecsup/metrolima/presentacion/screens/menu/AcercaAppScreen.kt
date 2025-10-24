@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +38,7 @@ fun AcercaAppScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        "Acerca de MetroLima GO",
+                        stringResource(R.string.acerca_title),
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
@@ -53,7 +54,7 @@ fun AcercaAppScreen(
                     }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Menú"
+                            contentDescription = stringResource(R.string.back)
                         )
                     }
                 },
@@ -89,18 +90,17 @@ fun AcercaAppScreen(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.welcome),
-                    contentDescription = "MetroLima GO",
+                    contentDescription = stringResource(R.string.app_name),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
             }
 
-
             Spacer(modifier = Modifier.height(24.dp))
 
             // Nombre de la App
             Text(
-                text = "MetroLima GO",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.onBackground
@@ -111,7 +111,7 @@ fun AcercaAppScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Versión 1.0.0",
+                text = stringResource(R.string.version_num, "1.0.0"),
                 style = MaterialTheme.typography.titleSmall.copy(
                     color = MaterialTheme.colorScheme.primary
                 ),
@@ -121,7 +121,7 @@ fun AcercaAppScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Tu guía esencial para el Metro de Lima y rutas integradas, diseñada para conectar la ciudad de forma eficiente y sencilla.",
+                text = stringResource(R.string.app_description),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(0.8f)
@@ -129,9 +129,8 @@ fun AcercaAppScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Créditos
             Text(
-                text = "Créditos del Proyecto",
+                text = stringResource(R.string.credits_title),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground
@@ -141,14 +140,12 @@ fun AcercaAppScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Equipo
             Text(
-                text = "Desarrollado por el equipo de MetroLima GO",
+                text = stringResource(R.string.desarrollado_por),
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
-
         }
     }
 }

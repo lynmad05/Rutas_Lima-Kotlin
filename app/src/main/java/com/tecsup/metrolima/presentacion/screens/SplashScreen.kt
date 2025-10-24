@@ -2,22 +2,16 @@ package com.tecsup.metrolima.presentacion.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color // Para el color lila
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tecsup.metrolima.R
@@ -25,7 +19,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navController: NavController) {
-    LaunchedEffect(key1 = true) {
+    // ⏳ Retraso de 3 segundos antes de ir al Home
+    LaunchedEffect(Unit) {
         delay(3000L)
         navController.popBackStack()
         navController.navigate("home") {
@@ -38,14 +33,16 @@ fun SplashScreen(navController: NavController) {
             .fillMaxSize()
             .background(Color.White)
     ) {
+        // Imagen de fondo del splash
         Image(
             painter = painterResource(id = R.drawable.welcome),
-            contentDescription = "Metro Lima Go Splash Screen",
+            contentDescription = stringResource(R.string.splash_image_desc),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
             alignment = Alignment.Center
         )
 
+        // Indicador de carga
         Column(
             modifier = Modifier
                 .fillMaxSize()
