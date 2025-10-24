@@ -1,14 +1,12 @@
 package com.tecsup.metrolima.ui.components
 
-import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.tecsup.metrolima.R
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -19,8 +17,14 @@ fun TopAppBarEstaciones(
     onMenuClick: () -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
-        title = { Text(title, style = MaterialTheme.typography.titleLarge.copy(
-            fontWeight = FontWeight.Bold))},
+        title = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold
+                )
+            )
+        },
         modifier = modifier
     )
 }
@@ -29,6 +33,7 @@ fun TopAppBarEstaciones(
 @Composable
 fun PreviewTopAppEstaciones() {
     MetroLimaGoTheme {
-        TopAppBarEstaciones("Estaciones")
+        // 👇 Ejemplo usando stringResource
+        TopAppBarEstaciones(title = stringResource(id = R.string.estaciones_title))
     }
 }

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Search
@@ -19,25 +21,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
+import com.tecsup.metrolima.R
 import com.tecsup.metrolima.data.model.Estacion
 import com.tecsup.metrolima.ui.components.BottomNavigationBar
 import com.tecsup.metrolima.ui.components.TopAppBarEstaciones
 import com.tecsup.metrolima.ui.theme.*
 import com.tecsup.metrolima.viewmodel.ListaEstacionesViewModel
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.input.ImeAction
-import kotlinx.coroutines.launch // Importa para el CoroutineScope
-
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,11 +73,10 @@ fun ListaEstacionScreen(
         }
     }
 
-
     Scaffold(
         topBar = {
             TopAppBarEstaciones(
-                title = "Estaciones"
+                title = stringResource(R.string.titulo_estaciones)
             )
         },
         bottomBar = { BottomNavigationBar(navController = navController) },
@@ -88,17 +88,19 @@ fun ListaEstacionScreen(
                 .padding(paddingValues)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-
             val keyboardController = LocalSoftwareKeyboardController.current
+
+            // 🔍 Barra de búsqueda traducible
             OutlinedTextField(
                 value = searchText,
                 onValueChange = { viewModel.onSearchTextChange(it) },
-                placeholder = { Text("Buscar estaciones o rutas") },
-                leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Buscar") },
+                placeholder = { Text(stringResource(R.string.buscar_placeholder)) },
+                leadingIcon = {
+                    Icon(Icons.Filled.Search, contentDescription = stringResource(R.string.buscar_placeholder))
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                enabled = true,
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(
@@ -119,26 +121,30 @@ fun ListaEstacionScreen(
                 )
             )
 
-            if (isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(modifier = Modifier.size(48.dp))
+            when {
+                isLoading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(modifier = Modifier.size(48.dp))
+                    }
                 }
-            } else {
-                if (estaciones.isEmpty() && mensajeUsuario.startsWith("❌").not()) {
+
+                estaciones.isEmpty() && mensajeUsuario.startsWith("❌").not() -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No hay estaciones disponibles o no se encontraron resultados.",
+                            text = stringResource(R.string.no_estaciones),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(16.dp)
                         )
                     }
-                } else {
+                }
+
+                else -> {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -163,7 +169,6 @@ fun ListaEstacionScreen(
     }
 }
 
-// StationListItem y PreviewListaEstacionScreen no cambian
 @Composable
 fun StationListItem(estacion: Estacion, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Row(
@@ -201,7 +206,7 @@ fun StationListItem(estacion: Estacion, onClick: () -> Unit, modifier: Modifier 
 
         Icon(
             imageVector = Icons.Filled.ArrowForwardIos,
-            contentDescription = "Ir a detalles de ${estacion.nombre}",
+            contentDescription = stringResource(R.string.ir_detalle, estacion.nombre),
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(16.dp)
         )

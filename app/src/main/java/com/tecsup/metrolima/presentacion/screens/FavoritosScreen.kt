@@ -5,19 +5,22 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.tecsup.metrolima.R
 import com.tecsup.metrolima.viewmodel.RutaViewModel
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritosScreen(navController: NavHostController) {
@@ -28,17 +31,16 @@ fun FavoritosScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Rutas Favoritas", color = Color.Black) },
+                title = { Text(stringResource(R.string.favoritos_title), color = Color.Black) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Volver",
+                            contentDescription = stringResource(R.string.back),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
-                // Sin especificar colores, usa el default de Material3
             )
         }
     ) { paddingValues ->
@@ -50,7 +52,7 @@ fun FavoritosScreen(navController: NavHostController) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    "No tienes rutas favoritas aún",
+                    text = stringResource(R.string.no_favoritos),
                     color = Color.Black
                 )
             }
@@ -77,24 +79,24 @@ fun FavoritosScreen(navController: NavHostController) {
                         ) {
                             Column {
                                 Text(
-                                    text = "Desde: ${ruta.nombreEstacionOrigen}",
+                                    text = stringResource(R.string.desde, ruta.nombreEstacionOrigen),
                                     fontWeight = FontWeight.Bold,
                                     color = Color.Black
                                 )
                                 Text(
-                                    text = "Hasta: ${ruta.nombreEstacionDestino}",
+                                    text = stringResource(R.string.hasta, ruta.nombreEstacionDestino),
                                     color = Color.Black,
                                     modifier = Modifier.padding(top = 4.dp)
                                 )
                                 Text(
-                                    text = "Tiempo estimado: ${ruta.tiempoEstimadoMinutos} min",
+                                    text = stringResource(R.string.tiempo_estimado, ruta.tiempoEstimadoMinutos),
                                     color = Color.Black,
                                     modifier = Modifier.padding(top = 4.dp)
                                 )
                             }
                             Icon(
                                 imageVector = Icons.Filled.Favorite,
-                                contentDescription = "Favorito",
+                                contentDescription = stringResource(R.string.favorito),
                                 tint = Color.Red
                             )
                         }

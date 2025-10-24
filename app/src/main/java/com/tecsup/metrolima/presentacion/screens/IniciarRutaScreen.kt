@@ -13,11 +13,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.tecsup.metrolima.R
 import com.tecsup.metrolima.viewmodel.RutaViewModel
@@ -30,28 +29,27 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
     val origen = viewModel.origenEstacion.collectAsState().value
     val destino = viewModel.destinoEstacion.collectAsState().value
 
-    // Aquí agregas este bloque para imprimir el estado actual
+    // Mostrar en logcat los datos actuales (solo para depuración)
     LaunchedEffect(origen, destino) {
         println("🟢 Origen recibido: ${origen?.nombre}")
         println("🟢 Destino recibido: ${destino?.nombre}")
     }
 
-
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("MetroLima GO") },
+                title = { Text(stringResource(R.string.app_name)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Volver"
+                            contentDescription = stringResource(R.string.back)
                         )
                     }
                 },
                 actions = {
                     TextButton(onClick = { navController.navigate("rutas") }) {
-                        Text("Finalizar", color = Color(0xFF00BCD4))
+                        Text(stringResource(R.string.finalizar), color = Color(0xFF00BCD4))
                     }
                 }
             )
@@ -66,10 +64,10 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // Imagen del mapa o ilustración
+            // Imagen ilustrativa
             Image(
                 painter = painterResource(id = R.drawable.mapa_linea1),
-                contentDescription = "Mapa",
+                contentDescription = stringResource(R.string.mapa_linea1_desc),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp)
@@ -89,16 +87,15 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = origen?.nombre ?: "Sin origen",
+                        text = origen?.nombre ?: stringResource(R.string.sin_origen),
                         color = if (origen == null) Color.Red else Color.Black,
                         fontWeight = if (origen == null) FontWeight.Bold else FontWeight.Normal
                     )
 
-
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = destino?.nombre ?: "Sin destino",
+                        text = destino?.nombre ?: stringResource(R.string.sin_destino),
                         color = if (destino == null) Color.Red else Color.Black,
                         fontWeight = if (destino == null) FontWeight.Bold else FontWeight.Normal
                     )
@@ -126,11 +123,16 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
             ) {
                 Icon(
                     imageVector = if (guardado) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "Favorito",
+                    contentDescription = stringResource(R.string.favorito),
                     tint = if (guardado) Color(0xFFB71C1C) else Color.Black
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(if (guardado) "Ruta guardada" else "Guardar como ruta favorita")
+                Text(
+                    if (guardado)
+                        stringResource(R.string.ruta_guardada)
+                    else
+                        stringResource(R.string.guardar_favorito)
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -147,17 +149,17 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = "Tiempo estimado: ${resultado.tiempoEstimado}",
+                            text = stringResource(R.string.tiempo_estimado_label, resultado.tiempoEstimado),
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Estaciones intermedias: ${resultado.estacionesIntermedias.size}"
+                            text = stringResource(R.string.estaciones_intermedias_label, resultado.estacionesIntermedias.size)
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         if (resultado.estacionesIntermedias.isNotEmpty()) {
                             Text(
-                                text = "Próximo paso: ${resultado.estacionesIntermedias.first().nombre}"
+                                text = stringResource(R.string.proximo_paso_label, resultado.estacionesIntermedias.first().nombre)
                             )
                         }
                     }
@@ -166,22 +168,16 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
+            Button(
+                onClick = { navController.navigate("favoritos") },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFF8BBD0),
+                    contentColor = Color.Black
+                ),
+                shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth(0.9f)
             ) {
-
-
-                Button(
-                    onClick = { navController.navigate("favoritos") },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFF8BBD0),
-                        contentColor = Color.Black
-                    ),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text("Ver Favoritos")
-                }
+                Text(stringResource(R.string.ver_favoritos))
             }
         }
     }

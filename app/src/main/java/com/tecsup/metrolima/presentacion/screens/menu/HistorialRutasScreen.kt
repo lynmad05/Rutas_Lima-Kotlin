@@ -16,11 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.tecsup.metrolima.R
 import com.tecsup.metrolima.viewmodel.RutaViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,7 +40,7 @@ fun HistorialRutasScreen(
             TopAppBar(
                 title = {
                     Text(
-                        "Historial de rutas",
+                        stringResource(R.string.historial_title),
                         style = MaterialTheme.typography.titleLarge.copy(
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -48,13 +50,13 @@ fun HistorialRutasScreen(
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             Icons.Filled.ArrowBack,
-                            contentDescription = "Volver",
+                            contentDescription = stringResource(R.string.back),
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface, // 👈 fondo claro, acorde al tema
+                    containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
@@ -67,7 +69,7 @@ fun HistorialRutasScreen(
                 .padding(paddingValues)
         ) {
             if (historial.isEmpty()) {
-                // 🌟 Diseño para cuando no hay rutas guardadas
+                // 🌟 Cuando no hay rutas guardadas
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -83,7 +85,7 @@ fun HistorialRutasScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "No hay rutas guardadas aún",
+                        text = stringResource(R.string.no_saved_routes),
                         style = MaterialTheme.typography.bodyLarge.copy(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )
@@ -96,14 +98,14 @@ fun HistorialRutasScreen(
                         .fillMaxSize()
                         .padding(horizontal = 12.dp)
                 ) {
-                    items(historial.reversed()) { ruta -> // Rutas recientes primero
+                    items(historial.reversed()) { ruta ->
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 6.dp)
                                 .clip(MaterialTheme.shapes.medium)
                                 .clickable {
-                                    // Navegar a detalles si lo deseas
+                                    // TODO: navegación a detalles
                                 },
                             elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
                             colors = CardDefaults.cardColors(
@@ -125,7 +127,7 @@ fun HistorialRutasScreen(
                                 Spacer(modifier = Modifier.height(6.dp))
 
                                 Text(
-                                    text = "⏱ ${ruta.tiempoEstimadoMinutos} min",
+                                    text = stringResource(R.string.tiempo_estimado, ruta.tiempoEstimadoMinutos),
                                     fontSize = 14.sp,
                                     color = MaterialTheme.colorScheme.primary,
                                     fontWeight = FontWeight.Medium
@@ -134,7 +136,10 @@ fun HistorialRutasScreen(
                                 if (ruta.estacionesIntermedias.isNotBlank()) {
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Text(
-                                        text = "Intermedias: ${ruta.estacionesIntermedias.replace("|", ", ")}",
+                                        text = stringResource(
+                                            R.string.intermedias,
+                                            ruta.estacionesIntermedias.replace("|", ", ")
+                                        ),
                                         fontSize = 13.sp,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         maxLines = 2,

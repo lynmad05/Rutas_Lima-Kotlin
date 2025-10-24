@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsTransit
@@ -17,25 +16,22 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.tecsup.metrolima.presentacion.LocalAppContext
+import com.tecsup.metrolima.R
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
 import com.tecsup.metrolima.ui.theme.NavigationBarBackground
 import com.tecsup.metrolima.ui.theme.SelectedButtonColor
 import com.tecsup.metrolima.ui.theme.OnSelectedButtonColor
 import com.tecsup.metrolima.ui.theme.UnselectedIconColor
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun BottomNavigationBar(
@@ -45,27 +41,53 @@ fun BottomNavigationBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    // 🔤 Textos traducibles
     val navItems = listOf(
-        BottomNavItem(Icons.Filled.Home, "Inicio", "home"),
-        BottomNavItem(Icons.Filled.LocationOn, "Rutas", "rutas"),
-        BottomNavItem(Icons.Filled.Map, "Mapa", "mapa"),
-        BottomNavItem(Icons.Filled.DirectionsTransit, "Estaciones", "listado"),
-        BottomNavItem(Icons.Filled.Settings, "Configuración", "config")
+        BottomNavItem(
+            icon = Icons.Filled.Home,
+            description = stringResource(R.string.nav_inicio),
+            route = "home"
+        ),
+        BottomNavItem(
+            icon = Icons.Filled.LocationOn,
+            description = stringResource(R.string.nav_rutas),
+            route = "rutas"
+        ),
+        BottomNavItem(
+            icon = Icons.Filled.Map,
+            description = stringResource(R.string.nav_mapa),
+            route = "mapa"
+        ),
+        BottomNavItem(
+            icon = Icons.Filled.DirectionsTransit,
+            description = stringResource(R.string.nav_estaciones),
+            route = "listado"
+        ),
+        BottomNavItem(
+            icon = Icons.Filled.Settings,
+            description = stringResource(R.string.nav_configuracion),
+            route = "config"
+        )
     )
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 10.dp),
+            .padding(horizontal = 10.dp, vertical = 10.dp),
         contentAlignment = Alignment.Center
     ) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp)
-                .clip(RoundedCornerShape(40.dp))
-                .shadow(elevation = 10.dp, shape = RoundedCornerShape(40.dp)),
+                .height(64.dp)
+                .clip(RoundedCornerShape(32.dp))
+                .border(
+                    width = 0.5.dp,
+                    color = Color.Black,
+                    shape = RoundedCornerShape(32.dp)
+                ),
             color = NavigationBarBackground,
+            shadowElevation = 8.dp
         ) {
             Row(
                 modifier = Modifier
@@ -76,20 +98,16 @@ fun BottomNavigationBar(
             ) {
                 navItems.forEach { item ->
                     val isSelected = currentRoute == item.route
-                    val backgroundColor by animateColorAsState(
-                        targetValue = if (isSelected) SelectedButtonColor else Color.Transparent,
-                        label = ""
-                    )
-                    val iconScale by animateFloatAsState(
-                        targetValue = if (isSelected) 1.2f else 1f,
-                        label = ""
-                    )
 
                     Box(
                         modifier = Modifier
-                            .size(60.dp)
-                            .clip(CircleShape)
-                            .background(backgroundColor)
+                            .width(80.dp)
+                            .height(60.dp)
+                            .clip(RoundedCornerShape(30.dp))
+                            .background(
+                                if (isSelected) SelectedButtonColor
+                                else Color.Transparent
+                            )
                             .clickable {
                                 if (currentRoute != item.route) {
                                     navController.navigate(item.route) {
@@ -107,21 +125,13 @@ fun BottomNavigationBar(
                             imageVector = item.icon,
                             contentDescription = item.description,
                             tint = if (isSelected) OnSelectedButtonColor else UnselectedIconColor,
-                            modifier = Modifier
-                                .size(34.dp)
-                                .graphicsLayer(scaleX = iconScale, scaleY = iconScale)
+                            modifier = Modifier.size(40.dp)
                         )
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-fun LocalizedText(resId: Int) {
-    val context = LocalAppContext.current
-    Text(text = context.getString(resId))
 }
 
 data class BottomNavItem(
