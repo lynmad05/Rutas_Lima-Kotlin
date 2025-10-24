@@ -26,7 +26,6 @@ import com.tecsup.metrolima.viewmodel.RutaViewModel
 @Composable
 fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel) {
 
-
     val resultadoRuta by viewModel.resultadoRuta.collectAsState()
     val origen = viewModel.origenEstacion.collectAsState().value
     val destino = viewModel.destinoEstacion.collectAsState().value
@@ -63,7 +62,7 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .background(Color.White),
+                .background(MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -141,7 +140,7 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .padding(top = 8.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFE1F5FE)),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Column(

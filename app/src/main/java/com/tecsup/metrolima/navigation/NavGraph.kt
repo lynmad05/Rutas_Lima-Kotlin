@@ -27,7 +27,6 @@ import com.tecsup.metrolima.presentacion.screens.RutaScreen
 import com.tecsup.metrolima.presentacion.screens.SplashScreen
 //import com.tecsup.metrolima.presentacion.screens.menu.FavoritosScreen
 import com.tecsup.metrolima.presentacion.screens.menu.HistorialRutasScreen
-import com.tecsup.metrolima.presentacion.screens.menu.LineasMapasScreen
 import com.tecsup.metrolima.viewmodel.RutaViewModel
 
 
@@ -53,11 +52,9 @@ fun NavGraph(
 
 
         composable("historial_rutas") {
-            HistorialRutasScreen(navController = navController)
+            HistorialRutasScreen(navController = navController, viewModel = rutaViewModel)
         }
-        composable("lineas_mapas") {
-            LineasMapasScreen(navController = navController)
-        }
+
         composable("acerca_app") {
             AcercaAppScreen(navController = navController)
         }

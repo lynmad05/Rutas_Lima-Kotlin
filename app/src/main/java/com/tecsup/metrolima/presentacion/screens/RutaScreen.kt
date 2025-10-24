@@ -130,7 +130,10 @@ fun RutaScreen(
                                 .clickable{
                                     viewModel.onOrigenSelected(estacion)
                                 },
-                            color = Color.Black
+                            color = Color(0xFF212121) // gris oscuro
+
+
+
                         )
                     }
                 }
@@ -179,7 +182,10 @@ fun RutaScreen(
                                 .clickable {
                                     viewModel.onDestinoSelected(estacion)
                                 },
-                            color = Color.Black
+                            color = Color(0xFF212121) // gris oscuro
+
+
+
                         )
                     }
                 }
@@ -254,7 +260,7 @@ fun RutaScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth(0.95f)
-                        .background(Color.White)
+                        .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(8.dp))
                         .padding(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -263,7 +269,8 @@ fun RutaScreen(
                         text = resultado.tiempoEstimado,
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
+
                         )
                     )
 
@@ -323,7 +330,7 @@ fun RutaScreen(
                         onClick = { navController.navigate("iniciarRuta") },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF4FC3F7),
-                            contentColor = Color.Black
+                            MaterialTheme.colorScheme.onSurface
                         ),
                         shape = RoundedCornerShape(10.dp),
                         modifier = Modifier

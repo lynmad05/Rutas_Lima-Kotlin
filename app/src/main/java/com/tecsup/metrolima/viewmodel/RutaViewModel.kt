@@ -148,18 +148,36 @@ class RutaViewModel(
             println("⚙️ Optimización: $optimizacion")
 
             viewModelScope.launch {
+                // Simula la ruta
                 val estacionesIntermedias = simularRuta(origen, destino)
-                val tiempoEstimado = "${(estacionesIntermedias.size + 1) * 2} min"
+                val tiempoEstimadoMinutos = (estacionesIntermedias.size + 1) * 2
+                val tiempoEstimado = "$tiempoEstimadoMinutos min"
 
-                _resultadoRuta.value = RutaResultado(
+                // Actualiza el resultado actual
+                val resultado = RutaResultado(
                     tiempoEstimado = tiempoEstimado,
                     estacionesIntermedias = estacionesIntermedias
                 )
+                _resultadoRuta.value = resultado
 
                 println("✅ Ruta calculada: ${origen.nombre} → ${destino.nombre} ($tiempoEstimado)")
+
+                // --- Nuevo: guarda automáticamente en historial ---
+                val ruta = Ruta(
+                    id = 0,
+                    idEstacionOrigen = origen.id,
+                    nombreEstacionOrigen = origen.nombre,
+                    idEstacionDestino = destino.id,
+                    nombreEstacionDestino = destino.nombre,
+                    tiempoEstimadoMinutos = tiempoEstimadoMinutos,
+                    estacionesIntermedias = estacionesIntermedias.joinToString("|") { it.nombre }
+                )
+
+                saveRutaHistorial(ruta)
+                println("🟡 Ruta agregada automáticamente al historial: ${ruta.nombreEstacionOrigen} → ${ruta.nombreEstacionDestino}")
             }
         } else {
-            println("No se puede calcular porque falta el origen o destino.")
+            println("❌ No se puede calcular porque falta el origen o destino.")
         }
     }
 
@@ -191,6 +209,7 @@ class RutaViewModel(
         viewModelScope.launch {
             rutaRepository.insertRoute(ruta)
             _isCurrentRouteFavorite.value = true
+            saveRutaHistorial(ruta)
             println("💾 Ruta guardada: ${origen.nombre} → ${destino.nombre} (${minutos} min)")
         }
     }
@@ -262,6 +281,13 @@ class RutaViewModel(
                 checkIfCurrentRouteIsFavorite()
             }
         }
+    }
+    private val _historialRutas = MutableStateFlow<List<Ruta>>(emptyList())
+    val historialRutas: StateFlow<List<Ruta>> = _historialRutas.asStateFlow()
+    // Función para guardar en historial
+    fun saveRutaHistorial(ruta: Ruta) {
+        _historialRutas.value = _historialRutas.value + ruta
+        println("🟡 Ruta agregada al historial: ${ruta.nombreEstacionOrigen} → ${ruta.nombreEstacionDestino}")
     }
 
 

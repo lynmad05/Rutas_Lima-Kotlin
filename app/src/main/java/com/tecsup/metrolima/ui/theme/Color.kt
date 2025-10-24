@@ -26,11 +26,6 @@ val OnSelectedButtonColor = Color(0xFF000000)
 val UnselectedIconColor = Color(0xFF000000)
 
 
-//--- LISTA DE ESTACIONES SCREENS :)
-
-// Color para el distrito/descripción de la estación StationNameColor
-val StationNameColor = Color(0xFF6A6A6A)
-val StationDescriptionColor = Color(0xFF1F617A)
 val DividerColor = Color(0xFFD3D3D3)
 
 val miColorBorde = Color(0xFF47949E)

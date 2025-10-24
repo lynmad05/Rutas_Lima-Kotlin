@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Article
+import androidx.compose.material.icons.filled.Construction
+import androidx.compose.material.icons.filled.DirectionsTransit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Search
@@ -50,7 +52,6 @@ data class MenuDrawerItem(
 val menuItems = listOf(
     MenuDrawerItem("Mis rutas favoritas", Icons.Default.Star, "favoritos"),
     MenuDrawerItem("Historial de Rutas", Icons.Default.Restore, "historial_rutas"),
-    MenuDrawerItem("Líneas y mapas", Icons.Default.Map, "lineas_mapas"),
     MenuDrawerItem("Acerca de la App", Icons.Default.Info, "acerca_app"),
 )
 
@@ -61,10 +62,11 @@ fun DrawerMenuItem(
     onItemClick: (String) -> Unit,
     isInfoItem: Boolean = false
 ) {
-    val backgroundColor = if (isSelected) Color(0xFFE0F7FA) else Color.White
-    val contentColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+    val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+    val contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
 
-    val infoBackgroundColor = if (isInfoItem) Color(0xFFF0F0F0) else backgroundColor
+
+    val infoBackgroundColor = if (isInfoItem) MaterialTheme.colorScheme.surfaceVariant else backgroundColor
 
     Row(
         modifier = Modifier
@@ -102,7 +104,8 @@ fun DrawerContent(
 ) {
     ModalDrawerSheet(
         modifier = Modifier.width(280.dp),
-        drawerContainerColor = Color.White
+        drawerContainerColor = MaterialTheme.colorScheme.surface
+
     ) {
         // Título del Menú
         Text(
@@ -193,8 +196,9 @@ fun HomeScreen(
                     OutlinedTextField(
                         value = "",
                         onValueChange = { },
-                        placeholder = { Text("Buscar estaciones o rutas") },
-                        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Buscar") },
+                        placeholder = { Text("Buscar estaciones o rutas",
+                            color = Color.Black )},
+                        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Buscar", tint = Color.Black) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -208,9 +212,10 @@ fun HomeScreen(
                             disabledBorderColor = Color.Transparent,
                             focusedBorderColor = Color.Transparent,
                             unfocusedBorderColor = Color.Transparent,
-                            disabledTextColor = SearchBarContentColor,
-                            disabledLeadingIconColor = SearchBarContentColor,
-                            disabledPlaceholderColor = SearchBarContentColor
+                            disabledTextColor = MaterialTheme.colorScheme.onBackground,
+                            disabledLeadingIconColor = MaterialTheme.colorScheme.onBackground,
+                            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
+
                         )
                     )
 
@@ -306,8 +311,13 @@ fun HomeScreen(
                             text = "Próximamente",
                             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                         )
-                        IconButton(onClick = { }) {
-                            Icon(Icons.Filled.Search, contentDescription = "Ver detalles")
+                        IconButton(onClick = { /* solo decorativo */ }) {
+                            Icon(
+                                imageVector = Icons.Filled.Construction,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                                modifier = Modifier.size(24.dp)
+                            )
                         }
                     }
 
@@ -352,7 +362,7 @@ fun PopularPlaceCard(title: String, subtitulo: String, description: String, imag
             .height(200.dp)
             .clip(RoundedCornerShape(16.dp)),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
@@ -374,26 +384,27 @@ fun PopularPlaceCard(title: String, subtitulo: String, description: String, imag
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
                     maxLines = 1,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onSurface,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = subtitulo,
                     style = MaterialTheme.typography.labelSmall,
                     maxLines = 1,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onSurface,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface,
 
                 )
             }
         }
     }
 }
+
 
 @Preview(showBackground = true, device = "id:pixel_7_pro")
 @Composable

@@ -134,7 +134,7 @@ fun ListaEstacionScreen(
                     ) {
                         Text(
                             text = "No hay estaciones disponibles o no se encontraron resultados.",
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(16.dp)
                         )
                     }
@@ -190,12 +190,12 @@ fun StationListItem(estacion: Estacion, onClick: () -> Unit, modifier: Modifier 
             Text(
                 text = estacion.nombre,
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                color = StationNameColor
+                color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = estacion.distrito,
                 style = MaterialTheme.typography.bodySmall,
-                color = StationDescriptionColor
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
