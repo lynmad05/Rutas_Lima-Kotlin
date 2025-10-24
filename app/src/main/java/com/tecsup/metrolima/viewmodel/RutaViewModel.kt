@@ -245,16 +245,6 @@ class RutaViewModel(
         }
     }
 
-    fun clearSelections() {
-        _origenEstacion.value = null
-        _destinoEstacion.value = null
-        _searchOrigenText.value = ""
-        _searchDestinoText.value = ""
-        _resultadoRuta.value = null
-        _isCurrentRouteFavorite.value = false
-    }
-
-
 
 
 
@@ -306,14 +296,6 @@ class RutaViewModel(
         _historialRutas.value = _historialRutas.value + ruta
         println("🟡 Ruta agregada al historial: ${ruta.nombreEstacionOrigen} → ${ruta.nombreEstacionDestino}")
     }
-
-
-    // Funciones básicas de interacción (Medrano y Livia las completarán)
-
-
-    fun setShowOriginPicker(show: Boolean) { _showOriginPicker.value = show }
-    fun setShowDestinoPicker(show: Boolean) { _showDestinoPicker.value = show }
-    suspend fun deleteRoute(ruta: Ruta) { /* ... */ }
 
 
     // --- Factory para el ViewModel ---

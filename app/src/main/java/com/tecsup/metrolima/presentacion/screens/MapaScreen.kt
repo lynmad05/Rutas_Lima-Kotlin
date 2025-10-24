@@ -87,7 +87,7 @@ fun MapaScreen(navController: NavHostController) {
                 ) {
                     Spacer(modifier = Modifier.height(30.dp))
 
-                    // 🗺️ Card con el mapa
+                    //  Card con el mapa
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -111,7 +111,7 @@ fun MapaScreen(navController: NavHostController) {
 
                     Spacer(modifier = Modifier.height(30.dp))
 
-                    // 📍 Subtítulo
+                    //  Subtítulo
                     Text(
                         text = "Línea 1 - Villa El Salvador → San Juan de Lurigancho",
                         style = MaterialTheme.typography.titleMedium.copy(
@@ -124,7 +124,7 @@ fun MapaScreen(navController: NavHostController) {
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // 💬 Tarjeta de información
+                    // Tarjeta de información
                     Surface(
                         shape = RoundedCornerShape(20.dp),
                         tonalElevation = 6.dp,
@@ -148,7 +148,7 @@ fun MapaScreen(navController: NavHostController) {
 
                     Spacer(modifier = Modifier.height(40.dp))
 
-                    // 🌈 Línea decorativa inferior
+                    //  Línea decorativa inferior
                     Divider(
                         modifier = Modifier
                             .width(100.dp)

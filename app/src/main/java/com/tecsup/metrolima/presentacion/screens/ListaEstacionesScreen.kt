@@ -90,7 +90,7 @@ fun ListaEstacionScreen(
         ) {
             val keyboardController = LocalSoftwareKeyboardController.current
 
-            // 🔍 Barra de búsqueda traducible
+            //  Barra de búsqueda traducible
             OutlinedTextField(
                 value = searchText,
                 onValueChange = { viewModel.onSearchTextChange(it) },

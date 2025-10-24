@@ -69,7 +69,7 @@ fun HistorialRutasScreen(
                 .padding(paddingValues)
         ) {
             if (historial.isEmpty()) {
-                // 🌟 Cuando no hay rutas guardadas
+                //  Cuando no hay rutas guardadas
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -92,7 +92,7 @@ fun HistorialRutasScreen(
                     )
                 }
             } else {
-                // 📜 Lista de rutas
+                //  Lista de rutas
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
