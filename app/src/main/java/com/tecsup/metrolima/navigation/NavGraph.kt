@@ -80,7 +80,11 @@ fun NavGraph(
         }
 
         composable("iniciarRuta") {
-            IniciarRutaScreen(navController = navController, viewModel = rutaViewModel)
+            val context = LocalContext.current
+            val viewModel: RutaViewModel = viewModel(
+                factory = RutaViewModel.provideFactory(context)
+            )
+            IniciarRutaScreen(navController = navController, viewModel = viewModel)
         }
 
         composable("rutas") {
