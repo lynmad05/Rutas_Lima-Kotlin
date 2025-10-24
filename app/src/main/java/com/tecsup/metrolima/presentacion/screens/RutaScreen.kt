@@ -34,7 +34,6 @@ fun RutaScreen(
     onMenuClick: () -> Unit = {},
 ) {
     val context = LocalContext.current
-
     // ✅ use remember to prevent recomposition issue
     val parentEntry = remember(navController) { navController.getBackStackEntry("rutas") }
     val viewModel: RutaViewModel = viewModel(

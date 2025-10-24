@@ -30,7 +30,6 @@ import com.tecsup.metrolima.presentacion.screens.menu.HistorialRutasScreen
 import com.tecsup.metrolima.presentacion.screens.menu.LineasMapasScreen
 import com.tecsup.metrolima.viewmodel.RutaViewModel
 
-
 @Composable
 fun NavGraph(
     navController: NavHostController,
@@ -47,7 +46,6 @@ fun NavGraph(
     ) {
 
         // RUTAS DEL MENU
-
 
 
         composable("historial_rutas") {
