@@ -112,6 +112,23 @@ class RutaViewModel(
         _filteredDestinos.value = emptyList()
     }
 
+    fun setRutaActual(origen: Estacion, destino: Estacion) {
+        _origenEstacion.value = origen
+        _destinoEstacion.value = destino
+    }
+
+    fun clearRuta() {
+        _resultadoRuta.value = null
+        _origenEstacion.value = null
+        _destinoEstacion.value = null
+    }
+
+    fun clearBusqueda() {
+        _searchOrigenText.value = ""
+        _searchDestinoText.value = ""
+        _filteredOrigenes.value = emptyList()
+        _filteredDestinos.value = emptyList()
+    }
     private fun resolveSelectionsFromTextIfNeeded() {
         println("Resolviendo estaciones desde texto...")
         if (_origenEstacion.value == null && _searchOrigenText.value.isNotBlank()) {

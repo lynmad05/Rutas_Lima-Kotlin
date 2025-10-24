@@ -23,6 +23,7 @@ import com.tecsup.metrolima.presentacion.screens.ListaEstacionScreen
 import kotlinx.coroutines.delay
 import com.tecsup.metrolima.presentacion.screens.HomeScreen
 import com.tecsup.metrolima.presentacion.screens.IniciarRutaScreen
+import com.tecsup.metrolima.presentacion.screens.MapaScreen
 import com.tecsup.metrolima.presentacion.screens.RutaScreen
 import com.tecsup.metrolima.presentacion.screens.SplashScreen
 //import com.tecsup.metrolima.presentacion.screens.menu.FavoritosScreen
@@ -39,6 +40,9 @@ fun NavGraph(
     onLanguageChange: (String) -> Unit
 ) {
     val context = LocalContext.current
+    val sharedViewModel: RutaViewModel = viewModel(
+        factory = RutaViewModel.provideFactory(context)
+    )
     // Crear una única instancia del ViewModel aquí
     val rutaViewModel: RutaViewModel = viewModel(factory = RutaViewModel.provideFactory(context))
 
@@ -79,23 +83,20 @@ fun NavGraph(
             FavoritosScreen(navController = navController)
         }
 
-        composable("iniciarRuta") {
-            val context = LocalContext.current
-            val viewModel: RutaViewModel = viewModel(
-                factory = RutaViewModel.provideFactory(context)
-            )
-            IniciarRutaScreen(navController = navController, viewModel = viewModel)
+        composable(route = "rutas") {
+            RutaScreen(navController = navController, viewModel = sharedViewModel)
         }
 
-        composable("rutas") {
-            RutaScreen(navController = navController, viewModel = rutaViewModel)  // Pasa el mismo ViewModel aquí
+        composable(route = "iniciarRuta") {
+            IniciarRutaScreen(navController = navController, viewModel = sharedViewModel)
         }
 
 
 
-        composable("mapa") {
-            Text("Mapa interactivo (en desarrollo)", color = Color.Black)
+        composable(route = "mapa") {
+            MapaScreen(navController = navController)
         }
+
         composable("listado") {
             ListaEstacionScreen(navController = navController)
         }
