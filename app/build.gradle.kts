@@ -70,6 +70,10 @@ dependencies {
 
     implementation(libs.kotlinx.metadata.jvm)
 
+    // animacion
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
+
+
     // Navigation Compose
     implementation(libs.androidx.navigation.compose)
 
@@ -89,4 +93,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 }

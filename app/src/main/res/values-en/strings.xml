@@ -69,7 +69,9 @@
 
     <!-- 🟣 Acerca de -->
     <string name="acerca_title">About MetroLima GO</string>
-    <string name="app_description">Your essential guide to the Lima Metro and integrated routes, designed to connect the city efficiently and easily.</string>
+    <string name="app_description">Your essential guide for the Lima Metro.</string>
+    <string name="innovacion_text">Designed to connect the city efficiently and effortlessly.</string>
+    <string name="diseno_usuario_text">User-friendly interface for everyone.</string>
     <string name="credits_title">Project Credits</string>
     <string name="version_num">Version %1$s</string>
     <string name="desarrollado_por">Developed by the MetroLima GO team</string>
