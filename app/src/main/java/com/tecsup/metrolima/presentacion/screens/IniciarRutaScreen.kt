@@ -1,6 +1,6 @@
 package com.tecsup.metrolima.presentacion.screens
 
-import androidx.compose.foundation.Image
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,15 +12,23 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.Polyline
+import com.google.maps.android.compose.rememberCameraPositionState
 import com.tecsup.metrolima.R
 import com.tecsup.metrolima.viewmodel.RutaViewModel
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel) {
@@ -29,10 +37,15 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
     val origen = viewModel.origenEstacion.collectAsState().value
     val destino = viewModel.destinoEstacion.collectAsState().value
 
-    // Mostrar en logcat los datos actuales (solo para depuración)
-    LaunchedEffect(origen, destino) {
-        println("🟢 Origen recibido: ${origen?.nombre}")
-        println("🟢 Destino recibido: ${destino?.nombre}")
+    val origenLatLng = origen?.let { LatLng(it.latitud, it.longitud) }
+    val destinoLatLng = destino?.let { LatLng(it.latitud, it.longitud) }
+
+    // 🧭 Centrar mapa entre ambas estaciones
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(
+            origenLatLng ?: LatLng(-12.0464, -77.0428),  // Lima por defecto
+            12f
+        )
     }
 
     Scaffold(
@@ -48,7 +61,17 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
                     }
                 },
                 actions = {
-                    TextButton(onClick = { navController.navigate("rutas") }) {
+                    TextButton(onClick = {
+                        // 🔹 Limpia el estado antes de volver
+                        viewModel.clearRuta()
+                        viewModel.clearBusqueda()
+
+                        // 🔹 Regresa y limpia el historial de navegación (para refrescar)
+                        navController.navigate("rutas") {
+                            popUpTo("rutas") { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }) {
                         Text(stringResource(R.string.finalizar), color = Color(0xFF00BCD4))
                     }
                 }
@@ -64,17 +87,56 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // Imagen ilustrativa
-            Image(
-                painter = painterResource(id = R.drawable.mapa_linea1),
-                contentDescription = stringResource(R.string.mapa_linea1_desc),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .padding(16.dp)
-            )
+            if (origenLatLng != null && destinoLatLng != null) {
+                GoogleMap(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(350.dp)
+                        .padding(12.dp)
+                        .shadow(8.dp, RoundedCornerShape(16.dp)),
+                    cameraPositionState = cameraPositionState
+                ) {
+                    // Marcadores
+                    Marker(
+                        state = MarkerState(position = origenLatLng),
+                        title = origen.nombre,
+                        snippet = "Origen"
+                    )
+                    Marker(
+                        state = MarkerState(position = destinoLatLng),
+                        title = destino.nombre,
+                        snippet = "Destino"
+                    )
 
-            // Datos de la ruta
+                    // Línea azul simulando la ruta del metro
+                    val rutaSimulada = listOf(
+                        origenLatLng,
+                        LatLng(
+                            (origenLatLng.latitude + destinoLatLng.latitude) / 2 + 0.003,
+                            (origenLatLng.longitude + destinoLatLng.longitude) / 2
+                        ),
+                        destinoLatLng
+                    )
+
+                    Polyline(
+                        points = rutaSimulada,
+                        color = Color(0xFF0091EA),
+                        width = 12f
+                    )
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(350.dp)
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(stringResource(R.string.mapa_linea1_desc))
+                }
+            }
+
+            // 🎨 Card con los datos
             Card(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
@@ -104,7 +166,7 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Botón para guardar favorito
+            // ❤️ Botón de favorito
             var guardado by remember { mutableStateOf(false) }
 
             Button(

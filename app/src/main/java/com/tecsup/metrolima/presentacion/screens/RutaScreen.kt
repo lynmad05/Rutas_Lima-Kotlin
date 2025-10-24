@@ -201,7 +201,10 @@ fun RutaScreen(
 
             // 🔵 Botón Calcular ruta
             Button(
-                onClick = { viewModel.onCalcularRutaClick() },
+                onClick = {
+                    viewModel.clearRuta()
+                    viewModel.onCalcularRutaClick()
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .height(56.dp),
@@ -290,7 +293,14 @@ fun RutaScreen(
                     }
 
                     Button(
-                        onClick = { navController.navigate("iniciarRuta") },
+                        onClick = {
+                            val origen = viewModel.origenEstacion.value
+                            val destino = viewModel.destinoEstacion.value
+                            if (origen != null && destino != null) {
+                                viewModel.setRutaActual(origen, destino)
+                                navController.navigate("iniciarRuta")
+                            }
+                        },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF4FC3F7),
                             contentColor = MaterialTheme.colorScheme.onSurface
