@@ -11,10 +11,10 @@ interface LineaDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(lineas: List<Linea>)
 
-    @Query("SELECT * FROM lineas")
+    @Query("SELECT * FROM linea")
     suspend fun getAll(): List<Linea>
 
-    @Query("SELECT * FROM lineas WHERE id = :lineaId")
+    @Query("SELECT * FROM linea WHERE id = :lineaId")
     suspend fun getById(lineaId: Int): Linea?
 
 }
