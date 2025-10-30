@@ -1,8 +1,13 @@
 package com.tecsup.metrolima.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "linea")
 data class Linea(
-    val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val nombre: String,
-    val colorHex: String,
-    val estaciones: List<Estacion>
+    val color: String,
+    val estado: String
 )

@@ -15,10 +15,6 @@ class EstacionRepository(private val estacionDao: EstacionDao) {
         return estacionDao.getAllEstaciones()
     }
 
-    fun getStationCount(): Flow<Int> {
-        return estacionDao.getCount()
-    }
-
     suspend fun getEstacionesRemotas(): List<Estacion>{
         return RetrofitInstance.api.getEstaciones()
     }

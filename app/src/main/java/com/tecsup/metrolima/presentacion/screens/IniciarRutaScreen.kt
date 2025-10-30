@@ -40,10 +40,10 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
     val origenLatLng = origen?.let { LatLng(it.latitud, it.longitud) }
     val destinoLatLng = destino?.let { LatLng(it.latitud, it.longitud) }
 
-    // 🧭 Centrar mapa entre ambas estaciones
+    //  Centrar mapa entre ambas estaciones
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(
-            origenLatLng ?: LatLng(-12.0464, -77.0428),  // Lima por defecto
+            origenLatLng ?: LatLng(-12.0464, -77.0428),
             12f
         )
     }
@@ -62,11 +62,11 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
                 },
                 actions = {
                     TextButton(onClick = {
-                        // 🔹 Limpia el estado antes de volver
+                        // Limpia el estado antes de volver
                         viewModel.clearRuta()
                         viewModel.clearBusqueda()
 
-                        // 🔹 Regresa y limpia el historial de navegación (para refrescar)
+                        // Regresa y limpia el historial de navegación (para refrescar)
                         navController.navigate("rutas") {
                             popUpTo("rutas") { inclusive = true }
                             launchSingleTop = true
@@ -136,7 +136,7 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
                 }
             }
 
-            // 🎨 Card con los datos
+            //  Card con los datos
             Card(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
@@ -166,7 +166,7 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // ❤️ Botón de favorito
+            //  Botón de favorito
             var guardado by remember { mutableStateOf(false) }
 
             Button(

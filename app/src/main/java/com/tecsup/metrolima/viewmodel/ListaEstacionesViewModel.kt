@@ -19,7 +19,7 @@ class ListaEstacionesViewModel(
     private val appContext: Context
 ) : ViewModel() {
 
-    // 🔹 Flujo de estaciones desde el repositorio (Room)
+    // Flujo de estaciones desde el repositorio (Room)
     val estaciones: StateFlow<List<Estacion>> = repository.getEstaciones()
         .stateIn(
             viewModelScope,
@@ -27,7 +27,7 @@ class ListaEstacionesViewModel(
             initialValue = emptyList()
         )
 
-    // 🔍 Texto del campo de búsqueda
+    /// Texto del campo de búsqueda
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
 
@@ -37,9 +37,7 @@ class ListaEstacionesViewModel(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val ESTACIONES_TOTAL_ESPERADAS = 26
-
-    // 🔎 Lista filtrada (buscador reactivo)
+    // Lista filtrada (buscador reactivo)
     val estacionesFiltradas = combine(_searchText, estaciones) { text, est ->
         if (text.isBlank()) est
         else est.filter {
@@ -87,23 +85,6 @@ class ListaEstacionesViewModel(
             "estacion_villa_salvador" -> R.drawable.estacion_villa_salvador
             else -> R.drawable.ic_launcher_foreground
         }
-    }
-
-    private fun cargarEstaciones() {
-        viewModelScope.launch {
-            try {
-                val count = repository.getStationCount().first()
-                if (count < ESTACIONES_TOTAL_ESPERADAS) {
-                    insertarEstacionesIniciales(appContext)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    fun refrescarEstaciones() {
-        _mensajeUsuario.value = "Estaciones refrescadas."
     }
 
     fun cargarEstacionesRemotas() {

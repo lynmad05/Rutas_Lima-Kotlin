@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MetroLima GO</string>
 
-    <!-- ⚙️ Configuración -->
+    <!-- Configuración -->
     <string name="config_title">Configuración</string>
     <string name="options">Opciones</string>
     <string name="dark_mode">Modo oscuro / claro</string>
@@ -11,7 +11,7 @@
     <string name="spanish">Español</string>
     <string name="english">Inglés</string>
 
-    <!-- 🚆 Iniciar Ruta -->
+    <!-- Iniciar Ruta -->
     <string name="finalizar">Finalizar</string>
     <string name="mapa_linea1_desc">Mapa de la Línea 1 del Metro de Lima</string>
     <string name="sin_origen">Sin origen</string>
@@ -21,7 +21,7 @@
     <string name="estaciones_intermedias_label">Estaciones intermedias: %1$d</string>
     <string name="proximo_paso_label">Próximo paso: %1$s</string>
 
-    <!-- 🔽 Bottom Navigation -->
+    <!-- Bottom Navigation -->
     <string name="nav_inicio">Inicio</string>
     <string name="nav_rutas">Rutas</string>
     <string name="nav_mapa">Mapa</string>
@@ -29,17 +29,17 @@
     <string name="nav_configuracion">Configuración</string>
 
 
-    <!-- 🏠 Home / Drawer -->
+    <!-- Home / Drawer -->
     <string name="menu_title">Menú</string>
     <string name="drawer_favoritos">Mis rutas favoritas</string>
     <string name="drawer_historial">Historial de Rutas</string>
     <string name="drawer_acerca">Acerca de la App</string>
     <string name="version_app">Versión 1.0.0</string>
 
-    <!-- 🔍 Barra de búsqueda -->
+    <!-- Barra de búsqueda -->
     <string name="buscar_placeholder">Buscar estaciones o rutas</string>
 
-    <!-- 🚇 Ruta Screen -->
+    <!-- Ruta Screen -->
     <string name="planifica_tu_ruta">Planifica tu Ruta</string>
     <string name="desde_donde">Desde dónde</string>
     <string name="hacia_donde">Hacia dónde</string>
@@ -50,31 +50,31 @@
     <string name="iniciar_ruta">Iniciar Ruta</string>
     <string name="tomar_linea_en">Tomar %1$s en %2$s</string>
 
-    <!-- 🧩 Chips -->
+    <!-- Chips -->
     <string name="filtro_favoritos">Mis Favoritos</string>
     <string name="filtro_ultimas">Últimas Rutas</string>
     <string name="filtro_lineas">Líneas/Mapas</string>
 
-    <!-- 📍 Sección de lugares -->
+    <!-- Sección de lugares -->
     <string name="lugares_populares">Lugares Populares</string>
     <string name="ruta">Ruta</string>
     <string name="estacion">Estación</string>
 
-    <!-- 🚆 Próximamente -->
+    <!-- Próximamente -->
     <string name="proximamente">Próximamente</string>
     <string name="mas_lineas">Más líneas en camino</string>
     <string name="lineas_en_desarrollo">Líneas 2, 3, 4 y 6 en desarrollo</string>
     <string name="tren_construccion">Tren en construcción</string>
-    <!-- 🏙️ Lista de estaciones -->
+    <!-- Lista de estaciones -->
     <string name="titulo_estaciones">Estaciones</string>
     <string name="no_estaciones">No hay estaciones disponibles o no se encontraron resultados.</string>
     <string name="ir_detalle">Ir a detalles de %1$s</string>
 
-    <!-- 🟣 Pantalla principal -->
+    <!-- Pantalla principal -->
     <string name="home_title">Inicio</string>
     <string name="welcome_message">Bienvenido al Metro de Lima</string>
 
-    <!-- 🟣 Acerca de -->
+    <!-- Acerca de -->
     <string name="acerca_title">Acerca de MetroLima GO</string>
     <string name="app_description">Tu guía esencial para el Metro de Lima.</string>
     <string name="innovacion_text">diseñada para conectar la ciudad de forma eficiente y sencilla</string>
@@ -84,16 +84,16 @@
     <string name="desarrollado_por">Desarrollado por el equipo de MetroLima GO</string>
     <string name="back">Volver</string>
 
-    <!-- 🟣 Mis rutas favoritas -->
+    <!-- Mis rutas favoritas -->
     <string name="favoritos_title">Mis Rutas Favoritas</string>
     <string name="pantalla_favoritos">Pantalla: Mis Rutas Favoritas</string>
 
-    <!-- 🟣 Mis historial de rutas -->
+    <!-- Mis historial de rutas -->
     <string name="historial_title">Historial de rutas</string>
     <string name="no_saved_routes">No hay rutas guardadas aún</string>
     <string name="intermedias">Intermedias: %1$s</string>
 
-    <!-- 🟣 DetalleEstacion -->
+    <!-- DetalleEstacion -->
     <string name="mapa_estacion">Mapa de estación</string>
     <string name="tipo_ruta">Tipo de Ruta</string>
     <string name="distrito">Distrito</string>
@@ -104,29 +104,29 @@
     <string name="ver_en_maps">Ver en Google Maps</string>
     <string name="planificar_ruta">Planificar Ruta</string>
 
-    <!-- 🟣 Favoritos -->
+    <!-- Favoritos -->
     <string name="desde">Desde: %1$s</string>
     <string name="hasta">Hasta: %1$s</string>
     <string name="tiempo_estimado">Tiempo estimado: %1$d min</string>
     <string name="favorito">Favorito</string>
 
-    <!-- 💜 Splash Screen -->
+    <!-- Splash Screen -->
     <string name="splash_image_desc">Pantalla de inicio de MetroLima GO</string>
 
-    <!-- 🟣 Pantalla rutas -->
+    <!-- Pantalla rutas -->
     <string name="guardar_favorito">Guardar Ruta Favorita</string>
     <string name="ver_favoritos">Ver Favoritos</string>
     <string name="recorrido">Recorrido:</string>
 
-    <!-- 🟣 Pantalla favoritos -->
+    <!-- Pantalla favoritos -->
     <string name="rutas_guardadas">Rutas Guardadas</string>
     <string name="no_favoritos">No tienes rutas guardadas aún 💾</string>
     <string name="eliminar_ruta">Eliminar ruta</string>
 
-    <!-- 🔹 TopAppBar Estaciones -->
+    <!-- TopAppBar Estaciones -->
     <string name="estaciones_title">Estaciones</string>
 
-    <!-- 🔹 TopAppBar con Menú y Notificaciones -->
+    <!-- TopAppBar con Menú y Notificaciones -->
     <string name="menu">Menú</string>
     <string name="notificaciones">Notificaciones</string>
 

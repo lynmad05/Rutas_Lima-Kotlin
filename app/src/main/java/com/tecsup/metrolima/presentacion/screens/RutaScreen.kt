@@ -66,7 +66,7 @@ fun RutaScreen(
         ) {
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 🟣 Campo de origen
+            //  Campo de origen
             OutlinedTextField(
                 value = searchOrigenText,
                 onValueChange = { viewModel.onSearchOrigenChange(it) },
@@ -91,7 +91,7 @@ fun RutaScreen(
                 )
             )
 
-            // 🔹 Sugerencias de origen
+            //  Sugerencias de origen
             if (filteredOrigenes.isNotEmpty() && searchOrigenText.isNotBlank()) {
                 Column(
                     modifier = Modifier
@@ -114,7 +114,7 @@ fun RutaScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 🟣 Campo de destino
+            //  Campo de destino
             OutlinedTextField(
                 value = searchDestinoText,
                 onValueChange = { viewModel.onSearchDestinoChange(it) },
@@ -139,7 +139,7 @@ fun RutaScreen(
                 )
             )
 
-            // 🔹 Sugerencias de destino
+            //  Sugerencias de destino
             if (filteredDestinos.isNotEmpty() && searchDestinoText.isNotBlank()) {
                 Column(
                     modifier = Modifier
@@ -162,7 +162,7 @@ fun RutaScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 🚇 Opciones
+            //  Opciones
             Row(
                 modifier = Modifier.fillMaxWidth(0.9f),
                 horizontalArrangement = Arrangement.SpaceAround,
@@ -199,7 +199,7 @@ fun RutaScreen(
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            // 🔵 Botón Calcular ruta
+            //  Botón Calcular ruta
             Button(
                 onClick = {
                     viewModel.clearRuta()
@@ -223,7 +223,7 @@ fun RutaScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // 🧭 Resultado
+            //  Resultado
             val resultadoRuta by viewModel.resultadoRuta.collectAsState()
             resultadoRuta?.let { resultado ->
                 Spacer(modifier = Modifier.height(32.dp))
