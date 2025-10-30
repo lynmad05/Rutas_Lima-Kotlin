@@ -12,8 +12,8 @@ android {
 
     defaultConfig {
         applicationId = "com.tecsup.metrolima"
-        minSdk = 36
-        targetSdk = 36
+        minSdk = 26       // ✅ Fixed: adaptive icons need API 26+
+        targetSdk = 36    // ✅ Match compileSdk
         versionCode = 1
         versionName = "1.0"
 
