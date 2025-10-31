@@ -5,16 +5,17 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.tecsup.metrolima.data.model.Linea
+import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface LineaDao{
+interface LineaDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(lineas: List<Linea>)
 
     @Query("SELECT * FROM linea")
-    suspend fun getAll(): List<Linea>
+    fun getAll(): Flow<List<Linea>>
 
     @Query("SELECT * FROM linea WHERE id = :lineaId")
-    suspend fun getById(lineaId: Int): Linea?
-
+    fun getById(lineaId: Int): Flow<Linea?>
 }

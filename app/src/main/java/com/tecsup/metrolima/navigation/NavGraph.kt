@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.gson.Gson
 import com.tecsup.metrolima.data.model.Estacion
+import com.tecsup.metrolima.data.model.EstacionExtendida
 import com.tecsup.metrolima.presentacion.screens.AcercaAppScreen
 import com.tecsup.metrolima.presentacion.screens.ConfigScreen
 import com.tecsup.metrolima.presentacion.screens.DetalleEstacionScreen
@@ -120,7 +121,7 @@ fun NavGraph(
             arguments = listOf(navArgument("estacionJson") { type = NavType.StringType })
         ) { backStackEntry ->
             val estacionJson = backStackEntry.arguments?.getString("estacionJson")
-            val estacion = estacionJson?.let { Gson().fromJson(it, Estacion::class.java) }
+            val estacion = estacionJson?.let { Gson().fromJson(it, EstacionExtendida::class.java) }
 
             if (estacion != null) {
                 DetalleEstacionScreen(

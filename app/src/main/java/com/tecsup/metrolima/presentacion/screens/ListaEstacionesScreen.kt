@@ -34,6 +34,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import com.tecsup.metrolima.R
 import com.tecsup.metrolima.data.model.Estacion
+import com.tecsup.metrolima.data.model.EstacionExtendida
 import com.tecsup.metrolima.ui.components.BottomNavigationBar
 import com.tecsup.metrolima.ui.components.TopAppBarEstaciones
 import com.tecsup.metrolima.ui.theme.*
@@ -170,7 +171,7 @@ fun ListaEstacionScreen(
 }
 
 @Composable
-fun StationListItem(estacion: Estacion, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun StationListItem(estacion: EstacionExtendida, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()

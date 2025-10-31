@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.tecsup.metrolima.R
 import com.tecsup.metrolima.data.model.Estacion
+import com.tecsup.metrolima.data.model.EstacionExtendida
 import com.tecsup.metrolima.ui.components.BottomNavigationBar
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
 
@@ -36,7 +37,7 @@ import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
 @Composable
 fun DetalleEstacionScreen(
     navController: NavController,
-    estacion: Estacion
+    estacion: EstacionExtendida
 ) {
     Scaffold(
         topBar = {
@@ -98,7 +99,7 @@ fun DetalleEstacionScreen(
                 ) {
                     InfoCard(
                         label = stringResource(R.string.tipo_ruta),
-                        value = estacion.linea,
+                        value = "ID Línea: ${estacion.linea_id}",
                         icon = Icons.Default.Train,
                         modifier = Modifier.weight(1f)
                     )
@@ -118,7 +119,7 @@ fun DetalleEstacionScreen(
                 ) {
                     InfoCard(
                         label = stringResource(R.string.coordenadas),
-                        value = "${estacion.latitud}, ${estacion.longitud}",
+                        value = "${estacion.lat}, ${estacion.lon}",
                         icon = Icons.Default.Route,
                         modifier = Modifier.weight(1f)
                     )
@@ -235,13 +236,13 @@ fun PreviewDetalleEstacionScreen() {
     MetroLimaGoTheme {
         DetalleEstacionScreen(
             navController = rememberNavController(),
-            estacion = Estacion(
+            estacion = EstacionExtendida(
                 id = 1,
                 nombre = "Estación Central",
                 distrito = "Cercado de Lima",
-                latitud = -12.056274,
-                longitud = -77.036529,
-                linea = "Línea 1 Metro",
+                lat = -12.056274,
+                lon = -77.036529,
+                linea_id = 1,
                 horario = "5:00 AM - 10:00 PM",
                 imagenCircularResId = R.drawable.gamarra
             )

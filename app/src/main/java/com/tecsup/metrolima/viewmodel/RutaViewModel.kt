@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.room.Query
 import com.tecsup.metrolima.data.db.MetroLimaDataBase
 import com.tecsup.metrolima.data.model.Estacion
+import com.tecsup.metrolima.data.model.EstacionExtendida
 import com.tecsup.metrolima.data.model.Ruta
 import com.tecsup.metrolima.data.model.RutaResultado
 import com.tecsup.metrolima.repository.EstacionRepository
+import com.tecsup.metrolima.repository.LineaRepository
 import com.tecsup.metrolima.repository.RutaRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,14 +23,12 @@ class RutaViewModel(
     private val rutaRepository: RutaRepository
 ) : ViewModel() {
 
-    private val _allEstaciones = MutableStateFlow<List<Estacion>>(emptyList())
-    val allEstaciones: StateFlow<List<Estacion>> = _allEstaciones.asStateFlow()
-
-    private val _origenEstacion = MutableStateFlow<Estacion?>(null)
-    val origenEstacion: StateFlow<Estacion?> = _origenEstacion.asStateFlow()
-
-    private val _destinoEstacion = MutableStateFlow<Estacion?>(null)
-    val destinoEstacion: StateFlow<Estacion?> = _destinoEstacion.asStateFlow()
+    private val _allEstaciones = MutableStateFlow<List<EstacionExtendida>>(emptyList())
+    val allEstaciones: StateFlow<List<EstacionExtendida>> = _allEstaciones.asStateFlow()
+    private val _origenEstacion = MutableStateFlow<EstacionExtendida?>(null)
+    val origenEstacion: StateFlow<EstacionExtendida?> = _origenEstacion.asStateFlow()
+    private val _destinoEstacion = MutableStateFlow<EstacionExtendida?>(null)
+    val destinoEstacion: StateFlow<EstacionExtendida?> = _destinoEstacion.asStateFlow()
 
     private val _tiempoEstimadoMinutos = MutableStateFlow<Int?>(null)
     val tiempoEstimadoMinutos: StateFlow<Int?> = _tiempoEstimadoMinutos.asStateFlow()
@@ -60,12 +60,10 @@ class RutaViewModel(
 
     // Estaciones filtradas según busqueda
 
-    private val _filteredOrigenes = MutableStateFlow<List<Estacion>>(emptyList())
-    val filteredOrigenes: StateFlow<List<Estacion>> = _filteredOrigenes.asStateFlow()
-
-    private val _filteredDestinos = MutableStateFlow<List<Estacion>>(emptyList())
-    val filteredDestinos: StateFlow<List<Estacion>> = _filteredDestinos.asStateFlow()
-
+    private val _filteredOrigenes = MutableStateFlow<List<EstacionExtendida>>(emptyList()) // ✅ Corregido
+    val filteredOrigenes: StateFlow<List<EstacionExtendida>> = _filteredOrigenes.asStateFlow()
+    private val _filteredDestinos = MutableStateFlow<List<EstacionExtendida>>(emptyList()) // ✅ Corregido
+    val filteredDestinos: StateFlow<List<EstacionExtendida>> = _filteredDestinos.asStateFlow()
     private val _selectedTransportOption = MutableStateFlow("Metro")
     val selectedTransportOption: StateFlow<String> = _selectedTransportOption.asStateFlow()
 
@@ -100,19 +98,19 @@ class RutaViewModel(
         }
     }
 
-    fun onOrigenSelected(estacion: Estacion) {
+    fun onOrigenSelected(estacion: EstacionExtendida) {
         _origenEstacion.value = estacion
         _searchOrigenText.value = estacion.nombre
-        _filteredOrigenes.value = emptyList()
+        _filteredOrigenes.value = emptyList<EstacionExtendida>()
     }
 
-    fun onDestinoSelected(estacion: Estacion) {
+    fun onDestinoSelected(estacion: EstacionExtendida) {
         _destinoEstacion.value = estacion
         _searchDestinoText.value = estacion.nombre
-        _filteredDestinos.value = emptyList()
+        _filteredDestinos.value = emptyList<EstacionExtendida>()
     }
 
-    fun setRutaActual(origen: Estacion, destino: Estacion) {
+    fun setRutaActual(origen: EstacionExtendida, destino: EstacionExtendida) {
         _origenEstacion.value = origen
         _destinoEstacion.value = destino
     }
@@ -123,11 +121,11 @@ class RutaViewModel(
         _destinoEstacion.value = null
     }
 
-    fun clearBusqueda() {
+    fun clearBusqueda() { // Línea 115
         _searchOrigenText.value = ""
         _searchDestinoText.value = ""
-        _filteredOrigenes.value = emptyList()
-        _filteredDestinos.value = emptyList()
+        _filteredOrigenes.value = emptyList<EstacionExtendida>()
+        _filteredDestinos.value = emptyList<EstacionExtendida>()
     }
     private fun resolveSelectionsFromTextIfNeeded() {
         println("Resolviendo estaciones desde texto...")
@@ -250,7 +248,7 @@ class RutaViewModel(
 
 
     // --- Simulación de algoritmo de rutas
-    private fun simularRuta(origen: Estacion, destino: Estacion): List<Estacion> {
+    private fun simularRuta(origen: EstacionExtendida, destino: EstacionExtendida): List<EstacionExtendida> { // ✅ Cambiar todos los tipos
         val todas = _allEstaciones.value
 
         val indiceOrigen = todas.indexOfFirst { it.id == origen.id }
@@ -264,18 +262,14 @@ class RutaViewModel(
         return todas.subList(pasoInicio + 1, pasoFin)
     }
 
-    // Esto deja un registro visible en el Logcat cada vez que el usuario presiona el botón.
-
-
 
     init {
         loadAllEstaciones()
         loadSavedRoutes()
     }
-
     private fun loadAllEstaciones() {
         viewModelScope.launch {
-            estacionRepository.getEstaciones().collect { estaciones ->
+            estacionRepository.getAllEstacionesConLinea().collect { estaciones ->
                 _allEstaciones.value = estaciones.sortedBy { it.id }
             }
         }
@@ -305,7 +299,8 @@ class RutaViewModel(
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     if (modelClass.isAssignableFrom(RutaViewModel::class.java)) {
                         val db = MetroLimaDataBase.getDatabase(context)
-                        val estacionRepo = EstacionRepository(db.estacionDao())
+                        val lineaRepo = LineaRepository(db.lineaDao())
+                        val estacionRepo = EstacionRepository(db.estacionDao(), lineaRepo)
                         val rutaRepo = RutaRepository(db.rutaDao())
                         @Suppress("UNCHECKED_CAST")
                         return RutaViewModel(estacionRepo, rutaRepo) as T

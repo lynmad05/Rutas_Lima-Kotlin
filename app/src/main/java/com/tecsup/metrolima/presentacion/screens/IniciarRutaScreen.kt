@@ -37,8 +37,8 @@ fun IniciarRutaScreen(navController: NavHostController, viewModel: RutaViewModel
     val origen = viewModel.origenEstacion.collectAsState().value
     val destino = viewModel.destinoEstacion.collectAsState().value
 
-    val origenLatLng = origen?.let { LatLng(it.latitud, it.longitud) }
-    val destinoLatLng = destino?.let { LatLng(it.latitud, it.longitud) }
+    val origenLatLng = origen?.let { LatLng(it.lat, it.lon) }
+    val destinoLatLng = destino?.let { LatLng(it.lat, it.lon) }
 
     //  Centrar mapa entre ambas estaciones
     val cameraPositionState = rememberCameraPositionState {

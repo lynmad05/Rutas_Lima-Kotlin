@@ -281,7 +281,7 @@ fun RutaScreen(
 
                             Column {
                                 Text(
-                                    text = stringResource(R.string.tomar_linea_en, estacion.linea, estacion.nombre),
+                                    text = stringResource(R.string.tomar_linea_en, estacion.linea_id.toString(), estacion.nombre),
                                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
                                 )
                                 Text(

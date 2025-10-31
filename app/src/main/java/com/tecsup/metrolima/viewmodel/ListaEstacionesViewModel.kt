@@ -10,17 +10,22 @@ import com.google.gson.reflect.TypeToken
 import com.tecsup.metrolima.R
 import com.tecsup.metrolima.data.db.MetroLimaDataBase
 import com.tecsup.metrolima.data.model.Estacion
+import com.tecsup.metrolima.data.model.EstacionExtendida
+import com.tecsup.metrolima.data.model.Linea
 import com.tecsup.metrolima.repository.EstacionRepository
+import com.tecsup.metrolima.repository.LineaRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+
 class ListaEstacionesViewModel(
-    private val repository: EstacionRepository,
+    private val estacionRepository: EstacionRepository,
+    private val lineaRepository: LineaRepository,
     private val appContext: Context
 ) : ViewModel() {
 
-    // Flujo de estaciones desde el repositorio (Room)
-    val estaciones: StateFlow<List<Estacion>> = repository.getEstaciones()
+    // Flujo de estaciones pero usando ya JOIN
+    val estacionesConLinea: StateFlow<List<EstacionExtendida>> = estacionRepository.getAllEstacionesConLinea() // Nuevo método
         .stateIn(
             viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -37,19 +42,30 @@ class ListaEstacionesViewModel(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    // Lista filtrada (buscador reactivo)
-    val estacionesFiltradas = combine(_searchText, estaciones) { text, est ->
+    // Lista filtrada ahora filtra Estacion extendida
+    val estacionesFiltradas = combine(_searchText, estacionesConLinea) { text, est -> // Usamos estacionesConLinea
         if (text.isBlank()) est
         else est.filter {
             it.nombre.contains(text, ignoreCase = true) ||
-                    it.distrito.contains(text, ignoreCase = true) ||
-                    it.linea.contains(text, ignoreCase = true)
+                    it.distrito.contains(text, ignoreCase = true)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     init {
-        cargarEstacionesRemotas()
+        loadLineasLocales()
+        cargarDatosIniciales()
     }
+    private val _lineas = MutableStateFlow(emptyList<com.tecsup.metrolima.data.model.Linea>())
+    private fun loadLineasLocales() {
+        viewModelScope.launch {
+            try {
+                _lineas.value = lineaRepository.getLineasLocales().first()
+            } catch (e: Exception) {
+                Log.e("ListaEstacionesViewModel", "Error al cargar líneas locales: ${e.message}")
+            }
+        }
+    }
+
 
     fun onSearchTextChange(newText: String) {
         _searchText.value = newText
@@ -87,41 +103,27 @@ class ListaEstacionesViewModel(
         }
     }
 
-    fun cargarEstacionesRemotas() {
+
+    fun cargarDatosIniciales() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val estacionesRemotas = repository.getEstacionesRemotas().map { estacion ->
-                    estacion.copy(imagenCircularResId = asignarImagenLocal(estacion.imagenCircular))
-                }
-
-                if (estacionesRemotas.isNotEmpty()) {
-                    repository.deleteAllEstaciones()
-                    repository.insertarEstaciones(estacionesRemotas)
-                    _mensajeUsuario.value = "Datos actualizados correctamente."
-                    Log.d("ListaEstacionesViewModel", "Estaciones cargadas desde API remoto (${estacionesRemotas.size})")
-                } else {
-                    Log.w("ListaEstacionesViewModel", "API remota devolvió lista vacía. Usando respaldo local.")
-
-                    // Si el StateFlow 'estaciones' está vacío y la API falla, insertamos iniciales.
-                    val currentEstaciones = estaciones.first()
-                    if (currentEstaciones.isEmpty()) {
-                        insertarEstacionesIniciales(appContext)
-                        _mensajeUsuario.value = "API vacía. Datos iniciales cargados."
-                    } else {
-                        _mensajeUsuario.value = "API vacía. Mostrando datos locales existentes."
-                    }
-                }
-
-            } catch (e: Exception) {
-                Log.e("ListaEstacionesViewModel", "Error al cargar estaciones remotas: ${e.message}", e)
-                val currentEstaciones = estaciones.first()
+                 val currentEstaciones = estacionesConLinea.value
                 if (currentEstaciones.isEmpty()) {
-                    insertarEstacionesIniciales(appContext)
-                    _mensajeUsuario.value = "No hay conexión y no se encontraron datos locales. Mostrando datos iniciales."
+                    _mensajeUsuario.value = "Intentando cargar datos iniciales desde la red..."
+                    estacionRepository.fetchAndSaveAllData()
+                    val estacionesDespuesDeCarga = estacionRepository.getAllEstacionesConLinea().first()
+                    if (estacionesDespuesDeCarga.isNotEmpty()) {
+                        _mensajeUsuario.value = "Datos cargados correctamente desde la red."
+                    } else {
+                        _mensajeUsuario.value = "No hay conexión y no se encontraron datos locales."
+                    }
                 } else {
-                    _mensajeUsuario.value = "No se pudo conectar. Mostrando datos locales."
+                    _mensajeUsuario.value = "Mostrando datos locales existentes."
                 }
+            } catch (e: Exception) {
+                Log.e("ListaEstacionesViewModel", "Error general en la carga de datos: ${e.message}", e)
+                _mensajeUsuario.value = "Error de conexión o datos. No se pudo actualizar."
             } finally {
                 _isLoading.value = false
             }
@@ -130,15 +132,27 @@ class ListaEstacionesViewModel(
 
     private suspend fun insertarEstacionesIniciales(context: Context) {
         try {
+            //  Leer JSON
             val inputStream = context.assets.open("estaciones.json")
             val json = inputStream.bufferedReader().use { it.readText() }
 
             val gson = Gson()
             val tipo = object : TypeToken<List<Estacion>>() {}.type
             val estacionesDesdeJson: List<Estacion> = gson.fromJson(json, tipo)
+            val lineasLocales = lineaRepository.getLineasLocales().first()
+            val linea1Id = lineasLocales.firstOrNull()?.id ?: 1
 
+            //  Mapear a EstacionExtendida
             val estacionesConImagenes = estacionesDesdeJson.map { estacion ->
-                estacion.copy(
+                EstacionExtendida(
+                    id = 0,
+                    nombre = estacion.nombre,
+                    distrito = estacion.distrito,
+                    lat = 0.0,
+                    lon = 0.0,
+                    linea_id = linea1Id,
+                    horario = estacion.horario,
+                    imagenCircular = estacion.imagenCircular,
                     imagenCircularResId = when (estacion.nombre) {
                         "Estación Bayóvar" -> R.drawable.estacion_bayovar
                         "Estación Santa Rosa" -> R.drawable.estacion_santarosa
@@ -171,22 +185,29 @@ class ListaEstacionesViewModel(
                 )
             }
 
-            repository.insertarEstaciones(estacionesConImagenes)
+            // Insertar en la BD
+            estacionRepository.insertarEstacionesExtendidas(estacionesConImagenes)
             println("Estaciones insertadas desde JSON en BD local")
         } catch (e: Exception) {
-            println("Error al insertar estaciones: ${e.message}")
+            println("Error al insertar estaciones iniciales: ${e.message}")
         }
     }
+
+
 
     companion object {
         fun provideFactory(context: Context): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     if (modelClass.isAssignableFrom(ListaEstacionesViewModel::class.java)) {
-                        val dao = MetroLimaDataBase.getDatabase(context).estacionDao()
-                        val repo = EstacionRepository(dao)
+                        val db = MetroLimaDataBase.getDatabase(context)
+                        val lineaDao = db.lineaDao()
+                        val lineaRepo = LineaRepository(lineaDao)
+                        val estacionDao = db.estacionDao()
+                        val estacionRepo = EstacionRepository(estacionDao, lineaRepo)
+
                         @Suppress("UNCHECKED_CAST")
-                        return ListaEstacionesViewModel(repo, context) as T
+                        return ListaEstacionesViewModel(estacionRepo, lineaRepo, context) as T
                     }
                     throw IllegalArgumentException("Unknown ViewModel class")
                 }
