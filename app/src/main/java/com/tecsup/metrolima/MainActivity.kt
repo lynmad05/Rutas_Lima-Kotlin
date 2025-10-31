@@ -12,10 +12,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
+import com.tecsup.metrolima.data.db.MetroLimaDataBase
 import com.tecsup.metrolima.navigation.NavGraph
 import com.tecsup.metrolima.presentacion.MyApp
+import com.tecsup.metrolima.repository.LineaRepository
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
@@ -60,6 +64,18 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        //test
+        lifecycleScope.launch {
+            val db = MetroLimaDataBase.getDatabase(applicationContext)
+            val lineaRepo = LineaRepository(db.lineaDao())
+
+            lineaRepo.getLineasLocales().collect { lineas ->
+                println("✅ ${lineas.size} líneas encontradas:")
+                lineas.forEach { println(" - ${it.nombre} (${it.color})") }
+            }
+        }
+
     }
 }
 

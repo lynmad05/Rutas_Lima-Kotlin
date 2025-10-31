@@ -4,7 +4,9 @@ import com.tecsup.metrolima.data.dao.LineaDao
 import com.tecsup.metrolima.data.model.Linea
 import kotlinx.coroutines.flow.Flow
 
-class LineaRepository(private val lineaDao: LineaDao) {
+class LineaRepository(
+    private val lineaDao: LineaDao
+) {
 
     suspend fun insertarLineas(lineas: List<Linea>) {
         lineaDao.insertAll(lineas)
@@ -17,6 +19,4 @@ class LineaRepository(private val lineaDao: LineaDao) {
     fun getLineaById(lineaId: Int): Flow<Linea?> {
         return lineaDao.getById(lineaId)
     }
-
-
 }
