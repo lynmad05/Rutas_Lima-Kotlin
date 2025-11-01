@@ -27,6 +27,17 @@ interface EstacionDao {
     @Query("DELETE FROM estaciones")
     suspend fun deleteAllEstaciones()
 
+    @Query("""
+    SELECT e.*, l.nombre AS lineaNombre, l.color AS lineaColor 
+    FROM estaciones_extendidas e 
+    INNER JOIN linea l ON e.linea_id = l.id 
+    WHERE l.nombre = :nombreLinea 
+    ORDER BY e.nombre ASC
+""")
+    fun getEstacionesPorLinea(nombreLinea: String): Flow<List<EstacionExtendida>>
+
+
+
     // =========================================================
     // 🔵 Métodos nuevos - Basados en EstacionExtendida y Línea
     // =========================================================

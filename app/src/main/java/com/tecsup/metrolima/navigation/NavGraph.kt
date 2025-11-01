@@ -19,11 +19,13 @@ import com.tecsup.metrolima.data.model.EstacionExtendida
 import com.tecsup.metrolima.presentacion.screens.AcercaAppScreen
 import com.tecsup.metrolima.presentacion.screens.ConfigScreen
 import com.tecsup.metrolima.presentacion.screens.DetalleEstacionScreen
+import com.tecsup.metrolima.presentacion.screens.EstacionesPorLineaScreen
 import com.tecsup.metrolima.presentacion.screens.FavoritosScreen
 import com.tecsup.metrolima.presentacion.screens.ListaEstacionScreen
 import kotlinx.coroutines.delay
 import com.tecsup.metrolima.presentacion.screens.HomeScreen
 import com.tecsup.metrolima.presentacion.screens.IniciarRutaScreen
+import com.tecsup.metrolima.presentacion.screens.ListaLineasScreen
 import com.tecsup.metrolima.presentacion.screens.MapaScreen
 import com.tecsup.metrolima.presentacion.screens.RutaScreen
 import com.tecsup.metrolima.presentacion.screens.SplashScreen
@@ -112,6 +114,25 @@ fun NavGraph(
             )
         }
 
+        composable("listado_lineas") {
+            ListaLineasScreen(navController)
+        }
+
+        composable("estaciones_linea/{lineaId}") { backStackEntry ->
+            val lineaId = backStackEntry.arguments?.getString("lineaId")?.toInt() ?: 0
+            ListaEstacionesPorLineaScreen(navController, lineaId)
+        }
+
+        composable(
+            route = "estaciones_linea/{lineaId}",
+            arguments = listOf(navArgument("lineaId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val lineaId = backStackEntry.arguments?.getInt("lineaId") ?: 0
+            EstacionesPorLineaScreen(navController = navController, lineaId = lineaId)
+        }
+
+
+
 
 
         //RUTAS DE DETALLES DE LAS ESTACIONES
@@ -143,4 +164,9 @@ fun NavGraph(
 
 
     }
+}
+
+@Composable
+fun ListaEstacionesPorLineaScreen(x0: NavHostController, x1: Int) {
+    TODO("Not yet implemented")
 }

@@ -2,6 +2,7 @@ package com.tecsup.metrolima.repository
 
 import com.tecsup.metrolima.data.api.RetrofitInstance
 import com.tecsup.metrolima.data.dao.EstacionDao
+import com.tecsup.metrolima.data.model.Estacion
 import com.tecsup.metrolima.data.model.EstacionExtendida
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -9,7 +10,9 @@ import kotlinx.coroutines.flow.first
 class EstacionRepository(
     private val estacionDao: EstacionDao,
     private val lineaRepository: LineaRepository
+
 ) {
+
 
     suspend fun insertarEstacionesExtendidas(estaciones: List<EstacionExtendida>) {
         estacionDao.insertAllExtendidas(estaciones)
@@ -18,6 +21,11 @@ class EstacionRepository(
     fun getAllEstacionesConLinea(): Flow<List<EstacionExtendida>> {
         return estacionDao.getAllEstacionesConLinea()
     }
+    fun getEstacionesPorLinea(nombreLinea: String): Flow<List<EstacionExtendida>> {
+        return estacionDao.getEstacionesPorLinea(nombreLinea)
+    }
+
+
 
     suspend fun getEstacionesRemotas(): List<EstacionExtendida> {
         val estacionesRemotas = RetrofitInstance.api.getEstaciones()

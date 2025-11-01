@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -171,7 +172,24 @@ fun ListaEstacionScreen(
 }
 
 @Composable
-fun StationListItem(estacion: EstacionExtendida, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun StationListItem(
+    estacion: EstacionExtendida,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+
+    // ✅ Intentamos obtener el ID real del drawable por nombre si existe
+    val imageResId = remember(estacion.imagenCircularResId, estacion.imagenCircular) {
+        when {
+            estacion.imagenCircularResId != 0 -> estacion.imagenCircularResId
+            !estacion.imagenCircular.isNullOrEmpty() -> {
+                context.resources.getIdentifier(estacion.imagenCircular, "drawable", context.packageName)
+            }
+            else -> 0
+        }
+    }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -180,15 +198,28 @@ fun StationListItem(estacion: EstacionExtendida, onClick: () -> Unit, modifier: 
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Image(
-            painter = painterResource(id = estacion.imagenCircularResId),
-            contentDescription = estacion.nombre,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .width(90.dp)
-                .height(70.dp)
-                .clip(RoundedCornerShape(8.dp))
-        )
+        // ✅ Mostrar imagen solo si el recurso existe
+        if (imageResId != 0) {
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = estacion.nombre,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .width(90.dp)
+                    .height(70.dp)
+                    .clip(RoundedCornerShape(8.dp))
+            )
+        } else {
+            // ✅ Mostrar ícono por defecto si no hay imagen válida
+            Icon(
+                imageVector = Icons.Default.LocationOn,
+                contentDescription = "Sin imagen",
+                tint = Color.Gray,
+                modifier = Modifier
+                    .width(90.dp)
+                    .height(70.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.width(16.dp))
 
@@ -213,6 +244,7 @@ fun StationListItem(estacion: EstacionExtendida, onClick: () -> Unit, modifier: 
         )
     }
 }
+
 
 @Preview(showBackground = true, device = "id:pixel_7_pro")
 @Composable
