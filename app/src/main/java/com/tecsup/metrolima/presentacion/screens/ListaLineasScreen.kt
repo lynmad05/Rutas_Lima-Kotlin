@@ -41,7 +41,7 @@ fun ListaLineasScreen(
         ) {
             items(lineas) { linea ->
                 LineaCard(linea = linea) {
-                    navController.navigate("estaciones_linea/${linea.id}")
+                    navController.navigate("estaciones/linea/${linea.id}")
                 }
             }
         }

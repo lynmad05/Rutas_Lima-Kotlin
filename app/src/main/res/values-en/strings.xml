@@ -125,6 +125,7 @@
 
     <!-- TopAppBar Estaciones -->
     <string name="estaciones_title">Stations</string>
+    <string name="nav_lineas">Lines</string>
 
     <!-- TopAppBar with Menu and Notifications -->
     <string name="menu">Menu</string>

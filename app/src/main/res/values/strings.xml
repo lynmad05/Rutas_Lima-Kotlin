@@ -123,6 +123,8 @@
     <string name="no_favoritos">No tienes rutas guardadas aún 💾</string>
     <string name="eliminar_ruta">Eliminar ruta</string>
 
+    <string name="nav_lineas">Líneas</string>
+
     <!-- TopAppBar Estaciones -->
     <string name="estaciones_title">Estaciones</string>
 

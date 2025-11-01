@@ -49,9 +49,9 @@ fun BottomNavigationBar(
             route = "home"
         ),
         BottomNavItem(
-            icon = Icons.Filled.LocationOn,
-            description = stringResource(R.string.nav_rutas),
-            route = "rutas"
+            icon = Icons.Filled.DirectionsTransit,
+            description = stringResource(R.string.nav_lineas),
+            route = "lineas"
         ),
         BottomNavItem(
             icon = Icons.Filled.Map,
