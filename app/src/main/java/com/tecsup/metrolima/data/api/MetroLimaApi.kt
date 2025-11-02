@@ -5,9 +5,12 @@ import com.tecsup.metrolima.data.model.Linea
 import retrofit2.http.GET
 
 interface MetroLimaApi {
-    @GET("81fed639-e328-4e03-a4c6-086a6780defc")
+
+    // Estaciones Mocki v2
+    @GET("8566829c-c1c4-4e40-bda8-c0b1cd1ff533")
     suspend fun getEstaciones(): List<Estacion>
 
-    @GET("fcedd880-566d-4746-858e-f91e612d764f")
+    // Líneas Mocki
+    @GET("0026bb55-e64a-4bc0-ab3b-c126ecf4ab61")
     suspend fun getLineas(): List<Linea>
 }

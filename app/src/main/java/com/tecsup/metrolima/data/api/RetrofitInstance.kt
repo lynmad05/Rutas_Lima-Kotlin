@@ -3,7 +3,7 @@ package com.tecsup.metrolima.data.api
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitInstance{
+object RetrofitInstance {
     private const val BASE_URL = "https://mocki.io/v1/"
 
     val api: MetroLimaApi by lazy {

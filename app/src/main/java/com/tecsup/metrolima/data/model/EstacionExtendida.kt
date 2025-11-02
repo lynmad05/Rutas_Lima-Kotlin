@@ -7,8 +7,9 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 /**
- * Entidad extendida de Estación
- * Incluye relación con la entidad Linea y coordenadas (lat/lon)
+ * Entidad extendida de Estación.
+ * Incluye relación con la entidad Linea y coordenadas (lat/lon),
+ * además del campo de favorito para el detalle.
  */
 @Parcelize
 @Entity(
@@ -29,8 +30,13 @@ data class EstacionExtendida(
     val distrito: String,
     val lat: Double,
     val lon: Double,
-    val linea_id: Int, // Relación con la tabla Linea
+    val linea_id: Int,  // Relación con la tabla Linea
     val horario: String,
     val imagenCircular: String? = null,
-    val imagenCircularResId: Int = 0
+
+    // Recurso opcional local (para modo offline o placeholder)
+    val imagenCircularResId: Int = 0,
+
+    // Campo nuevo: estado de favorito (para DetalleEstacionViewModel)
+    val is_favorite: Boolean = false
 ) : Parcelable

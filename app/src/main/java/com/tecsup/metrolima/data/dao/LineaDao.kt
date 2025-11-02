@@ -13,9 +13,9 @@ interface LineaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(lineas: List<Linea>)
 
-    @Query("SELECT * FROM linea")
+    @Query("SELECT * FROM lineas")
     fun getAll(): Flow<List<Linea>>
 
-    @Query("SELECT * FROM linea WHERE id = :lineaId")
-    fun getById(lineaId: Int): Flow<Linea?>
+    @Query("DELETE FROM lineas")
+    suspend fun deleteAll()
 }

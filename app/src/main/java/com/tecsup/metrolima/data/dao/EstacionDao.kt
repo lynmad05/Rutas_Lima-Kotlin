@@ -4,55 +4,38 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.tecsup.metrolima.data.model.Estacion
 import com.tecsup.metrolima.data.model.EstacionExtendida
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EstacionDao {
 
-    // =========================================================
-    // 🟢 Métodos antiguos - Compatibilidad con Estacion original
-    // =========================================================
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(estaciones: List<Estacion>)
-
-    @Query("SELECT * FROM estaciones ORDER BY id ASC")
-    fun getAllEstaciones(): Flow<List<Estacion>>
-
-    @Query("SELECT COUNT(id) FROM estaciones")
-    fun getCount(): Flow<Int>
-
-    @Query("DELETE FROM estaciones")
-    suspend fun deleteAllEstaciones()
-
-    @Query("""
-    SELECT e.*, l.nombre AS lineaNombre, l.color AS lineaColor 
-    FROM estaciones_extendidas e 
-    INNER JOIN linea l ON e.linea_id = l.id 
-    WHERE l.nombre = :nombreLinea 
-    ORDER BY e.nombre ASC
-""")
-    fun getEstacionesPorLinea(nombreLinea: String): Flow<List<EstacionExtendida>>
-
-
-
-    // =========================================================
-    // 🔵 Métodos nuevos - Basados en EstacionExtendida y Línea
-    // =========================================================
-
+    // Inserta o reemplaza todas las estaciones extendidas
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllExtendidas(estaciones: List<EstacionExtendida>)
 
-    @Query("""
-        SELECT e.*, l.nombre AS lineaNombre, l.color AS lineaColor
-        FROM estaciones_extendidas e
-        INNER JOIN linea l ON e.linea_id = l.id 
-        ORDER BY e.id ASC
-    """)
+    // Retorna todas las estaciones con línea (para lista general)
+    @Query("SELECT * FROM estaciones_extendidas")
     fun getAllEstacionesConLinea(): Flow<List<EstacionExtendida>>
 
-    @Query("DELETE FROM estaciones_extendidas")
-    suspend fun deleteAllEstacionesExtendidas()
+    // Retorna estaciones por nombre de línea (usa tabla 'linea' según la entidad)
+    @Query("""
+        SELECT * FROM estaciones_extendidas
+        WHERE linea_id IN (
+            SELECT id FROM lineas WHERE nombre LIKE '%' || :nombreLinea || '%'
+        )
+    """)
+    fun getEstacionesPorLinea(nombreLinea: String): Flow<List<EstacionExtendida>>
+
+    // Retorna estación por ID (para detalle)
+    @Query("SELECT * FROM estaciones_extendidas WHERE id = :id LIMIT 1")
+    suspend fun getEstacionConLineaById(id: Int): EstacionExtendida
+
+    // Actualiza el estado de favorito
+    @Query("UPDATE estaciones_extendidas SET is_favorite = :isFavorite WHERE id = :id")
+    suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean)
+
+    // Retorna todas las estaciones por línea (para mapa)
+    @Query("SELECT * FROM estaciones_extendidas WHERE linea_id = :id ORDER BY id ASC")
+    fun getEstacionesPorLineaId(id: Int): Flow<List<EstacionExtendida>>
 }
