@@ -23,7 +23,7 @@ class ListaEstacionesViewModel(
     private val appContext: Context
 ) : ViewModel() {
 
-    // 🔹 Flujo de estaciones con JOIN
+    // --- 1. ESTADOS BASE Y FLUJOS DE ENTRADA ---
     val estacionesConLinea: StateFlow<List<EstacionExtendida>> =
         estacionRepository.getAllEstacionesConLinea()
             .stateIn(
@@ -32,9 +32,15 @@ class ListaEstacionesViewModel(
                 initialValue = emptyList()
             )
 
-    // 🔹 Texto del buscador
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
+
+    private val _lineaIdFiltro = MutableStateFlow<Int?>(null)
+    val lineaIdFiltro: StateFlow<Int?> = _lineaIdFiltro.asStateFlow()
+
+    fun setLineaIdFiltro(lineaId: Int?) {
+        _lineaIdFiltro.value = lineaId
+    }
 
     private val _mensajeUsuario = MutableStateFlow("")
     val mensajeUsuario: StateFlow<String> = _mensajeUsuario.asStateFlow()
@@ -42,25 +48,34 @@ class ListaEstacionesViewModel(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    // 🔹 Lista filtrada por texto
-    val estacionesFiltradas = combine(_searchText, estacionesConLinea) { text, est ->
-        if (text.isBlank()) est
-        else est.filter {
+    private val _lineas = MutableStateFlow(emptyList<Linea>())
+
+
+    // --- 2. ESTADO DE SALIDA FILTRADO (COMBINE) ---
+    val estacionesFiltradas = combine(_searchText, estacionesConLinea, _lineaIdFiltro) { text, allEst, lineaId ->
+        var lista = allEst
+        if (lineaId != null && lineaId != 0) {
+            lista = lista.filter { it.linea_id == lineaId }
+        }
+        if (text.isBlank()) lista
+        else lista.filter {
             it.nombre.contains(text, ignoreCase = true) ||
                     it.distrito.contains(text, ignoreCase = true)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    // 🔹 Lista filtrada por línea
+
     private val _estacionesFiltradas = MutableStateFlow<List<EstacionExtendida>>(emptyList())
     val estacionesFiltradasPorLinea: StateFlow<List<EstacionExtendida>> get() = _estacionesFiltradas
+
+
+    // --- 3. LÓGICA DE CARGA Y ASISTENCIA ---
 
     init {
         loadLineasLocales()
         cargarDatosIniciales()
     }
 
-    private val _lineas = MutableStateFlow(emptyList<Linea>())
     private fun loadLineasLocales() {
         viewModelScope.launch {
             try {
@@ -111,26 +126,30 @@ class ListaEstacionesViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val currentEstaciones = estacionesConLinea.value
+                // Usamos .first() para obtener el valor actual del Flow de forma segura
+                val currentEstaciones = estacionRepository.getAllEstacionesConLinea().first()
                 if (currentEstaciones.isEmpty()) {
                     _mensajeUsuario.value = "Intentando cargar datos iniciales desde la red..."
                     estacionRepository.fetchAndSaveAllData()
-                    val estacionesDespuesDeCarga =
-                        estacionRepository.getAllEstacionesConLinea().first()
+
+                    val estacionesDespuesDeCarga = estacionRepository.getAllEstacionesConLinea().first()
                     if (estacionesDespuesDeCarga.isNotEmpty()) {
                         _mensajeUsuario.value = "Datos cargados correctamente desde la red."
                     } else {
-                        _mensajeUsuario.value = "No hay conexión y no se encontraron datos locales."
+                        // Intentamos cargar desde el JSON local como último recurso
+                        insertarEstacionesIniciales(appContext)
+                        val estacionesDespuesDeJson = estacionRepository.getAllEstacionesConLinea().first()
+                        if (estacionesDespuesDeJson.isNotEmpty()) {
+                            _mensajeUsuario.value = "Datos cargados desde el archivo local (JSON)."
+                        } else {
+                            _mensajeUsuario.value = "No hay conexión y no se encontraron datos locales."
+                        }
                     }
                 } else {
                     _mensajeUsuario.value = "Mostrando datos locales existentes."
                 }
             } catch (e: Exception) {
-                Log.e(
-                    "ListaEstacionesViewModel",
-                    "Error general en la carga de datos: ${e.message}",
-                    e
-                )
+                Log.e("ListaEstacionesViewModel", "Error general en la carga de datos: ${e.message}", e)
                 _mensajeUsuario.value = "Error de conexión o datos. No se pudo actualizar."
             } finally {
                 _isLoading.value = false
@@ -138,14 +157,6 @@ class ListaEstacionesViewModel(
         }
     }
 
-    // 🔹 Filtrar estaciones por línea
-    fun filtrarPorLinea(nombreLinea: String) {
-        viewModelScope.launch {
-            estacionRepository.getEstacionesPorLinea(nombreLinea).collect { lista ->
-                _estacionesFiltradas.value = lista
-            }
-        }
-    }
 
     private suspend fun insertarEstacionesIniciales(context: Context) {
         try {
@@ -155,6 +166,7 @@ class ListaEstacionesViewModel(
             val gson = Gson()
             val tipo = object : TypeToken<List<Estacion>>() {}.type
             val estacionesDesdeJson: List<Estacion> = gson.fromJson(json, tipo)
+
             val lineasLocales = lineaRepository.getLineasLocales().first()
             val linea1Id = lineasLocales.firstOrNull()?.id ?: 1
 
@@ -173,11 +185,13 @@ class ListaEstacionesViewModel(
             }
 
             estacionRepository.insertarEstacionesExtendidas(estacionesConImagenes)
-            println("Estaciones insertadas desde JSON en BD local")
+            Log.d("ListaEstacionesViewModel", "Estaciones insertadas desde JSON en BD local")
         } catch (e: Exception) {
-            println("Error al insertar estaciones iniciales: ${e.message}")
+            Log.e("ListaEstacionesViewModel", "Error al insertar estaciones iniciales desde JSON: ${e.message}")
         }
     }
+
+    // --- 4. FACTORY (Proveedor de dependencias) ---
 
     companion object {
         fun provideFactory(context: Context): ViewModelProvider.Factory {
