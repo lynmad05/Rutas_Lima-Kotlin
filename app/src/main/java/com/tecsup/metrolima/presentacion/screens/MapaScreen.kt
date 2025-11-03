@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,16 +21,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tecsup.metrolima.R
 import com.tecsup.metrolima.ui.components.BottomNavigationBar
 import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
+import com.tecsup.metrolima.viewmodel.MapaLineaViewModel
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapaScreen(navController: NavHostController) {
+fun MapaScreen(
+    navController: NavHostController,
+    lineaId: Int
+) {
+    val context = LocalContext.current
+    val viewModel: MapaLineaViewModel = viewModel(
+        factory = MapaLineaViewModel.provideFactory(context, lineaId)
+    )
+    val coordenadas by viewModel.coordenadasLinea.collectAsState()
+
     var visible by remember { mutableStateOf(false) }
 
     // Animación simple de aparición
@@ -113,7 +125,7 @@ fun MapaScreen(navController: NavHostController) {
 
                     //  Subtítulo
                     Text(
-                        text = "Línea 1 - Villa El Salvador → San Juan de Lurigancho",
+                        text = "Línea $lineaId - Villa El Salvador → San Juan de Lurigancho",
                         style = MaterialTheme.typography.titleMedium.copy(
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold,
@@ -148,7 +160,6 @@ fun MapaScreen(navController: NavHostController) {
 
                     Spacer(modifier = Modifier.height(40.dp))
 
-                    //  Línea decorativa inferior
                     Divider(
                         modifier = Modifier
                             .width(100.dp)
@@ -164,18 +175,3 @@ fun MapaScreen(navController: NavHostController) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewMapaScreenLight() {
-    MetroLimaGoTheme(darkTheme = false) {
-        MapaScreen(navController = rememberNavController())
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewMapaScreenDark() {
-    MetroLimaGoTheme(darkTheme = true) {
-        MapaScreen(navController = rememberNavController())
-    }
-}

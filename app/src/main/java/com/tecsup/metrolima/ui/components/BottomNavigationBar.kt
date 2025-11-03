@@ -1,7 +1,6 @@
 package com.tecsup.metrolima.ui.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.material3.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,30 +38,33 @@ fun BottomNavigationBar(
     modifier: Modifier = Modifier
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination?.route?.substringBefore("?")?.substringBefore("/")
 
-    // 🔤 Textos traducibles
     val navItems = listOf(
         BottomNavItem(
             icon = Icons.Filled.Home,
             description = stringResource(R.string.nav_inicio),
             route = "home"
         ),
+
         BottomNavItem(
             icon = Icons.Filled.DirectionsTransit,
+            description = stringResource(R.string.nav_rutas),
+            route = "rutas"
+        ),
+
+        BottomNavItem(
+            icon = Icons.Filled.LocationOn,
+            description = stringResource(R.string.nav_mapa),
+            route = "mapa_general"
+        ),
+
+        BottomNavItem(
+            icon = Icons.Filled.Map,
             description = stringResource(R.string.nav_lineas),
             route = "lineas"
         ),
-        BottomNavItem(
-            icon = Icons.Filled.Map,
-            description = stringResource(R.string.nav_mapa),
-            route = "mapa"
-        ),
-        BottomNavItem(
-            icon = Icons.Filled.DirectionsTransit,
-            description = stringResource(R.string.nav_estaciones),
-            route = "listado"
-        ),
+
         BottomNavItem(
             icon = Icons.Filled.Settings,
             description = stringResource(R.string.nav_configuracion),

@@ -9,42 +9,79 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.Train
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.tecsup.metrolima.R
-import com.tecsup.metrolima.data.model.Estacion
-import com.tecsup.metrolima.data.model.EstacionExtendida
 import com.tecsup.metrolima.ui.components.BottomNavigationBar
-import com.tecsup.metrolima.ui.theme.MetroLimaGoTheme
+import com.tecsup.metrolima.viewmodel.DetalleEstacionViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetalleEstacionScreen(
     navController: NavController,
-    estacion: EstacionExtendida
+    estacionId: Int
 ) {
+    val context = LocalContext.current
+
+    val viewModel: DetalleEstacionViewModel = viewModel(
+        factory = DetalleEstacionViewModel.provideFactory(context, estacionId)
+    )
+
+    val estacion by viewModel.estacion.collectAsState()
+    val servicios by viewModel.serviciosCercanos.collectAsState()
+
+    if (estacion == null) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(stringResource(R.string.detalle_estacion_titulo)) },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+                        }
+                    }
+                )
+            }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier.fillMaxSize().padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+        return
+    }
+
+    val estacionData = estacion!!
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = estacion.nombre,
+                        text = estacionData.nombre,
                         fontWeight = FontWeight.Bold
                     )
                 },
@@ -53,6 +90,15 @@ fun DetalleEstacionScreen(
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { viewModel.toggleFavorite() }) {
+                        Icon(
+                            imageVector = if (estacionData.is_favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = stringResource(R.string.favorito),
+                            tint = if (estacionData.is_favorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -70,17 +116,18 @@ fun DetalleEstacionScreen(
         ) {
 
             Image(
-                painter = painterResource(id = R.drawable.linea1),
+                painter = painterResource(id = estacionData.imagenCircularResId.takeIf { it != 0 } ?: R.drawable.linea1),
                 contentDescription = stringResource(R.string.mapa_estacion),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp)
                     .padding(16.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(12.dp)),
+                contentScale = ContentScale.Crop // Asegura que la imagen se vea bien
             )
 
             Text(
-                text = estacion.nombre,
+                text = estacionData.nombre,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground,
@@ -99,13 +146,15 @@ fun DetalleEstacionScreen(
                 ) {
                     InfoCard(
                         label = stringResource(R.string.tipo_ruta),
-                        value = "ID Línea: ${estacion.linea_id}",
+                        // 🟢 CAMBIO: Mostrar el ID de línea real
+                        value = "ID Línea: ${estacionData.linea_id}",
                         icon = Icons.Default.Train,
                         modifier = Modifier.weight(1f)
                     )
                     InfoCard(
                         label = stringResource(R.string.distrito),
-                        value = estacion.distrito,
+                        // 🟢 CAMBIO: Usar la data real
+                        value = estacionData.distrito,
                         icon = Icons.Default.LocationOn,
                         modifier = Modifier.weight(1f)
                     )
@@ -119,13 +168,15 @@ fun DetalleEstacionScreen(
                 ) {
                     InfoCard(
                         label = stringResource(R.string.coordenadas),
-                        value = "${estacion.lat}, ${estacion.lon}",
+                        // 🟢 CAMBIO: Usar las coordenadas reales
+                        value = "${estacionData.lat}, ${estacionData.lon}",
                         icon = Icons.Default.Route,
                         modifier = Modifier.weight(1f)
                     )
                     InfoCard(
                         label = stringResource(R.string.horario),
-                        value = estacion.horario,
+                        // 🟢 CAMBIO: Usar el horario real
+                        value = estacionData.horario,
                         icon = Icons.Default.AccessTime,
                         modifier = Modifier.weight(1f)
                     )
@@ -146,27 +197,31 @@ fun DetalleEstacionScreen(
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                    shape = RoundedCornerShape(12.dp),
-                    elevation = CardDefaults.cardElevation(2.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+
+
+                servicios.forEach { servicio ->
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = CardDefaults.cardElevation(2.dp),
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Train,
-                            contentDescription = stringResource(R.string.linea_1),
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            stringResource(R.string.linea_1),
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Train,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                servicio,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
                 }
             }
@@ -180,7 +235,7 @@ fun DetalleEstacionScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = { /* TODO: Ver en Google Maps */ },
+                    onClick = { /* TODO: Implementar navegación a Google Maps con (lat, lon) */ },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF004E63)),
                     shape = RoundedCornerShape(8.dp)
                 ) {
@@ -227,25 +282,5 @@ fun InfoCard(
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = value, fontSize = 14.sp, color = Color.DarkGray)
         }
-    }
-}
-
-@Preview(showBackground = true, device = "id:pixel_7_pro")
-@Composable
-fun PreviewDetalleEstacionScreen() {
-    MetroLimaGoTheme {
-        DetalleEstacionScreen(
-            navController = rememberNavController(),
-            estacion = EstacionExtendida(
-                id = 1,
-                nombre = "Estación Central",
-                distrito = "Cercado de Lima",
-                lat = -12.056274,
-                lon = -77.036529,
-                linea_id = 1,
-                horario = "5:00 AM - 10:00 PM",
-                imagenCircularResId = R.drawable.gamarra
-            )
-        )
     }
 }

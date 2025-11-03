@@ -46,14 +46,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun ListaEstacionScreen(
     navController: NavHostController,
-    onMenuClick: () -> Unit = {},
-    onNotificationsClick: () -> Unit = {},
-    onSearchClick: () -> Unit = {}
+    lineaId: Int? = null
 ) {
     val context = LocalContext.current
     val viewModel: ListaEstacionesViewModel = viewModel(
         factory = ListaEstacionesViewModel.provideFactory(context)
     )
+
+    LaunchedEffect(lineaId) {
+        viewModel.setLineaIdFiltro(lineaId)
+    }
 
     val estaciones by viewModel.estacionesFiltradas.collectAsState()
     val mensajeUsuario by viewModel.mensajeUsuario.collectAsState()
@@ -155,8 +157,7 @@ fun ListaEstacionScreen(
                             StationListItem(
                                 estacion = estacion,
                                 onClick = {
-                                    val estacionJson = Uri.encode(Gson().toJson(estacion))
-                                    navController.navigate("detalle/${estacionJson}")
+                                    navController.navigate("detalle/${estacion.id}")
                                 }
                             )
                             Divider(
@@ -179,7 +180,6 @@ fun StationListItem(
 ) {
     val context = LocalContext.current
 
-    // ✅ Intentamos obtener el ID real del drawable por nombre si existe
     val imageResId = remember(estacion.imagenCircularResId, estacion.imagenCircular) {
         when {
             estacion.imagenCircularResId != 0 -> estacion.imagenCircularResId
@@ -198,7 +198,6 @@ fun StationListItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        // ✅ Mostrar imagen solo si el recurso existe
         if (imageResId != 0) {
             Image(
                 painter = painterResource(id = imageResId),

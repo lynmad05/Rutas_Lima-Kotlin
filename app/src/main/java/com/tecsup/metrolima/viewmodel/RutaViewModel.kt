@@ -175,7 +175,7 @@ class RutaViewModel(
                 )
                 _resultadoRuta.value = resultado
 
-                println("✅ Ruta calculada: ${origen.nombre} → ${destino.nombre} ($tiempoEstimado)")
+                println(" Ruta calculada: ${origen.nombre} → ${destino.nombre} ($tiempoEstimado)")
 
                 // --- Nuevo: guarda automáticamente en historial ---
                 val ruta = Ruta(
@@ -189,10 +189,10 @@ class RutaViewModel(
                 )
 
                 saveRutaHistorial(ruta)
-                println("🟡 Ruta agregada automáticamente al historial: ${ruta.nombreEstacionOrigen} → ${ruta.nombreEstacionDestino}")
+                println("Ruta agregada automáticamente al historial: ${ruta.nombreEstacionOrigen} → ${ruta.nombreEstacionDestino}")
             }
         } else {
-            println("❌ No se puede calcular porque falta el origen o destino.")
+            println("No se puede calcular porque falta el origen o destino.")
         }
     }
 
@@ -243,10 +243,6 @@ class RutaViewModel(
         }
     }
 
-
-
-
-
     // --- Simulación de algoritmo de rutas
     private fun simularRuta(origen: EstacionExtendida, destino: EstacionExtendida): List<EstacionExtendida> { // ✅ Cambiar todos los tipos
         val todas = _allEstaciones.value
@@ -288,7 +284,7 @@ class RutaViewModel(
     // Función para guardar en historial
     fun saveRutaHistorial(ruta: Ruta) {
         _historialRutas.value = _historialRutas.value + ruta
-        println("🟡 Ruta agregada al historial: ${ruta.nombreEstacionOrigen} → ${ruta.nombreEstacionDestino}")
+        println("Ruta agregada al historial: ${ruta.nombreEstacionOrigen} → ${ruta.nombreEstacionDestino}")
     }
 
 

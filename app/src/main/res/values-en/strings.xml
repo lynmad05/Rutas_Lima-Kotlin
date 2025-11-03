@@ -85,6 +85,7 @@
     <string name="intermedias">Intermediate: %1$s</string>
 
     <!-- DetalleEstacion -->
+    <string name="detalle_estacion_titulo">Station Details</string>
     <string name="mapa_estacion">Station Map</string>
     <string name="tipo_ruta">Route Type</string>
     <string name="distrito">District</string>

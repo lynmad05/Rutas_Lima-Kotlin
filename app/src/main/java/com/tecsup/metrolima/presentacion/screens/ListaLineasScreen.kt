@@ -1,7 +1,6 @@
 package com.tecsup.metrolima.presentacion.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,7 +26,7 @@ fun ListaLineasScreen(
     navController: NavHostController,
     viewModel: ListaLineasViewModel = viewModel(factory = ListaLineasViewModel.provideFactory(LocalContext.current))
 ) {
-    val lineas by viewModel.lineas.collectAsState() // 👈 usa el StateFlow de tu ViewModel
+    val lineas by viewModel.lineas.collectAsState()
 
     Scaffold(
         topBar = { TopAppBarEstaciones(title = "Líneas del Metro") },
@@ -40,16 +39,26 @@ fun ListaLineasScreen(
                 .padding(12.dp)
         ) {
             items(lineas) { linea ->
-                LineaCard(linea = linea) {
-                    navController.navigate("estaciones/linea/${linea.id}")
-                }
+                LineaCard(
+                    linea = linea,
+                    onVerEstacionesClick = {
+                        navController.navigate("estaciones/linea/${linea.id}")
+                    },
+                    onVerMapaClick = {
+                        navController.navigate("mapa_linea/${linea.id}")
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun LineaCard(linea: Linea, onClick: () -> Unit) {
+fun LineaCard(
+    linea: Linea,
+    onVerEstacionesClick: () -> Unit,
+    onVerMapaClick: () -> Unit
+) {
     val color = try {
         Color(android.graphics.Color.parseColor(linea.color))
     } catch (e: Exception) {
@@ -59,34 +68,60 @@ fun LineaCard(linea: Linea, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp)
-            .clickable { onClick() },
+            .padding(vertical = 6.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.15f))
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .padding(16.dp)
         ) {
-            Column {
-                Text(
-                    text = linea.nombre,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "Estado: ${linea.estado}",
-                    style = MaterialTheme.typography.bodySmall
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Información de la Línea
+                Column {
+                    Text(
+                        text = linea.nombre,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Estado: ${linea.estado}",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .background(color, shape = RoundedCornerShape(8.dp))
                 )
             }
-            Box(
-                modifier = Modifier
-                    .size(32.dp)
-                    .background(color, shape = RoundedCornerShape(8.dp))
-            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(
+                    onClick = onVerEstacionesClick,
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text("Ver Estaciones")
+                }
+
+                Button(
+                    onClick = onVerMapaClick,
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                ) {
+                    Text("Ver Mapa")
+                }
+            }
         }
     }
 }

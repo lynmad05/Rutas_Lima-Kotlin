@@ -1,11 +1,6 @@
 package com.tecsup.metrolima.navigation
 
-import android.content.Context
-import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -13,23 +8,19 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.gson.Gson
-import com.tecsup.metrolima.data.model.Estacion
-import com.tecsup.metrolima.data.model.EstacionExtendida
 import com.tecsup.metrolima.presentacion.screens.AcercaAppScreen
 import com.tecsup.metrolima.presentacion.screens.ConfigScreen
 import com.tecsup.metrolima.presentacion.screens.DetalleEstacionScreen
-import com.tecsup.metrolima.presentacion.screens.EstacionesPorLineaScreen
 import com.tecsup.metrolima.presentacion.screens.FavoritosScreen
 import com.tecsup.metrolima.presentacion.screens.ListaEstacionScreen
-import kotlinx.coroutines.delay
 import com.tecsup.metrolima.presentacion.screens.HomeScreen
 import com.tecsup.metrolima.presentacion.screens.IniciarRutaScreen
 import com.tecsup.metrolima.presentacion.screens.ListaLineasScreen
 import com.tecsup.metrolima.presentacion.screens.MapaScreen
+// Importar la nueva pantalla que crearemos
+import com.tecsup.metrolima.presentacion.screens.MapaGeneralScreen
 import com.tecsup.metrolima.presentacion.screens.RutaScreen
 import com.tecsup.metrolima.presentacion.screens.SplashScreen
-//import com.tecsup.metrolima.presentacion.screens.menu.FavoritosScreen
 import com.tecsup.metrolima.presentacion.screens.menu.HistorialRutasScreen
 import com.tecsup.metrolima.viewmodel.ListaLineasViewModel
 import com.tecsup.metrolima.viewmodel.RutaViewModel
@@ -44,20 +35,17 @@ fun NavGraph(
     onLanguageChange: (String) -> Unit
 ) {
     val context = LocalContext.current
-    val sharedViewModel: RutaViewModel = viewModel(
+    // Mantener la instancia del ViewModel para compartirla si es necesario
+    val rutaViewModel: RutaViewModel = viewModel(
         factory = RutaViewModel.provideFactory(context)
     )
-    // Crear una única instancia del ViewModel aquí
-    val rutaViewModel: RutaViewModel = viewModel(factory = RutaViewModel.provideFactory(context))
 
     NavHost(
         navController = navController,
         startDestination = "splash"
     ) {
 
-        // RUTAS DEL MENU
-
-
+        // --- RUTAS DEL MENU ---
 
         composable("historial_rutas") {
             HistorialRutasScreen(navController = navController, viewModel = rutaViewModel)
@@ -67,11 +55,13 @@ fun NavGraph(
             AcercaAppScreen(navController = navController)
         }
 
-        // RUTAS DEL NAVBAR
+        // --- RUTAS DEL NAVBAR (5 PUNTOS) ---
 
         composable("splash") {
             SplashScreen(navController = navController)
         }
+
+        // 1. HOME
         composable(
             "home?openDrawer={openDrawer}",
             arguments = listOf(navArgument("openDrawer") {
@@ -83,28 +73,53 @@ fun NavGraph(
             HomeScreen(navController, openDrawerOnStart = openDrawer)
         }
 
-        composable("favoritos") {
-            FavoritosScreen(navController = navController)
-        }
-
+        // 2. CALCULAR RUTA
         composable(route = "rutas") {
-            RutaScreen(navController = navController, viewModel = sharedViewModel)
+            RutaScreen(navController = navController, viewModel = rutaViewModel)
         }
 
+        // La ruta 'iniciarRuta' es una sub-ruta del proceso de rutas
         composable(route = "iniciarRuta") {
-            IniciarRutaScreen(navController = navController, viewModel = sharedViewModel)
+            IniciarRutaScreen(navController = navController, viewModel = rutaViewModel)
+        }
+
+        // 3. MAPA GENERAL (Navbar Central) - Muestra todas las líneas juntas
+        composable(route = "mapa_general") {
+            MapaGeneralScreen(navController = navController)
         }
 
 
-
-        composable(route = "mapa") {
-            MapaScreen(navController = navController)
+        // 4. LÍNEAS DE METRO (Punto de acceso a listados y mapa de línea)
+        composable("lineas") {
+            val listaLineasViewModel: ListaLineasViewModel = viewModel(
+                factory = ListaLineasViewModel.provideFactory(context)
+            )
+            ListaLineasScreen(navController = navController, viewModel = listaLineasViewModel)
         }
 
-        composable("listado") {
-            ListaEstacionScreen(navController = navController)
+        // Sub-ruta del Listado: Navegación de Línea a Estaciones
+        composable(
+            route = "estaciones/linea/{lineaId}",
+            arguments = listOf(navArgument("lineaId") {
+                type = NavType.IntType;
+                defaultValue = 0
+            })
+        ) { backStackEntry ->
+            val lineaId = backStackEntry.arguments?.getInt("lineaId")
+            ListaEstacionScreen(navController = navController, lineaId = if (lineaId == 0) null else lineaId)
         }
 
+        // Sub-ruta del Listado: Navegación de Línea a su Mapa (MapaScreen existente)
+        composable(
+            route = "mapa_linea/{lineaId}", // **Ruta renombrada**
+            arguments = listOf(navArgument("lineaId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val lineaId = backStackEntry.arguments?.getInt("lineaId") ?: 1
+            MapaScreen(navController = navController, lineaId = lineaId) // MapaScreen usado para 1 línea
+        }
+
+
+        // 5. CONFIGURACIÓN
         composable("config") {
             ConfigScreen(
                 navController = navController,
@@ -115,54 +130,20 @@ fun NavGraph(
             )
         }
 
-        composable("lineas") {
-            val listaLineasViewModel: ListaLineasViewModel = viewModel(
-                factory = ListaLineasViewModel.provideFactory(context)
-            )
-            ListaLineasScreen(navController = navController, viewModel = listaLineasViewModel)
+        // --- RUTAS COMPLEMENTARIAS ---
+
+        composable("favoritos") { // Se mantuvo fuera de la secuencia principal del navbar
+            FavoritosScreen(navController = navController)
         }
 
+
+        //RUTAS DE DETALLES DE LAS ESTACIONES (Permanece igual)
         composable(
-            route = "estaciones/linea/{lineaId}",
-            arguments = listOf(navArgument("lineaId") { type = NavType.IntType })
+            route = "detalle/{estacionId}",
+            arguments = listOf(navArgument("estacionId") { type = NavType.IntType })
         ) { backStackEntry ->
-            val lineaId = backStackEntry.arguments?.getInt("lineaId") ?: 0
-            EstacionesPorLineaScreen(navController = navController, lineaId = lineaId)
+            val estacionId = backStackEntry.arguments?.getInt("estacionId") ?: 0
+            DetalleEstacionScreen(navController = navController, estacionId = estacionId)
         }
-
-
-
-
-
-
-
-        //RUTAS DE DETALLES DE LAS ESTACIONES
-
-        composable(
-            route = "detalle/{estacionJson}",
-            arguments = listOf(navArgument("estacionJson") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val estacionJson = backStackEntry.arguments?.getString("estacionJson")
-            val estacion = estacionJson?.let { Gson().fromJson(it, EstacionExtendida::class.java) }
-
-            if (estacion != null) {
-                DetalleEstacionScreen(
-                    navController = navController,
-                    estacion = estacion
-                )
-            } else {
-                Text(
-                    "Error: Estación no encontrada. Volviendo...",
-                    color = Color.Red
-                )
-                LaunchedEffect(Unit) {
-                    delay(1500)
-                    navController.popBackStack()
-                }
-            }
-        }
-
-
-
     }
 }
