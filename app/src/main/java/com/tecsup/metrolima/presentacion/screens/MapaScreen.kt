@@ -31,7 +31,7 @@ import com.tecsup.metrolima.viewmodel.MapaLineaViewModel
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
+        @Composable
 fun MapaScreen(
     navController: NavHostController,
     lineaId: Int

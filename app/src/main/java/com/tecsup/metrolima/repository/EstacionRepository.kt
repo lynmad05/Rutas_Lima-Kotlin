@@ -6,7 +6,8 @@ import com.tecsup.metrolima.data.model.EstacionExtendida
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-
+import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.flow.map
 class EstacionRepository(
     private val estacionDao: EstacionDao,
     private val lineaRepository: LineaRepository
@@ -41,10 +42,11 @@ class EstacionRepository(
     }
 
     /** Retorna coordenadas (lat/lon) para trazado del mapa */
-    fun getCoordenadasPorLinea(id: Int): Flow<List<Pair<Double, Double>>> =
-        estacionDao.getEstacionesPorLineaId(id).map { estaciones ->
-            estaciones.map { it.lat to it.lon }
+    fun getCoordenadasPorLinea(id: Int): Flow<List<LatLng>> =
+        estacionDao.getEstacionesPorLineaId(id).map { coords ->
+            coords.map { LatLng(it.lat, it.lon) }
         }
+
 
     /** Obtiene las estaciones remotas desde el endpoint Mocki */
     suspend fun getEstacionesRemotas(): List<EstacionExtendida> {

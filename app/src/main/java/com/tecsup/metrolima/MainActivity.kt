@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
             var selectedLanguage by remember { mutableStateOf("Español") }
             val navController = rememberNavController()
 
-            MyApp(selectedLanguage = selectedLanguage) {
+            MyApp(selectedLanguage = selectedLanguage)  {
                 MetroLimaGoTheme(darkTheme = darkModeEnabled) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),

@@ -1,0 +1,12 @@
+[
+  {"id":1, "nombre":"La Molina", "distrito":"La Molina", "latitud":-12.0847, "longitud":-76.9351, "linea":"Corredor Azul", "horario":"L-D: 05:00 - 23:00"},
+  {"id":2, "nombre":"Javier Prado Este", "distrito":"San Borja", "latitud":-12.0899, "longitud":-76.9953, "linea":"Corredor Azul", "horario":"L-D: 05:00 - 23:00"},
+  {"id":3, "nombre":"San Borja Sur", "distrito":"San Borja", "latitud":-12.1003, "longitud":-77.0039, "linea":"Corredor Azul", "horario":"L-D: 05:00 - 23:00"},
+  {"id":4, "nombre":"Angamos", "distrito":"Miraflores", "latitud":-12.1138, "longitud":-77.0228, "linea":"Corredor Azul", "horario":"L-D: 05:00 - 23:00"},
+  {"id":5, "nombre":"Ricardo Palma", "distrito":"Miraflores", "latitud":-12.1223, "longitud":-77.0295, "linea":"Corredor Azul", "horario":"L-D: 05:00 - 23:00"},
+  {"id":6, "nombre":"Arequipa", "distrito":"Lince", "latitud":-12.0852, "longitud":-77.0351, "linea":"Corredor Azul", "horario":"L-D: 05:00 - 23:00"},
+  {"id":7, "nombre":"Tacna", "distrito":"Cercado de Lima", "latitud":-12.0512, "longitud":-77.0388, "linea":"Corredor Azul", "horario":"L-D: 05:00 - 23:00"},
+  {"id":8, "nombre":"Garcilaso", "distrito":"Jesús María", "latitud":-12.0709, "longitud":-77.0344, "linea":"Corredor Azul", "horario":"L-D: 05:00 - 23:00"},
+  {"id":9, "nombre":"Brasil", "distrito":"Jesús María", "latitud":-12.0743, "longitud":-77.0568, "linea":"Corredor Azul", "horario":"L-D: 05:00 - 23:00"},
+  {"id":10, "nombre":"San Miguel", "distrito":"San Miguel", "latitud":-12.0802, "longitud":-77.0875, "linea":"Corredor Azul", "horario":"L-D: 05:00 - 23:00"}
+]

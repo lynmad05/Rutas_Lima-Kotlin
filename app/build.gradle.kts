@@ -45,7 +45,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -82,6 +82,9 @@ dependencies {
 
     // Google Maps Compose
     implementation("com.google.maps.android:maps-compose:2.14.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.maps.android:maps-compose:2.14.0")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -30,10 +30,6 @@ class MapaLineaViewModel(
     private fun cargarCoordenadasLinea() {
         viewModelScope.launch {
             estacionRepository.getCoordenadasPorLinea(lineaId)
-                // Mapea el Pair<Double, Double> a LatLng
-                .map { pares ->
-                    pares.map { LatLng(it.first, it.second) }
-                }
                 .catch { e ->
                     println("Error al cargar coordenadas para la línea $lineaId: ${e.message}")
                 }
@@ -43,6 +39,7 @@ class MapaLineaViewModel(
                 }
         }
     }
+
 
     // --- Factory para el ViewModel ---
     companion object {

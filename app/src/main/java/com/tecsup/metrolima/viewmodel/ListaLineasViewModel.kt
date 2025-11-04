@@ -46,7 +46,7 @@ class ListaLineasViewModel(
     companion object {
         fun provideFactory(context: Context): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                   override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     if (modelClass.isAssignableFrom(ListaLineasViewModel::class.java)) {
                         val db = MetroLimaDataBase.getDatabase(context)
                         val lineaDao = db.lineaDao()

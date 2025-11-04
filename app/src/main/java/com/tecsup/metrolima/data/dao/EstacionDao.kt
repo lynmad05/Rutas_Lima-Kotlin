@@ -36,6 +36,16 @@ interface EstacionDao {
     suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean)
 
     // Retorna todas las estaciones por línea (para mapa)
-    @Query("SELECT * FROM estaciones_extendidas WHERE linea_id = :id ORDER BY id ASC")
-    fun getEstacionesPorLineaId(id: Int): Flow<List<EstacionExtendida>>
+    data class Coordenada(val lat: Double, val lon: Double)
+
+    @Query("""
+    SELECT lat, lon 
+    FROM estaciones_extendidas
+    WHERE linea_id = :id
+    ORDER BY id ASC
+""")
+    fun getEstacionesPorLineaId(id: Int): Flow<List<Coordenada>>
+
+
+
 }

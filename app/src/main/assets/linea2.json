@@ -1,0 +1,12 @@
+[
+  {"id":1, "nombre":"Estación Mercado Santa Anita", "distrito":"Santa Anita", "latitud":-12.0454, "longitud":-76.9588, "linea":"Línea 2 Metro", "horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
+  {"id":2, "nombre":"Estación Colectora Industrial", "distrito":"Santa Anita", "latitud":-12.0489, "longitud":-76.9681, "linea":"Línea 2 Metro", "horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
+  {"id":3, "nombre":"Estación Evitamiento", "distrito":"El Agustino", "latitud":-12.0505, "longitud":-76.9773, "linea":"Línea 2 Metro", "horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
+  {"id":4, "nombre":"Estación 28 de Julio", "distrito":"Cercado de Lima", "latitud":-12.0563, "longitud":-77.0036, "linea":"Línea 2 Metro", "horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
+  {"id":5, "nombre":"Estación Plaza Bolognesi", "distrito":"Cercado de Lima", "latitud":-12.0615, "longitud":-77.0275, "linea":"Línea 2 Metro", "horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
+  {"id":6, "nombre":"Estación Plaza Unión", "distrito":"Cercado de Lima", "latitud":-12.0641, "longitud":-77.0421, "linea":"Línea 2 Metro", "horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
+  {"id":7, "nombre":"Estación Carmen de la Legua", "distrito":"Callao", "latitud":-12.0609, "longitud":-77.0781, "linea":"Línea 2 Metro", "horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
+  {"id":8, "nombre":"Estación Buenos Aires", "distrito":"Callao", "latitud":-12.0563, "longitud":-77.0941, "linea":"Línea 2 Metro", "horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
+  {"id":9, "nombre":"Estación Juan Pablo II", "distrito":"Callao", "latitud":-12.0501, "longitud":-77.1055, "linea":"Línea 2 Metro", "horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
+  {"id":10, "nombre":"Estación Gambetta", "distrito":"Callao", "latitud":-12.0433, "longitud":-77.1182, "linea":"Línea 2 Metro", "horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"}
+]

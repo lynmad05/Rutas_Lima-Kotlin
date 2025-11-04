@@ -1,28 +1,44 @@
 package com.tecsup.metrolima.presentacion.screens
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Polyline
+import com.google.maps.android.compose.rememberCameraPositionState
 import com.tecsup.metrolima.viewmodel.MapaGeneralViewModel
 
 @Composable
 fun MapaGeneralScreen(
-    navController: NavController
-    // Livia deberá añadir aquí el viewModel
-    // viewModel: MapaGeneralViewModel
+    navController: NavController,
+    viewModel: MapaGeneralViewModel = viewModel(factory = MapaGeneralViewModel.provideFactory(LocalContext.current))
 ) {
-    // Este Composable será el encargado de mostrar las 3 líneas (L1, L2, L3) a la vez. trazadas en el mapa.
-    Box(
+    val lineas = viewModel.lineas.collectAsState()
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(LatLng(-12.05, -77.03), 11f)
+    }
+
+    GoogleMap(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        cameraPositionState = cameraPositionState
     ) {
-        // Livia implementará aquí el Google Map
-        Text("Mapa General - Trazando TODAS las Líneas")
-        // Aquí se usará el ViewModel para obtener y dibujar las PolyLines de todas las líneas.
-        // Ejemplo: GoogleMap { ... Polyline(puntos de L1), Polyline(puntos de L2) ... }
+        // Dibujamos cada línea separada
+        lineas.value.forEach { linea ->
+            if (linea.puntos.isNotEmpty()) {
+                Polyline(
+                    points = linea.puntos,
+                    color = Color(linea.color),
+                    width = 8f,
+                    geodesic = true
+                )
+            }
+        }
     }
 }
