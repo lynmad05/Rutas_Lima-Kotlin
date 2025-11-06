@@ -12,14 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-
-data class LineaConPuntos(
-    val id: Int,
-    val nombre: String,
-    val color: Long,
-    val puntos: List<LatLng>
-)
-
 class MapaGeneralViewModel(
     private val estacionRepository: EstacionRepository
 ) : ViewModel() {
@@ -49,7 +41,7 @@ class MapaGeneralViewModel(
                     ),
                     LineaConPuntos(
                         id = 3,
-                        nombre = "corredorazul.json",
+                        nombre = "Línea 3",
                         color = 0xFF2196F3,
                         puntos = estacionRepository.getCoordenadasPorLinea(3).first()
                     )
@@ -61,6 +53,12 @@ class MapaGeneralViewModel(
         }
     }
 
+    data class LineaConPuntos(
+        val id: Int,
+        val nombre: String,
+        val color: Long,
+        val puntos: List<LatLng>
+    )
 
     companion object {
         fun provideFactory(context: Context): ViewModelProvider.Factory {

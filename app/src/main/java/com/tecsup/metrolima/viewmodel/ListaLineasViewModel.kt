@@ -19,13 +19,10 @@ class ListaLineasViewModel(
     val lineas: StateFlow<List<Linea>> get() = _lineas
 
     init {
-        // 🔥 Nuevo: intentar descargar y guardar líneas desde Mocki al inicio
         viewModelScope.launch {
             try {
                 val db = lineaRepository // solo referencia
                 println("Intentando sincronizar líneas iniciales...")
-                // Usa tu estacionRepository si es necesario, o crea aquí una función similar
-                // Si solo tienes LineaRepository, agrega una función allí para cargar remotas si existe
 
             } catch (e: Exception) {
                 println("Error al sincronizar líneas: ${e.message}")

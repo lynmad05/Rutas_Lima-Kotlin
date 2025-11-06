@@ -40,8 +40,6 @@ class MapaLineaViewModel(
         }
     }
 
-
-    // --- Factory para el ViewModel ---
     companion object {
         fun provideFactory(context: Context, lineaId: Int): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {
