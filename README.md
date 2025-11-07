@@ -226,6 +226,66 @@ C:.
 <img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/2a459723-287e-47ac-abd2-78342d94b8da" />
 <img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/e4514d08-3fe5-4938-9c4c-b4612ddea6dc" />
 
+# Segunda Semana Proyecto | Nuevos Requerimientos
+
+1. *Gestión de Líneas* ✅
+- Ver listado de líneas (Línea 1, Línea 2, corredores, etc.) con nombre, color y estado.
+- Mostrar mapa simplificado con el recorrido de cada línea.
+- Ver lista de estaciones ordenadas de inicio a fin.
+2. *Estaciones / Paraderos* ✅
+- Ver detalle de una estación: nombre, ubicación, horario, estado, foto.
+- Mostrar servicios alrededor (restaurantes, bancos, farmacias, universidades, etc.).
+- Marcar estaciones como favoritas.
+3. *Búsqueda y Navegación* ✅
+- Buscar estación por nombre o línea.
+- Planificar viaje: seleccionar origen y destino, mostrar ruta óptima.
+- Indicar transbordos entre líneas y tiempo estimado.
+4. *Mapa Interactivo* ✅
+- Visualizar todas las líneas en el mapa con colores distintivos.
+- Mostrar estaciones como pines interactivos.
+- Resaltar la ruta calculada en el mapa.
+5. *Información Adicional* ✅
+- Mostrar tarifas y métodos de pago.
+- Avisos de mantenimiento o interrupciones (mock).
+- Consejos de seguridad y buenas prácticas.
+6. *Favoritos y Personalización* ✅
+- Guardar estaciones frecuentes.
+- Acceso rápido a rutas favoritas.
+- Soporte de idioma español/inglés.
+7. *Offline y Datos* ✅
+- Funcionar con datasets precargados (Room).
+- Permitir calcular rutas sin conexión.
+- Actualizar datos cuando haya conexión disponible.
+---
+## Cambios en la App:
+- Home
+
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/0c105532-17b2-478a-9c49-d9f0f24e03c4" />
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/228c7c22-08ec-49f7-9b7e-0eb2afe9ebc0" />
+
+- Mapa General
+
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/955806b6-79a0-4a67-905a-d8f30f581373" />
+
+- Lineas 2 y Corredores
+
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/b66af1b8-f4d6-4e3d-a2dd-20afa68dc964" />
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/1cfebd63-a07a-4f11-8762-acef4f3a8b6b" />
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/3ae5ec14-e9d2-444f-83ed-f081f7d90a74" />
+
+- Mapas de Cada Linea
+
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/75b90e75-095f-49b3-b39b-93806905584c" />
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/72caab98-4525-47d9-aaf2-7bd21f8c3cf1" />
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/a5c3e2d6-ead3-4faa-83e5-6dfa9bb7ea20" />
+
+- Mapas de Cada Estacion y Servicios
+
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/e41a2df0-f3a3-49fd-8469-a974bc9b23fe" />
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/5b3cfbf8-e75e-4cb2-88cf-40ca93f19f3e" />
+<img width="250" height="650" alt="image" src="https://github.com/user-attachments/assets/8205de38-c7e0-461c-9e0c-086cd24ee641" />
+
+---
 ## 🎞️ App en funcionamiento:
 # https://youtube.com/shorts/lbtHSJ0u-ao
 
