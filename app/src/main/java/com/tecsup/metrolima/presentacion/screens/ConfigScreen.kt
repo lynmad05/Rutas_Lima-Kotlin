@@ -39,7 +39,6 @@ import androidx.compose.material3.*
 import androidx.compose.ui.res.stringResource
 import com.tecsup.metrolima.R
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfigScreen(
@@ -52,10 +51,18 @@ fun ConfigScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(id = R.string.config_title), style = MaterialTheme.typography.titleLarge) },
+                title = {
+                    Text(
+                        stringResource(id = R.string.config_title),
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(id = R.string.back))
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(id = R.string.back)
+                        )
                     }
                 }
             )
@@ -66,47 +73,62 @@ fun ConfigScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.Top
         ) {
+
+            // ---- Título general ----
             Text(
                 text = stringResource(id = R.string.options),
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
+
+            // ---- Opción: Modo oscuro ----
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                tonalElevation = 4.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 18.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        stringResource(id = R.string.dark_mode),
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
+                        modifier = Modifier.weight(1f)
+                    )
+                    Switch(
+                        checked = darkModeEnabled,
+                        onCheckedChange = onDarkModeChange
+                    )
+                }
+            }
+
+            // ---- Opción: Idioma ----
+            Text(
+                text = stringResource(id = R.string.language),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(stringResource(id = R.string.dark_mode), modifier = Modifier.weight(1f))
-                Switch(
-                    checked = darkModeEnabled,
-                    onCheckedChange = onDarkModeChange
-                )
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Text(
-                text = stringResource(id = R.string.language),
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-
-
             LanguageSelector(
                 selectedLanguage = selectedLanguage,
                 onLanguageChange = onLanguageChange
             )
-
         }
     }
 }
+
 @Composable
 fun LanguageSelector(
     selectedLanguage: String,
@@ -114,86 +136,84 @@ fun LanguageSelector(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    Column(
+    Surface(
+        tonalElevation = 4.dp,
+        shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Surface(
-            tonalElevation = 6.dp,
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { expanded = !expanded }
-        ) {
+        Column {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable { expanded = !expanded }
                     .padding(horizontal = 20.dp, vertical = 18.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = stringResource(id = R.string.language),
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium)
                     )
                     Text(
                         text = selectedLanguage,
                         style = MaterialTheme.typography.bodySmall.copy(
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     )
                 }
-
                 Icon(
-                    imageVector = if (expanded)
-                        Icons.Filled.KeyboardArrowUp
+                    imageVector = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+                    contentDescription = if (expanded)
+                        stringResource(id = R.string.hide_languages)
                     else
-                        Icons.Filled.KeyboardArrowDown,
-                    contentDescription = if (expanded) stringResource(id = R.string.hide_languages) else stringResource(id = R.string.show_languages),
+                        stringResource(id = R.string.show_languages),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
-        }
 
-        // Sección expandida (radio buttons)
-        if (expanded) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 28.dp, top = 10.dp, end = 12.dp)
-            ) {
-                val languages = listOf(stringResource(id = R.string.spanish), stringResource(id = R.string.english))
+            if (expanded) {
+                Divider(modifier = Modifier.padding(horizontal = 12.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 28.dp, vertical = 8.dp)
+                ) {
+                    val languages = listOf(
+                        stringResource(id = R.string.spanish),
+                        stringResource(id = R.string.english)
+                    )
 
-                languages.forEach { language ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onLanguageChange(language)
-                                expanded = false
-                            }
-                            .padding(vertical = 10.dp)
-                    ) {
-                        RadioButton(
-                            selected = selectedLanguage == language,
-                            onClick = {
-                                onLanguageChange(language)
-                                expanded = false
-                            }
-                        )
-                        Text(
-                            text = language,
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
+                    languages.forEach { language ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    onLanguageChange(language)
+                                    expanded = false
+                                }
+                                .padding(vertical = 10.dp)
+                        ) {
+                            RadioButton(
+                                selected = selectedLanguage == language,
+                                onClick = {
+                                    onLanguageChange(language)
+                                    expanded = false
+                                }
+                            )
+                            Text(
+                                text = language,
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
                     }
                 }
             }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -208,4 +228,3 @@ fun PreviewConfigScreen() {
         )
     }
 }
-

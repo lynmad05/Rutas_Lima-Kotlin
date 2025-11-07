@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.filled.Construction
 import androidx.compose.material.icons.filled.DirectionsTransit
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Search
@@ -47,7 +48,7 @@ data class MenuDrawerItem(
 
 @Composable
 fun menuItems() = listOf(
-    MenuDrawerItem(stringResource(R.string.drawer_favoritos), Icons.Default.Star, "favoritos"),
+    MenuDrawerItem(stringResource(R.string.drawer_favoritos), Icons.Default.FavoriteBorder, "favoritos"),
     MenuDrawerItem(stringResource(R.string.drawer_historial), Icons.Default.Restore, "historial_rutas"),
     MenuDrawerItem(stringResource(R.string.drawer_acerca), Icons.Default.Info, "acerca_app"),
 )

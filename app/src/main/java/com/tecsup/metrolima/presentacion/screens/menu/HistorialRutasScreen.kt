@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DirectionsTransit
@@ -15,12 +16,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.tecsup.metrolima.R
 import com.tecsup.metrolima.viewmodel.RutaViewModel
@@ -42,7 +45,7 @@ fun HistorialRutasScreen(
                     Text(
                         stringResource(R.string.historial_title),
                         style = MaterialTheme.typography.titleLarge.copy(
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = Color.Black
                         )
                     )
                 },
@@ -51,13 +54,13 @@ fun HistorialRutasScreen(
                         Icon(
                             Icons.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back),
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = Color.Black
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    containerColor = Color.White,
+                    titleContentColor = Color.Black
                 )
             )
         }
@@ -65,11 +68,10 @@ fun HistorialRutasScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
+                .background(Color(0xFFF5F5F5))
                 .padding(paddingValues)
         ) {
             if (historial.isEmpty()) {
-                //  Cuando no hay rutas guardadas
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -80,71 +82,87 @@ fun HistorialRutasScreen(
                     Icon(
                         imageVector = Icons.Filled.DirectionsTransit,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+                        tint = Color(0xFF1976D2).copy(alpha = 0.6f),
                         modifier = Modifier.size(80.dp)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = stringResource(R.string.no_saved_routes),
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                        )
+                        fontSize = 16.sp,
+                        color = Color.Gray
                     )
                 }
             } else {
-                //  Lista de rutas
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 12.dp)
+                        .padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(historial.reversed()) { ruta ->
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 6.dp)
-                                .clip(MaterialTheme.shapes.medium)
-                                .clickable {
-                                    // TODO: navegación a detalles
-                                },
-                            elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant
-                            )
+                                .clip(RoundedCornerShape(16.dp))
+                                .clickable { },
+                            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                         ) {
-                            Column(
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(16.dp)
+                                    .background(
+                                        Brush.horizontalGradient(
+                                            listOf(Color(0xFFBBDEFB), Color(0xFF90CAF9))
+                                        )
+                                    )
+                                    .padding(16.dp),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = "${ruta.nombreEstacionOrigen} → ${ruta.nombreEstacionDestino}",
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
+                                val iconSize = 60.dp
+                                Box(
+                                    modifier = Modifier
+                                        .size(iconSize)
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .background(Color.White),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.DirectionsTransit,
+                                        contentDescription = null,
+                                        tint = Color(0xFF1976D2),
+                                        modifier = Modifier.size(iconSize * 0.6f)
+                                    )
+                                }
 
-                                Spacer(modifier = Modifier.height(6.dp))
+                                Spacer(modifier = Modifier.width(16.dp))
 
-                                Text(
-                                    text = stringResource(R.string.tiempo_estimado, ruta.tiempoEstimadoMinutos),
-                                    fontSize = 14.sp,
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontWeight = FontWeight.Medium
-                                )
-
-                                if (ruta.estacionesIntermedias.isNotBlank()) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = "${ruta.nombreEstacionOrigen} → ${ruta.nombreEstacionDestino}",
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.Black
+                                    )
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Text(
-                                        text = stringResource(
-                                            R.string.intermedias,
-                                            ruta.estacionesIntermedias.replace("|", ", ")
-                                        ),
-                                        fontSize = 13.sp,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        maxLines = 2,
-                                        overflow = TextOverflow.Ellipsis
+                                        text = stringResource(R.string.tiempo_estimado, ruta.tiempoEstimadoMinutos),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        color = Color(0xFF1976D2)
                                     )
+                                    if (ruta.estacionesIntermedias.isNotBlank()) {
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(
+                                            text = stringResource(
+                                                R.string.intermedias,
+                                                ruta.estacionesIntermedias.replace("|", ", ")
+                                            ),
+                                            fontSize = 13.sp,
+                                            color = Color.DarkGray,
+                                            maxLines = 2,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    }
                                 }
                             }
                         }
