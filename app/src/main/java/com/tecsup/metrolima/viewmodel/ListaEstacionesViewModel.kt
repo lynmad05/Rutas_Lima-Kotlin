@@ -118,6 +118,23 @@
                 "estacion_pumacahua" -> R.drawable.estacion_pumacahua
                 "estacion_parque_industrial" -> R.drawable.estacion_parque_industrial
                 "estacion_villa_salvador" -> R.drawable.estacion_villa_salvador
+
+                // Imagenes de la linea 2
+
+                "l2_atevitarte" -> R.drawable.l2_atevitarte
+                "l2_valdizan" -> R.drawable.l2_valdizan
+                "l2_colectora" -> R.drawable.l2_colectora
+                "l2_ovalo" -> R.drawable.l2_ovalo
+                "l2_evitamiento"  -> R.drawable.l2_evitamiento
+                "l2_ayllon" -> R.drawable.l2_ayllon
+
+                // Imagenes de corredores
+
+                "corredor_arequipa" -> R.drawable.corredor_arequipa
+                "corredor_angamos" -> R.drawable.corredor_angamos
+                "corredor_brasil" -> R.drawable.corredor_brasil
+                "corredor_javierprado" -> R.drawable.corredor_javierprado
+
                 else -> R.drawable.ic_launcher_foreground
             }
         }

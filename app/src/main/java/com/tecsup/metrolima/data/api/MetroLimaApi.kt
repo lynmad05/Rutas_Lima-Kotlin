@@ -7,7 +7,7 @@ import retrofit2.http.GET
 interface MetroLimaApi {
 
     // Estaciones Mocki v2
-    @GET("8566829c-c1c4-4e40-bda8-c0b1cd1ff533")
+    @GET("bbc5cff0-5f7b-498e-8ca5-56059419a478")
     suspend fun getEstaciones(): List<Estacion>
 
     // Líneas Mocki

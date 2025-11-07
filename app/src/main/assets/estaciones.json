@@ -24,7 +24,7 @@
     {"id":23, "nombre":"Villa María","distrito":"Villa María del Triunfo","latitud":-12.16508,"longitud":-76.95028,"linea":"Línea 1 Metro","horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
     {"id":24, "nombre":"Pumacahua","distrito":"Villa María del Triunfo","latitud":-12.17669,"longitud":-76.94482,"linea":"Línea 1 Metro","horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
     {"id":25, "nombre":"Parque Industrial","distrito":"Villa El Salvador","latitud":-12.18845,"longitud":-76.94023,"linea":"Línea 1 Metro","horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
-    {"id":26, "nombre":"Villa El Salvador","distrito":"Villa El Salvador","latitud":-12.19823,"longitud":-76.93588,"linea":"Línea 1 Metro","horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"}
+    {"id":26, "nombre":"Villa El Salvador","distrito":"Villa El Salvador","latitud":-12.19823,"longitud":-76.93588,"linea":"Línea 1 Metro","horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},
 
     [
       {"id":1, "nombre":"Estación Mercado Santa Anita", "distrito":"Santa Anita", "latitud":-12.0454, "longitud":-76.9588, "linea":"Línea 2 Metro", "horario":"L-S: 06:00 - 22:00, D/F: 06:00 - 21:00"},

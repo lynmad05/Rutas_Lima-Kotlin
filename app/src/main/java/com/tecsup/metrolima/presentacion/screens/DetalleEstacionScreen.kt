@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -32,6 +33,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 import com.tecsup.metrolima.R
 import com.tecsup.metrolima.ui.components.BottomNavigationBar
 import com.tecsup.metrolima.viewmodel.DetalleEstacionViewModel
@@ -115,16 +122,50 @@ fun DetalleEstacionScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Image(
-                painter = painterResource(id = estacionData.imagenCircularResId.takeIf { it != 0 } ?: R.drawable.linea1),
-                contentDescription = stringResource(R.string.mapa_estacion),
+            // Cámara (igual que ya tienes)
+            val cameraPositionState = rememberCameraPositionState {
+                position = CameraPosition.fromLatLngZoom(
+                    LatLng(estacionData.lat, estacionData.lon), 16f
+                )
+            }
+
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp)
-                    .padding(16.dp)
-                    .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Crop // Asegura que la imagen se vea bien
-            )
+                    .padding(16.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                GoogleMap(
+                    modifier = Modifier.fillMaxSize(),
+                    cameraPositionState = cameraPositionState
+                ) {
+                    // 📍 Marcador principal
+                    val estacionMarker = rememberMarkerState(
+                        position = LatLng(estacionData.lat, estacionData.lon)
+                    )
+                    Marker(
+                        state = estacionMarker,
+                        title = estacionData.nombre,
+                        snippet = estacionData.distrito
+                    )
+
+                    // 📌 Servicios cercanos (ejemplo con desplazamiento mínimo)
+                    servicios.forEachIndexed { index, servicio ->
+                        val serviceState = rememberMarkerState(
+                            position = LatLng(
+                                estacionData.lat + 0.0008 * (index + 1),
+                                estacionData.lon + 0.0008 * (index + 1)
+                            )
+                        )
+                        Marker(
+                            state = serviceState,
+                            title = servicio,
+                            snippet = "Servicio cerca"
+                        )
+                    }
+                }
+            }
 
             Text(
                 text = estacionData.nombre,
@@ -144,13 +185,20 @@ fun DetalleEstacionScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    val tipoRuta = when (estacionData.linea_id) {
+                        1 -> "Línea 1"
+                        2 -> "Línea 2"
+                        3 -> "Corredor Azul"
+                        else -> "Ruta"
+                    }
+
                     InfoCard(
-                        label = stringResource(R.string.tipo_ruta),
-                        // 🟢 CAMBIO: Mostrar el ID de línea real
-                        value = "ID Línea: ${estacionData.linea_id}",
+                        label = "Tipo de Ruta",
+                        value = tipoRuta,
                         icon = Icons.Default.Train,
                         modifier = Modifier.weight(1f)
                     )
+
                     InfoCard(
                         label = stringResource(R.string.distrito),
                         // 🟢 CAMBIO: Usar la data real
@@ -234,13 +282,8 @@ fun DetalleEstacionScreen(
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Button(
-                    onClick = { /* TODO: Implementar navegación a Google Maps con (lat, lon) */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF004E63)),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Text(stringResource(R.string.ver_en_maps), color = Color.White)
-                }
+
+                //aca borre
 
                 Button(
                     onClick = { navController.navigate("rutas") },
@@ -260,26 +303,26 @@ fun DetalleEstacionScreen(
 fun InfoCard(
     label: String,
     value: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     modifier: Modifier = Modifier
 ) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFEDE0FF)),
-        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFE9D8FF)),
+        shape = RoundedCornerShape(16.dp),
         modifier = modifier
-            .padding(4.dp)
-            .height(100.dp)
+            .padding(6.dp)
+            .height(120.dp)
     ) {
         Column(
-            modifier = Modifier.padding(12.dp),
-            horizontalAlignment = Alignment.Start
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = icon, contentDescription = null, tint = Color.Black)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = label, fontWeight = FontWeight.SemiBold)
-            }
-            Spacer(modifier = Modifier.height(4.dp))
+            Icon(imageVector = icon, contentDescription = null, tint = Color.Black)
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(text = label, fontWeight = FontWeight.SemiBold)
             Text(text = value, fontSize = 14.sp, color = Color.DarkGray)
         }
     }

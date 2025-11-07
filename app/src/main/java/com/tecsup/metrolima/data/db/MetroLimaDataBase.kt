@@ -23,7 +23,7 @@ import com.tecsup.metrolima.data.model.Transbordo
         Ruta::class,               // 🔹 Ya la tienes en tu app
         Transbordo::class          // 🔹 Nueva tabla de unión
     ],
-    version = 11, // 🔄
+    version = 12, // 🔄
     exportSchema = false
 )
 abstract class MetroLimaDataBase : RoomDatabase() {
