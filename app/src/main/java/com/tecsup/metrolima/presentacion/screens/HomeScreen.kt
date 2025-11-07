@@ -6,13 +6,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.filled.Construction
+import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.DirectionsTransit
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
@@ -22,6 +25,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -129,7 +133,6 @@ fun DrawerContent(
         )
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -156,9 +159,7 @@ fun HomeScreen(
                     scope.launch { drawerState.close() }
                     if (route.isNotEmpty()) {
                         navController.navigate(route) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
+                            popUpTo(navController.graph.startDestinationId) { saveState = true }
                             launchSingleTop = true
                             restoreState = true
                         }
@@ -181,6 +182,8 @@ fun HomeScreen(
                     .padding(paddingValues)
                     .background(MaterialTheme.colorScheme.background)
             ) {
+
+                // 🔹 Buscador
                 item {
                     OutlinedTextField(
                         value = "",
@@ -192,7 +195,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 8.dp)
-                            .clickable { navController.navigate("listado") },
+                            .clickable { navController.navigate("lineas") },
                         enabled = openDrawerOnStart,
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(
@@ -204,37 +207,17 @@ fun HomeScreen(
                             unfocusedBorderColor = Color.Transparent
                         )
                     )
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 14.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        FilterChip(
-                            selected = true,
-                            onClick = { },
-                            label = { Text(stringResource(R.string.filtro_favoritos)) }
-                        )
-                        FilterChip(
-                            selected = true,
-                            onClick = { },
-                            label = { Text(stringResource(R.string.filtro_ultimas)) }
-                        )
-                        FilterChip(
-                            selected = true,
-                            onClick = { },
-                            label = { Text(stringResource(R.string.filtro_lineas)) }
-                        )
-                    }
                 }
 
+                // Sección de Lugares Populares
                 item {
                     Text(
                         text = stringResource(R.string.lugares_populares),
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
                     )
+
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -242,8 +225,8 @@ fun HomeScreen(
                         item {
                             PopularPlaceCard(
                                 title = stringResource(R.string.ruta),
-                                subtitulo = "Estación Central a Miraflores",
-                                description = "Línea 1",
+                                subtitulo = "Estación Central → Miraflores",
+                                description = stringResource(R.string.linea1),
                                 imageUrl = R.drawable.estacion_central
                             )
                         }
@@ -258,32 +241,70 @@ fun HomeScreen(
                     }
                 }
 
+                // Sección de Líneas Operativas
                 item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                    Text(
+                        text = stringResource(R.string.lineas_disponibles),
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
+                    )
+
+                    val lines = listOf(
+                        Triple(stringResource(R.string.linea1), stringResource(R.string.operativa), R.drawable.linea1_metro),
+                        Triple(stringResource(R.string.linea2), stringResource(R.string.operativa), R.drawable.linea2),
+                        Triple(stringResource(R.string.corredor_azul), stringResource(R.string.operativa), R.drawable.corredor_azul)
+                    )
+
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        Text(
-                            text = stringResource(R.string.proximamente),
-                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
-                        )
-                        IconButton(onClick = { }) {
-                            Icon(
-                                imageVector = Icons.Filled.Construction,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
-                                modifier = Modifier.size(24.dp)
-                            )
+                        items(lines.size) { index ->
+                            val (title, status, image) = lines[index]
+                            Card(
+                                modifier = Modifier
+                                    .width(180.dp)
+                                    .height(180.dp),
+                                shape = RoundedCornerShape(16.dp),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                            ) {
+                                Column(modifier = Modifier.fillMaxSize()) {
+                                    Image(
+                                        painter = painterResource(id = image),
+                                        contentDescription = title,
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .height(120.dp)
+                                            .fillMaxWidth()
+                                    )
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(8.dp)
+                                    ) {
+                                        Text(title, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSecondaryContainer)
+                                        Text(status, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f))
+                                    }
+                                }
+                            }
                         }
                     }
+                }
+
+                //  Sección En construcción
+                item {
+                    Text(
+                        text = stringResource(R.string.proximamente),
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
+                    )
 
                     Text(
-                        text = stringResource(R.string.mas_lineas),
+                        text = "Líneas 4 y 5",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp)
                     )
                     Text(
                         text = stringResource(R.string.lineas_en_desarrollo),
@@ -307,6 +328,59 @@ fun HomeScreen(
                         )
                     }
                 }
+                //Consejos de seguridad
+                item {
+                    Text(
+                        text = stringResource(R.string.consejos_seguridad),
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 12.dp)
+                    )
+
+                    val tips = listOf(
+                        stringResource(R.string.tip1),
+                        stringResource(R.string.tip2),
+                        stringResource(R.string.tip3)
+                    )
+
+                    tips.forEach { tip ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant
+                            )
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Lightbulb,
+                                    contentDescription = null,
+                                    tint = Color(0xFFFFAA00),
+                                    modifier = Modifier.size(24.dp)
+                                )
+
+                                Spacer(modifier = Modifier.width(12.dp))
+
+                                Text(
+                                    text = tip,
+                                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+                    }
+                }
+
+                item { Spacer(modifier = Modifier.height(16.dp)) }
+
             }
         }
     }
@@ -319,8 +393,9 @@ fun PopularPlaceCard(title: String, subtitulo: String, description: String, imag
             .width(180.dp)
             .height(200.dp)
             .clip(RoundedCornerShape(16.dp)),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp) ,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Image(

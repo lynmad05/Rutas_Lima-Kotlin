@@ -36,6 +36,17 @@
     <string name="drawer_acerca">Acerca de la App</string>
     <string name="version_app">Versión 1.0.0</string>
 
+    <!-- HomeScreen -->
+    <string name="linea1">Línea 1</string>
+    <string name="linea2">Línea 2</string>
+    <string name="corredor_azul">Corredor Azul</string>
+    <string name="lineas_disponibles">Líneas Disponibles</string>
+    <string name="operativa">Operativa</string>
+    <string name="consejos_seguridad">Consejos de Seguridad</string>
+    <string name="tip1">Mantén tus pertenencias cerca de ti.</string>
+    <string name="tip2">No bloquees las puertas del tren al subir o bajar.</string>
+    <string name="tip3">Si ves algo sospechoso, informa al personal.</string>
+
     <!-- Barra de búsqueda -->
     <string name="buscar_placeholder">Buscar estaciones o rutas</string>
 
@@ -63,7 +74,7 @@
     <!-- Próximamente -->
     <string name="proximamente">Próximamente</string>
     <string name="mas_lineas">Más líneas en camino</string>
-    <string name="lineas_en_desarrollo">Líneas 2, 3, 4 y 6 en desarrollo</string>
+    <string name="lineas_en_desarrollo">Líneas  3, 4 y 6 en desarrollo</string>
     <string name="tren_construccion">Tren en construcción</string>
     <!-- Lista de estaciones -->
     <string name="titulo_estaciones">Estaciones</string>

@@ -56,7 +56,7 @@ fun SplashScreen(navController: NavController) {
             CircularProgressIndicator(
                 modifier = Modifier.wrapContentSize(Alignment.Center),
                 color = Color(0xFFC084FC),
-                strokeWidth = 4.dp
+                strokeWidth = 6.dp
             )
             Spacer(modifier = Modifier.height(16.dp))
         }

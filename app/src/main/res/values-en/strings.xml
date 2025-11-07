@@ -34,7 +34,7 @@
     <!--  Coming Soon -->
     <string name="proximamente">Coming Soon</string>
     <string name="mas_lineas">More lines on the way</string>
-    <string name="lineas_en_desarrollo">Lines 2, 3, 4, and 6 under development</string>
+    <string name="lineas_en_desarrollo">Lines 3, 4, and 6 under development</string>
     <string name="tren_construccion">Train under construction</string>
 
     <!--  Station list -->
@@ -66,6 +66,19 @@
     <!--  Home screen -->
     <string name="home_title">Home</string>
     <string name="welcome_message">Welcome to Metro de Lima</string>
+
+        <!-- HomeScreen -->
+    <string name="linea1">Line 1</string>
+    <string name="linea2">Line 2</string>
+    <string name="corredor_azul">Blue Corridor</string>
+    <string name="lineas_disponibles">Available Lines</string>
+    <string name="operativa">Operational</string>
+    <string name="consejos_seguridad">Safety Tips</string>
+    <string name="tip1">Keep your belongings close to you.</string>
+    <string name="tip2">Do not block train doors when boarding or exiting.</string>
+    <string name="tip3">If you see something suspicious, report it to staff.</string>
+
+
 
     <!-- Acerca de -->
     <string name="acerca_title">About MetroLima GO</string>
