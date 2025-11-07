@@ -55,7 +55,7 @@ fun NavGraph(
             AcercaAppScreen(navController = navController)
         }
 
-        // --- RUTAS DEL NAVBAR (5 PUNTOS) ---
+        // --- RUTAS DEL NAVBAR ---
 
         composable("splash") {
             SplashScreen(navController = navController)
@@ -73,23 +73,22 @@ fun NavGraph(
             HomeScreen(navController, openDrawerOnStart = openDrawer)
         }
 
-        // 2. CALCULAR RUTA
+        //  CALCULAR RUTA
         composable(route = "rutas") {
             RutaScreen(navController = navController, viewModel = rutaViewModel)
         }
 
-        // La ruta 'iniciarRuta' es una sub-ruta del proceso de rutas
         composable(route = "iniciarRuta") {
             IniciarRutaScreen(navController = navController, viewModel = rutaViewModel)
         }
 
-        // 3. MAPA GENERAL (Navbar Central) - Muestra todas las líneas juntas
+        // MAPA GENERAL (Navbar Central) - Muestra todas las líneas juntas
         composable(route = "mapa_general") {
             MapaGeneralScreen(navController = navController)
         }
 
 
-        // 4. LÍNEAS DE METRO (Punto de acceso a listados y mapa de línea)
+        // LÍNEAS DE METRO (Punto de acceso a listados y mapa de línea)
         composable("lineas") {
             val listaLineasViewModel: ListaLineasViewModel = viewModel(
                 factory = ListaLineasViewModel.provideFactory(context)
@@ -109,7 +108,7 @@ fun NavGraph(
             ListaEstacionScreen(navController = navController, lineaId = if (lineaId == 0) null else lineaId)
         }
 
-        // Sub-ruta del Listado: Navegación de Línea a su Mapa (MapaScreen existente)
+        // Sub-ruta del Listado: Navegación de Línea a su Mapa
         composable(
             route = "mapa_linea/{lineaId}", // **Ruta renombrada**
             arguments = listOf(navArgument("lineaId") { type = NavType.IntType })
@@ -119,7 +118,7 @@ fun NavGraph(
         }
 
 
-        // 5. CONFIGURACIÓN
+        // CONFIGURACIÓN
         composable("config") {
             ConfigScreen(
                 navController = navController,
@@ -137,7 +136,7 @@ fun NavGraph(
         }
 
 
-        //RUTAS DE DETALLES DE LAS ESTACIONES (Permanece igual)
+        //RUTAS DE DETALLES DE LAS ESTACIONES
         composable(
             route = "detalle/{estacionId}",
             arguments = listOf(navArgument("estacionId") { type = NavType.IntType })

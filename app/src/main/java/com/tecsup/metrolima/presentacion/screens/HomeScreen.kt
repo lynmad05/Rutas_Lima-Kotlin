@@ -183,7 +183,7 @@ fun HomeScreen(
                     .background(MaterialTheme.colorScheme.background)
             ) {
 
-                // 🔹 Buscador
+                // Buscador
                 item {
                     OutlinedTextField(
                         value = "",
@@ -328,7 +328,7 @@ fun HomeScreen(
                         )
                     }
                 }
-                //Consejos de seguridad
+                // Consejos de seguridad
                 item {
                     Text(
                         text = stringResource(R.string.consejos_seguridad),

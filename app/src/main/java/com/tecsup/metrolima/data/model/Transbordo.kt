@@ -5,10 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Index
 
-/**
- * Representa un punto de transbordo entre dos estaciones.
- * Cada registro indica que puedes hacer conexión entre una estación A y una estación B.
- */
+
 @Entity(
     tableName = "transbordos",
     foreignKeys = [

@@ -23,7 +23,7 @@
         private val appContext: Context
     ) : ViewModel() {
 
-        // --- 1. ESTADOS BASE Y FLUJOS DE ENTRADA ---
+        // --- ESTADOS BASE Y FLUJOS DE ENTRADA ---
         val estacionesConLinea: StateFlow<List<EstacionExtendida>> =
             estacionRepository.getAllEstacionesConLinea()
                 .stateIn(
@@ -51,7 +51,7 @@
         private val _lineas = MutableStateFlow(emptyList<Linea>())
 
 
-        // --- 2. ESTADO DE SALIDA FILTRADO (COMBINE) ---
+        // ---  ESTADO DE SALIDA FILTRADO  ---
         val estacionesFiltradas = combine(_searchText, estacionesConLinea, _lineaIdFiltro) { text, allEst, lineaId ->
             var lista = allEst
             if (lineaId != null && lineaId != 0) {
@@ -69,7 +69,7 @@
         val estacionesFiltradasPorLinea: StateFlow<List<EstacionExtendida>> get() = _estacionesFiltradas
 
 
-        // --- 3. LÓGICA DE CARGA Y ASISTENCIA ---
+        // ---  LÓGICA DE CARGA Y ASISTENCIA ---
 
         init {
             loadLineasLocales()
@@ -143,7 +143,7 @@
             viewModelScope.launch {
                 _isLoading.value = true
                 try {
-                    // Usamos .first() para obtener el valor actual del Flow de forma segura
+                    // Usamos .first() para obtener el valor actual del Flow
                     val currentEstaciones = estacionRepository.getAllEstacionesConLinea().first()
                     if (currentEstaciones.isEmpty()) {
                         _mensajeUsuario.value = "Intentando cargar datos iniciales desde la red..."
@@ -208,7 +208,7 @@
             }
         }
 
-        // --- 4. FACTORY (Proveedor de dependencias) ---
+        // --- FACTORY (Proveedor de dependencias) ---
 
         companion object {
             fun provideFactory(context: Context): ViewModelProvider.Factory {

@@ -122,7 +122,7 @@ fun DetalleEstacionScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // Cámara (igual que ya tienes)
+            // Cámara
             val cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(
                     LatLng(estacionData.lat, estacionData.lon), 16f
@@ -140,7 +140,7 @@ fun DetalleEstacionScreen(
                     modifier = Modifier.fillMaxSize(),
                     cameraPositionState = cameraPositionState
                 ) {
-                    // 📍 Marcador principal
+                    // El Marcador
                     val estacionMarker = rememberMarkerState(
                         position = LatLng(estacionData.lat, estacionData.lon)
                     )
@@ -150,7 +150,7 @@ fun DetalleEstacionScreen(
                         snippet = estacionData.distrito
                     )
 
-                    // 📌 Servicios cercanos (ejemplo con desplazamiento mínimo)
+                    // Servicios cercanos de ejemplo
                     servicios.forEachIndexed { index, servicio ->
                         val serviceState = rememberMarkerState(
                             position = LatLng(
@@ -216,14 +216,12 @@ fun DetalleEstacionScreen(
                 ) {
                     InfoCard(
                         label = stringResource(R.string.coordenadas),
-                        // 🟢 CAMBIO: Usar las coordenadas reales
                         value = "${estacionData.lat}, ${estacionData.lon}",
                         icon = Icons.Default.Route,
                         modifier = Modifier.weight(1f)
                     )
                     InfoCard(
                         label = stringResource(R.string.horario),
-                        // 🟢 CAMBIO: Usar el horario real
                         value = estacionData.horario,
                         icon = Icons.Default.AccessTime,
                         modifier = Modifier.weight(1f)
@@ -282,8 +280,6 @@ fun DetalleEstacionScreen(
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-
-                //aca borre
 
                 Button(
                     onClick = { navController.navigate("rutas") },

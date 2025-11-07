@@ -13,7 +13,7 @@ class EstacionRepository(
     private val lineaRepository: LineaRepository
 ) {
 
-    /** Inserta todas las estaciones extendidas */
+    // Inserta todas las estaciones extendidas
     suspend fun insertarEstacionesExtendidas(estaciones: List<EstacionExtendida>) {
         try {
             estacionDao.insertAllExtendidas(estaciones)
@@ -23,32 +23,33 @@ class EstacionRepository(
         }
     }
 
-    /** Retorna todas las estaciones con su línea asociada */
+    // Retorna todas las estaciones con su línea asociada
     fun getAllEstacionesConLinea(): Flow<List<EstacionExtendida>> =
         estacionDao.getAllEstacionesConLinea()
 
-    /** Retorna estaciones filtradas por nombre de línea */
+    // Retorna estaciones filtradas por nombre de línea
+
     fun getEstacionesPorLinea(nombreLinea: String): Flow<List<EstacionExtendida>> =
         estacionDao.getEstacionesPorLinea(nombreLinea)
 
-    /** Retorna una estación específica por ID */
+    // Retorna una estación específica por ID
     suspend fun getEstacionById(id: Int): EstacionExtendida =
         estacionDao.getEstacionConLineaById(id)
 
-    /** Actualiza el estado de favorito */
+    // Actualiza el estado de favorito
     suspend fun updateFavorite(id: Int, isFavorite: Boolean) {
         estacionDao.updateFavoriteStatus(id, isFavorite)
         println("Estación $id actualizada como favorita = $isFavorite")
     }
 
-    /** Retorna coordenadas (lat/lon) para trazado del mapa */
+    // Retorna coordenadas (lat/lon) para trazado del mapa
     fun getCoordenadasPorLinea(id: Int): Flow<List<LatLng>> =
         estacionDao.getEstacionesPorLineaId(id).map { coords ->
             coords.map { LatLng(it.lat, it.lon) }
         }
 
 
-    /** Obtiene las estaciones remotas desde el endpoint Mocki */
+    // Obtiene las estaciones remotas desde el endpoint Mocki
     suspend fun getEstacionesRemotas(): List<EstacionExtendida> {
         println("Solicitando estaciones desde Mocki...")
 
@@ -81,7 +82,7 @@ class EstacionRepository(
         }
     }
 
-    /** 🔹 Sincroniza las líneas y estaciones desde Mocki */
+    // Sincroniza las líneas y estaciones desde Mocki
     suspend fun fetchAndSaveAllData() {
         try {
             println("Sincronizando datos iniciales desde Mocki...")
@@ -101,7 +102,7 @@ class EstacionRepository(
         }
     }
 
-    /** 🔹 Descarga y guarda líneas desde Mocki */
+    // Descarga y guarda líneas desde Mocki
     private suspend fun fetchAndSaveLineas() {
         println("Intentando cargar líneas desde Mocki...")
 

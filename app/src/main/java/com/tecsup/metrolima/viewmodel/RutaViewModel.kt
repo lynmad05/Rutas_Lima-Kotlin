@@ -70,18 +70,18 @@ class RutaViewModel(
     private val _selectedOptimizationOption = MutableStateFlow("Menos Transbordos")
     val selectedOptimizationOption: StateFlow<String> = _selectedOptimizationOption.asStateFlow()
 
-    // --- Resultado de cálculo de ruta (Livia) ---
+    // --- Resultado de cálculo de ruta  ---
     private val _resultadoRuta = MutableStateFlow<RutaResultado?>(null)
     val resultadoRuta: StateFlow<RutaResultado?> = _resultadoRuta.asStateFlow()
 
     fun onTransportOptionSelected(option: String){
         _selectedTransportOption.value = option
-        println("🚇 Transporte seleccionado: $option")
+        println(" Transporte seleccionado: $option")
     }
 
     fun onOptimizationOptionSelected(option: String){
         _selectedOptimizationOption.value = option
-        println("⚙️ Optimización seleccionada: $option")
+        println(" Optimización seleccionada: $option")
     }
 
     fun onSearchOrigenChange(query: String){
@@ -156,11 +156,11 @@ class RutaViewModel(
         val optimizacion = _selectedOptimizationOption.value
 
         if (origen != null && destino != null) {
-            println("🟢 Cálculo de ruta iniciado")
-            println("➡️ Origen: ${origen.nombre}")
-            println("🏁 Destino: ${destino.nombre}")
-            println("🚇 Transporte: $transporte")
-            println("⚙️ Optimización: $optimizacion")
+            println(" Cálculo de ruta iniciado")
+            println(" Origen: ${origen.nombre}")
+            println(" Destino: ${destino.nombre}")
+            println(" Transporte: $transporte")
+            println(" Optimización: $optimizacion")
 
             viewModelScope.launch {
                 // Simula la ruta
@@ -177,7 +177,7 @@ class RutaViewModel(
 
                 println(" Ruta calculada: ${origen.nombre} → ${destino.nombre} ($tiempoEstimado)")
 
-                // --- Nuevo: guarda automáticamente en historial ---
+                // ---  Guarda automáticamente en historial ---
                 val ruta = Ruta(
                     id = 0,
                     idEstacionOrigen = origen.id,
@@ -225,7 +225,7 @@ class RutaViewModel(
             rutaRepository.insertRoute(ruta)
             _isCurrentRouteFavorite.value = true
             saveRutaHistorial(ruta)
-            println("💾 Ruta guardada: ${origen.nombre} → ${destino.nombre} (${minutos} min)")
+            println(" Ruta guardada: ${origen.nombre} → ${destino.nombre} (${minutos} min)")
         }
     }
 

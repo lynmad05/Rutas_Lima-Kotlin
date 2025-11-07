@@ -6,11 +6,7 @@ import androidx.room.PrimaryKey
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-/**
- * Entidad extendida de Estación.
- * Incluye relación con la entidad Linea y coordenadas (lat/lon),
- * además del campo de favorito para el detalle.
- */
+
 @Parcelize
 @Entity(
     tableName = "estaciones_extendidas",

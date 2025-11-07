@@ -209,7 +209,7 @@ fun StationListItem(
                     .clip(RoundedCornerShape(8.dp))
             )
         } else {
-            // ✅ Mostrar ícono por defecto si no hay imagen válida
+            //  Mostrar ícono por defecto si no hay imagen válida
             Icon(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = "Sin imagen",

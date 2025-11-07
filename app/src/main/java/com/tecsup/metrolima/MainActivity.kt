@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
             val db = MetroLimaDataBase.getDatabase(applicationContext)
             val lineaRepo = LineaRepository(db.lineaDao())
 
-            // 🔹 Llamada única para cargar datos remotos e insertarlos
+            //  Llamada única para cargar datos remotos e insertarlos
             try {
                 val estacionRepo = com.tecsup.metrolima.repository.EstacionRepository(
                     db.estacionDao(),
@@ -81,9 +81,9 @@ class MainActivity : ComponentActivity() {
                 println("Error al sincronizar datos iniciales: ${e.message}")
             }
 
-            // 🔹 Tu lógica original se mantiene intacta
+            // Tu lógica original se mantiene intacta
             lineaRepo.getLineasLocales().collect { lineas ->
-                println("✅ ${lineas.size} líneas encontradas:")
+                println(" ${lineas.size} líneas encontradas:")
                 lineas.forEach { println(" - ${it.nombre} (${it.color})") }
             }
         }
