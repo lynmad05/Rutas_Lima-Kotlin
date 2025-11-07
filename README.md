@@ -106,24 +106,34 @@ https://www.figma.com/design/5ZArdPdHcov5raScjkjj6A/Proyecto_Kotlin?node-id=0-1&
 
 ``` 
 
+C:.
 |   MainActivity.kt
-|   
+|
 +---data
 |   +---api
 |   |       MetroLimaApi.kt
 |   |       RetrofitInstance.kt
-|   |       
+|   |
 |   +---dao
 |   |       EstacionDao.kt
+|   |       LineaDao.kt
 |   |       RutaDao.kt
-|   |       
+|   |       TransbordoDao.kt
+|   |
 |   +---db
 |   |       MetroLimaDataBase.kt
 |   |
 |   \---model
-|           Estacion.kt
-|           Ruta.kt
-|           RutaResultado.kt
+|       |   Estacion.kt
+|       |   EstacionExtendida.kt
+|       |   Linea.kt
+|       |   LineaConPuntos.kt
+|       |   Ruta.kt
+|       |   RutaResultado.kt
+|       |   Transbordo.kt
+|       |
+|       \---remote
+|               EstacionRemota.kt
 |
 +---navigation
 |       NavGraph.kt
@@ -138,6 +148,8 @@ https://www.figma.com/design/5ZArdPdHcov5raScjkjj6A/Proyecto_Kotlin?node-id=0-1&
 |   |   |   HomeScreen.kt
 |   |   |   IniciarRutaScreen.kt
 |   |   |   ListaEstacionesScreen.kt
+|   |   |   ListaLineasScreen.kt
+|   |   |   MapaGeneralScreen.kt
 |   |   |   MapaScreen.kt
 |   |   |   RutaScreen.kt
 |   |   |   SplashScreen.kt
@@ -151,6 +163,7 @@ https://www.figma.com/design/5ZArdPdHcov5raScjkjj6A/Proyecto_Kotlin?node-id=0-1&
 |
 +---repository
 |       EstacionRepository.kt
+|       LineaRepository.kt
 |       RutaRepository.kt
 |
 +---ui
@@ -165,8 +178,13 @@ https://www.figma.com/design/5ZArdPdHcov5raScjkjj6A/Proyecto_Kotlin?node-id=0-1&
 |           Type.kt
 |
 \---viewmodel
+        DetalleEstacionViewModel.kt
         ListaEstacionesViewModel.kt
+        ListaLineasViewModel.kt
+        MapaGeneralViewModel.kt
+        MapaLineaViewModel.kt
         RutaViewModel.kt
+
 ```
 
 ## Proyecto base corriendo con pantalla inicial 
